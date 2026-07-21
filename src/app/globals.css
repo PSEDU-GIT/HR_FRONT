@@ -1,26 +1,449 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+@import 'react-datepicker/dist/react-datepicker.css';
+@import './_component/date/customCalendar.css';
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --font-size: 18px;
+  --background: rgb(255 255 255 / 1);
+  --foreground: #f3f4f6;
+  --border: oklch(93.4% 0.003 264.5);
+
+  --text-title: oklch(17.192% 0.0186 259.682);
+  --text-main: oklch(25.1% 0.02918 261.41);
+  --text-sub: oklch(40.4% 0.046 257.417);
+  --text-side: oklch(65.4% 0.04 256.788);
+
+  --hover-icon: oklch(96.7% 0.003 264.542);
+
+  --scroll-track: oklch(100% 0 0);
+  --scroll-thumb: #e0e0e0;
+
+  --primary: oklch(54% 0.22 264);
+  --primary-bg: oklch(95.2% 0.016 264);
+  --primary-hover: oklch(45% 0.205 264);
+  --primary-border: oklch(56% 0.18 264);
+  --primary-border-hover: oklch(87% 0.06 264);
+  --primary-side: oklch(56% 0.18 264);
+
+  --secondary: oklch(68% 0.14 192);
+  --secondary-bg: oklch(96% 0.015 192);
+  --secondary-hover: oklch(60% 0.16 192);
+  --secondary-border: oklch(90% 0.06 192);
+  --secondary-border-hover: oklch(79% 0.1 192);
+
+  --neutral: oklch(38% 0.025 245);
+  --neutral-bg: oklch(75% 0.022 245);
+  --neutral-hover: oklch(25% 0.02 245);
+  --neutral-border: oklch(68% 0.028 245);
+  --neutral-border-hover: oklch(71% 0.03 245);
+
+  --foreground-slate: oklch(62% 0.028 257.281);
+  --foreground-slate-bg: oklch(95% 0.008 255.508);
+  --foreground-slate-hover: oklch(90.5% 0.012 252.894);
+
+  --custom-slate: oklch(96.8% 0.007 247.896);
+  --custom-slate-bg: oklch(97.8% 0.003 247.858);
+  --custom-slate-hover: oklch(92.9% 0.013 255.508);
+  --custom-slate-border: oklch(90% 0.02 255);
+  --custom-slate-border-hover: oklch(80% 0.03 255);
+  --custom-slate-border-side: oklch(96.8% 0.007 247.896);
+
+  --custom-success: oklch(65% 0.17 232);
+  --custom-success-bg: oklch(98% 0.01 232);
+  --custom-success-hover: oklch(60% 0.19 232);
+  --custom-success-border: oklch(90% 0.03 232);
+  --custom-success-border-hover: oklch(82% 0.06 232);
+
+  --custom-emerald: oklch(66% 0.16 162.48);
+  --custom-emerald-bg: oklch(98% 0.02 162.48);
+  --custom-emerald-hover: oklch(63% 0.18 162.48);
+  --custom-emerald-border: oklch(90% 0.06 162.48);
+  --custom-emerald-border-hover: oklch(80% 0.11 162.48);
+
+  --custom-blue: oklch(60% 0.18 255);
+  --custom-blue-bg: oklch(97% 0.015 255);
+  --custom-blue-hover: oklch(50% 0.2 255);
+  --custom-blue-border: oklch(85% 0.04 255);
+  --custom-blue-border-hover: oklch(75% 0.08 255);
+
+  --custom-orange: oklch(70.5% 0.213 47.604);
+  --custom-orange-bg: oklch(97% 0.025 47.604);
+  --custom-orange-hover: oklch(63% 0.23 47.604);
+  --custom-orange-border: oklch(88% 0.08 47.604);
+  --custom-orange-border-hover: oklch(78% 0.15 47.604);
+
+  --custom-indigo: oklch(51.1% 0.262 276.966);
+  --custom-indigo-side: oklch(67.3% 0.182 276.935);
+  --custom-indigo-bg: oklch(97.2% 0.018 272.314);
+  --custom-indigo-hover: oklch(45.7% 0.24 277.023);
+  --custom-indigo-border: oklch(87% 0.065 274.039);
+  --custom-indigo-border-hover: oklch(87% 0.065 274.039);
+
+  --custom-rose: oklch(60% 0.18 15);
+  --custom-rose-bg: oklch(97.1% 0.03 12.58);
+  --custom-rose-hover: oklch(55% 0.2 15);
+  --custom-rose-border: oklch(88% 0.04 15);
+  --custom-rose-border-hover: oklch(90% 0.08 15);
+
+  --custom-danger: oklch(63% 0.2 22.37);
+  --custom-danger-bg: oklch(97% 0.018 22.37);
+  --custom-danger-border: oklch(90% 0.072 22.37);
+  --custom-danger-border-hover: oklch(78% 0.145 22.37);
+  --custom-danger-hover: oklch(52% 0.23 22.37);
+
+  --custom-yellow: oklch(68.1% 0.162 75.834);
+  --custom-yellow-bg: oklch(98.7% 0.026 102.212);
+  --custom-yellow-hover: oklch(55.4% 0.135 66.442);
+  --custom-yellow-border: oklch(94.5% 0.129 101.54);
+  --custom-yellow-border-hover: oklch(90.5% 0.182 98.111);
+
+  --custom-etc: oklch(60% 0.02 240);
+  --custom-etc-bg: oklch(96% 0.008 240);
+  --custom-etc-border: oklch(78% 0.012 240);
+  --custom-etc-border-hover: oklch(68% 0.018 240);
+  --custom-etc-hover: oklch(52% 0.025 240);
+
+  --custom-multi: oklch(76% 0.19 82);
+  --custom-multi-bg: oklch(98% 0.04 88);
+  --custom-multi-border: oklch(92% 0.11 85);
+  --custom-multi-border-hover: oklch(84% 0.14 80);
+  --custom-multi-hover: oklch(72% 0.19 78);
+}
+
+.dark {
+  --background: rgb(30 41 59 / 1);
+  --foreground: rgb(2 6 23);
+  --border: oklch(37.2% 0.044 257.287);
+
+  --text-title: oklch(92% 0.02 260.031);
+  --text-main: oklch(88% 0.018 257.28);
+  --text-sub: oklch(78% 0.022 257.417);
+  --text-side: oklch(55% 0.03 256.788);
+
+  --hover-icon: oklch(22% 0.005 264.542);
+
+  --scroll-track: oklch(14% 0 0);
+  --scroll-thumb: #3a3a3a;
+
+  --primary: oklch(60% 0.2488 264.05);
+  --primary-bg: oklch(20% 0.04 264.05);
+  --primary-hover: oklch(70% 0.23 264.05);
+  --primary-border: oklch(40% 0.18 264.05);
+  --primary-border-hover: oklch(35% 0.1 264.05);
+  --primary-side: oklch(40% 0.18 264.05);
+
+  --secondary: oklch(60% 0.14 210);
+  --secondary-bg: oklch(18% 0.025 210);
+  --secondary-hover: oklch(68% 0.17 210);
+  --secondary-border: oklch(32% 0.06 210);
+  --secondary-border-hover: oklch(40% 0.1 210);
+
+  --neutral: oklch(72% 0.005 260);
+  --neutral-bg: oklch(22% 0.006 260);
+  --neutral-hover: oklch(82% 0.006 260);
+  --neutral-border: oklch(32% 0.01 260);
+  --neutral-border-hover: oklch(38% 0.012 260);
+
+  --foreground-slate: oklch(58% 0.022 257.281);
+  --foreground-slate-bg: oklch(20% 0.01 255.508);
+  --foreground-slate-hover: oklch(25% 0.014 252.894);
+
+  --custom-slate: oklch(24% 0.009 247.896);
+  --custom-slate-bg: oklch(18% 0.005 247.858);
+  --custom-slate-hover: oklch(28% 0.013 255.508);
+  --custom-slate-border: oklch(30% 0.018 255);
+  --custom-slate-border-hover: oklch(38% 0.025 255);
+  --custom-slate-border-side: oklch(26% 0.009 247.896);
+
+  --custom-success: oklch(58% 0.15 232);
+  --custom-success-bg: oklch(16% 0.02 232);
+  --custom-success-hover: oklch(66% 0.17 232);
+  --custom-success-border: oklch(30% 0.055 232);
+  --custom-success-border-hover: oklch(38% 0.09 232);
+
+  --custom-emerald: oklch(58% 0.15 162.48);
+  --custom-emerald-bg: oklch(16% 0.03 162.48);
+  --custom-emerald-hover: oklch(66% 0.17 162.48);
+  --custom-emerald-border: oklch(30% 0.07 162.48);
+  --custom-emerald-border-hover: oklch(38% 0.12 162.48);
+
+  --custom-blue: oklch(58% 0.16 255);
+  --custom-blue-bg: oklch(16% 0.025 255);
+  --custom-blue-hover: oklch(66% 0.18 255);
+  --custom-blue-border: oklch(30% 0.055 255);
+  --custom-blue-border-hover: oklch(38% 0.1 255);
+
+  --custom-orange: oklch(68% 0.19 47.604);
+  --custom-orange-bg: oklch(17% 0.035 47.604);
+  --custom-orange-hover: oklch(74% 0.21 47.604);
+  --custom-orange-border: oklch(32% 0.09 47.604);
+  --custom-orange-border-hover: oklch(40% 0.15 47.604);
+
+  --custom-indigo: oklch(62% 0.22 276.966);
+  --custom-indigo-side: oklch(58% 0.16 276.935);
+  --custom-indigo-bg: oklch(16% 0.03 272.314);
+  --custom-indigo-hover: oklch(70% 0.2 277.023);
+  --custom-indigo-border: oklch(30% 0.08 274.039);
+  --custom-indigo-border-hover: oklch(38% 0.1 274.039);
+
+  --custom-rose: oklch(60% 0.16 15);
+  --custom-rose-bg: oklch(16% 0.04 12.58);
+  --custom-rose-hover: oklch(68% 0.18 15);
+  --custom-rose-border: oklch(30% 0.06 15);
+  --custom-rose-border-hover: oklch(36% 0.1 15);
+
+  --custom-danger: oklch(62% 0.18 22.37);
+  --custom-danger-bg: oklch(16% 0.03 22.37);
+  --custom-danger-border: oklch(30% 0.09 22.37);
+  --custom-danger-border-hover: oklch(38% 0.14 22.37);
+  --custom-danger-hover: oklch(70% 0.21 22.37);
+
+  --custom-yellow: oklch(72% 0.148 75.834);
+  --custom-yellow-bg: oklch(17% 0.03 102.212);
+  --custom-yellow-hover: oklch(78% 0.16 75);
+  --custom-yellow-border: oklch(32% 0.09 101.54);
+  --custom-yellow-border-hover: oklch(40% 0.14 98.111);
+
+  --custom-etc: oklch(62% 0.02 240);
+  --custom-etc-bg: oklch(18% 0.01 240);
+  --custom-etc-border: oklch(28% 0.014 240);
+  --custom-etc-border-hover: oklch(35% 0.02 240);
+  --custom-etc-hover: oklch(70% 0.025 240);
+
+  --custom-multi: oklch(72% 0.17 82);
+  --custom-multi-bg: oklch(17% 0.045 88);
+  --custom-multi-border: oklch(30% 0.1 85);
+  --custom-multi-border-hover: oklch(38% 0.13 80);
+  --custom-multi-hover: oklch(78% 0.19 78);
 }
 
 @theme inline {
+  --text-9: 9px;
+  --text-10: 10px;
+  --text-11: 11px;
+  --text-12: 12px;
+  --text-13: 13px;
+  --text-14: 14px;
+  --text-15: 15px;
+  --text-16: 16px;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-border: var(--border);
+
+  --color-text-title: var(--text-title);
+  --color-text-main: var(--text-main);
+  --color-text-sub: var(--text-sub);
+  --color-text-side: var(--text-side);
+
+  --color-hover-icon: var(--hover-icon);
+
+  --color-primary: var(--primary);
+  --color-primary-bg: var(--primary-bg);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-border: var(--primary-border);
+  --color-primary-border-hover: var(--primary-border-hover);
+  --color-primary-side: var(--primary-side);
+
+  --color-neutral: var(--neutral);
+  --color-neutral-bg: var(--neutral-bg);
+  --color-neutral-hover: var(--neutral-hover);
+  --color-neutral-border: var(--neutral-border);
+  --color-neutral-border-hover: var(--neutral-border-hover);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-bg: var(--secondary-bg);
+  --color-secondary-hover: var(--secondary-hover);
+  --color-secondary-border: var(--secondary-border);
+  --color-secondary-border-hover: var(--secondary-border-hover);
+
+  --color-custom-emerald: var(--custom-emerald);
+  --color-custom-emerald-bg: var(--custom-emerald-bg);
+  --color-custom-emerald-hover: var(--custom-emerald-hover);
+  --color-custom-emerald-border: var(--custom-emerald-border);
+  --color-custom-emerald-border-hover: var(--custom-emerald-border-hover);
+
+  --color-custom-blue: var(--custom-blue);
+  --color-custom-blue-bg: var(--custom-blue-bg);
+  --color-custom-blue-hover: var(--custom-blue-hover);
+  --color-custom-blue-border: var(--custom-blue-border);
+  --color-custom-blue-border-hover: var(--custom-blue-border-hover);
+
+  --color-custom-success: var(--custom-success);
+  --color-custom-success-bg: var(--custom-success-bg);
+  --color-custom-success-hover: var(--custom-success-hover);
+  --color-custom-success-border: var(--custom-success-border);
+  --color-custom-success-border-hover: var(--custom-success-border-hover);
+
+  --color-custom-rose: var(--custom-rose);
+  --color-custom-rose-bg: var(--custom-rose-bg);
+  --color-custom-rose-hover: var(--custom-rose-hover);
+  --color-custom-rose-border: var(--custom-rose-border);
+  --color-custom-rose-border-hover: var(--custom-rose-border-hover);
+
+  --color-custom-danger: var(--custom-danger);
+  --color-custom-danger-bg: var(--custom-danger-bg);
+  --color-custom-danger-hover: var(--custom-danger-hover);
+  --color-custom-danger-border: var(--custom-danger-border);
+  --color-custom-danger-border-hover: var(--custom-danger-border-hover);
+
+  --color-custom-etc: var(--custom-etc);
+  --color-custom-etc-bg: var(--custom-etc-bg);
+  --color-custom-etc-hover: var(--custom-etc-hover);
+  --color-custom-etc-border: var(--custom-etc-border);
+  --color-custom-etc-border-hover: var(--custom-etc-border-hover);
+
+  --color-custom-orange: var(--custom-orange);
+  --color-custom-orange-bg: var(--custom-orange-bg);
+  --color-custom-orange-hover: var(--custom-orange-hover);
+  --color-custom-orange-border: var(--custom-orange-border);
+  --color-custom-orange-border-hover: var(--custom-orange-border-hover);
+
+  --color-custom-yellow: var(--custom-yellow);
+  --color-custom-yellow-bg: var(--custom-yellow-bg);
+  --color-custom-yellow-hover: var(--custom-yellow-hover);
+  --color-custom-yellow-border: var(--custom-yellow-border);
+  --color-custom-yellow-border-hover: var(--custom-yellow-border-hover);
+
+  --color-custom-indigo: var(--custom-indigo);
+  --color-custom-indigo-side: var(--custom-indigo-side);
+  --color-custom-indigo-bg: var(--custom-indigo-bg);
+  --color-custom-indigo-hover: var(--custom-indigo-hover);
+  --color-custom-indigo-border: var(--custom-indigo-border);
+  --color-custom-indigo-border-hover: var(--custom-indigo-border-hover);
+
+  --color-custom-slate: var(--custom-slate);
+  --color-custom-slate-bg: var(--custom-slate-bg);
+  --color-custom-slate-hover: var(--custom-slate-hover);
+  --color-custom-slate-border: var(--custom-slate-border);
+  --color-custom-slate-border-hover: var(--custom-slate-border-hover);
+  --color-custom-slate-border-side: var(--custom-slate-border-side);
+
+  --color-foreground-slate: var(--foreground-slate);
+  --color-foreground-slate-bg: var(--foreground-slate-bg);
+  --color-foreground-slate-hover: var(--foreground-slate-hover);
+
+  --color-custom-multi: var(--custom-multi);
+  --color-custom-multi-bg: var(--custom-multi-bg);
+  --color-custom-multi-hover: var(--custom-multi-hover);
+  --color-custom-multi-border: var(--custom-multi-border);
+  --color-custom-multi-border-hover: var(--custom-multi-border-hover);
+
+  --font-sans:
+    Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI',
+    'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  h1 {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
   }
+
+  h2 {
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  h3 {
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  h4 {
+    font-size: var(--text-16);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  h5 {
+    font-size: var(--text-12);
+    font-weight: var(--font-weight-normal);
+    line-height: 1.5;
+  }
+
+  p.low {
+    font-size: var(--text-13);
+    font-weight: var(--font-weight-normal);
+    line-height: 1.5;
+  }
+
+  h6 {
+    font-size: var(--text-10);
+    font-weight: var(--font-weight-normal);
+    line-height: 1.5;
+  }
+
+  h6.low {
+    font-size: var(--text-9);
+    font-weight: var(--font-weight-normal);
+    line-height: 1.5;
+  }
+
+  p {
+    font-size: var(--text-14);
+    font-weight: var(--font-weight-normal);
+    line-height: 1.5;
+  }
+
+  input {
+    width: 100%;
+    outline: none;
+    font-size: var(--text-14);
+    border-radius: 0.75rem;
+    font-weight: bold;
+    color: var(--color-text-main);
+    border: 1px solid var(--color-custom-slate-border);
+    padding: 10px 16px;
+    transition: all 0.2s;
+  }
+  input::placeholder {
+    font-weight: 700;
+  }
+  input:focus {
+    border-color: var(--color-primary-border);
+  }
+  textarea {
+    width: 100%;
+    outline: none;
+    font-size: var(--text-14);
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-border);
+    font-weight: bold;
+    color: var(--color-text-main);
+    resize: none;
+    transition: all 0.2s;
+  }
+  textarea::placeholder {
+    font-weight: 700;
+  }
+  textarea:focus {
+    border-color: var(--color-primary-border) !important;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb);
+  border-radius: theme('borderRadius.sm');
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scroll-thumb);
 }
 
 body {
   background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--color-text-main);
+  font-family: var(--font-sans);
 }

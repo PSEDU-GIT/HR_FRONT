@@ -1,0 +1,110 @@
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+  }
+  0.01% {
+    visibility: visible;
+  }
+  100% {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  15% {
+    transform: translateX(-4px);
+  }
+  30% {
+    transform: translateX(4px);
+  }
+  45% {
+    transform: translateX(-4px);
+  }
+  60% {
+    transform: translateX(4px);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.2;
+  }
+}
+
+@keyframes circle-reveal {
+  from {
+    clip-path: circle(0% at 90% 10%);
+  }
+  to {
+    clip-path: circle(150% at 90% 10%);
+  }
+}
+
+@keyframes bounce-right {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+}
+@keyframes ripple {
+  0% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  50%,
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@layer utilities {
+  .animate-shake {
+    animation: shake 0.4s ease-in-out;
+  }
+
+  .animate-fade-in {
+    opacity: 0;
+    visibility: hidden;
+    animation: fade-in 0.3s ease-in 0.25s forwards;
+  }
+
+  .animate-bounce-right {
+    animation: bounce-right 2s ease-in-out infinite;
+  }
+
+  .animate-ripple {
+    animation: ripple 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 800ms;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  ::view-transition-old(root) {
+    animation-name: fade-out;
+  }
+
+  ::view-transition-new(root) {
+    animation-name: circle-reveal;
+  }
+}

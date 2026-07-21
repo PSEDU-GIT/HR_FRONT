@@ -1,0 +1,87 @@
+'use client';
+
+import React from 'react';
+import { ChevronDown, ChevronUp, AlertTriangle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import cx from 'classnames';
+
+interface AccordionCardProps {
+  title: string;
+  summary?: React.ReactNode;
+  hasWarning?: boolean;
+  isOpen: boolean;
+  isDone?: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}
+
+export default function AccordionCard({
+  title,
+  summary,
+  hasWarning,
+  isOpen,
+  isDone,
+  onClick,
+  children,
+}: AccordionCardProps) {
+  return (
+    <div
+      className={cx(
+        'border-custom-slate-border rounded-2xl border transition-all duration-200',
+        isOpen ? 'bg-white shadow-sm' : 'bg-white hover:bg-slate-50',
+      )}
+    >
+      <button
+        type="button"
+        onClick={onClick}
+        className={cx(
+          'flex w-full cursor-pointer items-center justify-between p-4 text-left transition-all',
+          isOpen
+            ? 'border-custom-slate-border-side bg-custom-slate-bg rounded-t-2xl border-b'
+            : 'hover:bg-custom-slate-bg bg-background rounded-2xl border-transparent',
+        )}
+      >
+        <div className="flex items-center gap-2.5">
+          <div
+            className={cx(
+              'h-2 w-2 rounded-full transition-colors',
+              hasWarning
+                ? 'bg-custom-yellow'
+                : isDone
+                  ? 'bg-custom-emerald'
+                  : isOpen
+                    ? 'bg-custom-indigo'
+                    : 'bg-slate-300',
+            )}
+          />
+          <span className="text-text-title text-sm font-bold">{title}</span>
+          {hasWarning && <AlertTriangle className="text-custom-yellow h-3.5 w-3.5 shrink-0" />}
+        </div>
+
+        <div className="flex items-center gap-3">
+          {summary && <span className="text-text-side text-xs font-medium">{summary}</span>}
+          {isOpen ? (
+            <ChevronUp className="text-text-side h-4 w-4 shrink-0" />
+          ) : (
+            <ChevronDown className="text-text-side h-4 w-4 shrink-0" />
+          )}
+        </div>
+      </button>
+
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            key="accordion-content"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2, ease: 'easeInOut' }}
+            className="border-custom-slate-border bg-background rounded-b-2xl border-t"
+          >
+            <div className="space-y-4 p-5">{children}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}

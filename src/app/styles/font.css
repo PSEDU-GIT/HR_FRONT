@@ -1,0 +1,29 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+
+@font-face {
+  font-family: 'Inter';
+  src:
+    url(/assets/font/InterVariable.woff2) format('woff2'),
+    url(/assets/font/InterVariable.woff) format('woff');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans KR';
+  src:
+    url(/assets/font/NotoSansKR-VariableFont_wght.woff2) format('woff2'),
+    url(/assets/font/NotoSansKR-VariableFont_wght.woff) format('woff');
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+}
+
+/* Pretendard font-family alias for backward compatibility */
+@font-face {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: local('Pretendard Variable'), local('Pretendard');
+}
