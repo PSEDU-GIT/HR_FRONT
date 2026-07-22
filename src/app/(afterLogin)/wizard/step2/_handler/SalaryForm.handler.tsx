@@ -3,6 +3,7 @@
 import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore, SalaryType } from '@/app/(afterLogin)/wizard/store';
 import Step2SalaryMonthlyArea from '@/app/(afterLogin)/wizard/step2/_area/level3/Step2SalaryMonthly.area';
+import Step2SalaryCommissionArea from '@/app/(afterLogin)/wizard/step2/_area/level3/Step2SalaryCommission.area';
 import Step2SalaryHourlyArea from '@/app/(afterLogin)/wizard/step2/_area/level3/Step2SalaryHourly.area';
 import Step2SalaryPayDayArea from '@/app/(afterLogin)/wizard/step2/_area/level3/Step2SalaryPayDay.area';
 import Step2SalaryTaxFreeArea from '@/app/(afterLogin)/wizard/step2/_area/level3/Step2SalaryTaxFree.area';
@@ -11,6 +12,7 @@ import Step2ExtraAllowanceArea from '@/app/(afterLogin)/wizard/step2/_area/level
 import Step2SalarySummaryArea from '@/app/(afterLogin)/wizard/step2/_area/level3/Step2SalarySummary.area';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowRight, ArrowLeft, RotateCcw } from 'lucide-react';
+import cx from 'classnames';
 
 const getSubLevelTitle = (subLevel: number, salaryType: SalaryType): string => {
   if (salaryType === 'hourly') {
@@ -44,16 +46,19 @@ const SALARY_TYPE_LABELS: Record<SalaryType, string> = {
 };
 
 export default function SalaryFormHandler() {
-  const { wizSalaryType, wizSalarySubStep, setStep2 } = useWizardStore(
+  const { wizSalaryType, wizSalarySubStep, wizHourlyRate, setStep2 } = useWizardStore(
     useShallow((state) => ({
       wizSalaryType: state.step2.wizSalaryType,
       wizSalarySubStep: state.step2.wizSalarySubStep || 1,
+      wizHourlyRate: state.step2.wizHourlyRate,
       setStep2: state.setStep2,
     })),
   );
 
   const subLevel = wizSalarySubStep;
   const maxSubLevel = wizSalaryType === 'hourly' ? 3 : 6;
+  const isHourlyBelowMinimum =
+    wizSalaryType === 'hourly' && subLevel === 1 && wizHourlyRate < 10320;
 
   const handleChangeSalaryType = () => {
     setStep2({
@@ -71,6 +76,7 @@ export default function SalaryFormHandler() {
   };
 
   const handleNext = () => {
+    if (isHourlyBelowMinimum) return;
     if (subLevel < maxSubLevel) {
       const nextLevel = (subLevel + 1) as 1 | 2 | 3 | 4 | 5 | 6;
       setStep2((prev) => ({
@@ -99,6 +105,9 @@ export default function SalaryFormHandler() {
 
     switch (subLevel) {
       case 1:
+        if (wizSalaryType === 'commission') {
+          return <Step2SalaryCommissionArea />;
+        }
         return <Step2SalaryMonthlyArea />;
       case 2:
         return <Step2SalaryPayDayArea />;
@@ -168,10 +177,18 @@ export default function SalaryFormHandler() {
           <button
             type="button"
             onClick={handleNext}
-            className="border-custom-slate-border text-text-title flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-xl border bg-white py-2.5 text-xs font-bold transition-all hover:bg-slate-50 active:scale-[0.99]"
+            disabled={isHourlyBelowMinimum}
+            className={cx(
+              'border-custom-slate-border flex flex-1 items-center justify-center gap-1.5 rounded-xl border py-2.5 text-xs font-bold transition-all',
+              isHourlyBelowMinimum
+                ? 'cursor-not-allowed bg-slate-100 text-slate-400 opacity-60'
+                : 'text-text-title cursor-pointer bg-white hover:bg-slate-50 active:scale-[0.99]',
+            )}
           >
             <span>{subLevel === maxSubLevel - 1 ? '다음 (최종 요약 확인)' : '다음'}</span>
-            <ArrowRight className="text-text-side h-3.5 w-3.5 shrink-0" />
+            <ArrowRight
+              className={cx('h-3.5 w-3.5 shrink-0', isHourlyBelowMinimum ? 'text-slate-400' : 'text-text-side')}
+            />
           </button>
         </footer>
       )}

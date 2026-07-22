@@ -31,7 +31,7 @@ export default function ClickFontScaleAction() {
   const percentage = Math.round((fontSize / 16) * 100);
 
   return (
-    <div className="fixed right-6 bottom-6 z-50 flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 p-1.5 shadow-lg backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/80">
+    <div className="fixed bottom-6 left-6 z-50 flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 p-1.5 shadow-lg backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/80">
       <div className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-500 dark:bg-slate-900 dark:text-slate-400">
         <Type size={14} />
       </div>

@@ -3,7 +3,7 @@ import Step4HeaderActionArea from './_area/Step4HeaderAction.area';
 
 export default function WizardStep4Page() {
   return (
-    <div className="flex h-full w-full flex-col">
+    <div className="flex w-full flex-1 flex-col">
       <Step4HeaderActionArea />
       <div className="relative flex-1">
         <Step4ContractPreviewArea />

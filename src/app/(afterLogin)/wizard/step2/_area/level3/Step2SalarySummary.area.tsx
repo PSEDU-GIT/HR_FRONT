@@ -9,6 +9,8 @@ export default function Step2SalarySummaryArea() {
     wizSalaryType,
     wizSalaryAmount,
     wizHourlyRate,
+    wizCommissionRate,
+    wizMinGuaranteeAmount,
     wizPayDay,
     wizHasTaxFree,
     wizNonTaxFood,
@@ -28,6 +30,8 @@ export default function Step2SalarySummaryArea() {
       wizSalaryType: state.step2.wizSalaryType,
       wizSalaryAmount: state.step2.wizSalaryAmount,
       wizHourlyRate: state.step2.wizHourlyRate,
+      wizCommissionRate: state.step2.wizCommissionRate ?? 20,
+      wizMinGuaranteeAmount: state.step2.wizMinGuaranteeAmount ?? 1883297,
       wizPayDay: state.step2.wizPayDay,
       wizHasTaxFree: state.step2.wizHasTaxFree,
       wizNonTaxFood: state.step2.wizNonTaxFood,
@@ -57,21 +61,28 @@ export default function Step2SalarySummaryArea() {
   };
 
   const isHourly = wizSalaryType === 'hourly';
+  const isCommission = wizSalaryType === 'commission';
 
   return (
     <div className="space-y-4">
       {/* 요약 2열 카드 그리드 레이아웃 */}
       <div className="grid grid-cols-2 gap-2">
-        {/* 1. 시급 또는 월급 */}
+        {/* 1. 시급 또는 월급 또는 비율제 */}
         <div className="border-custom-slate-border flex items-center justify-between rounded-xl border bg-white px-3 py-2 shadow-2xs">
           <div className="min-w-0 pr-1">
             <span className="text-text-side block truncate text-[10px] font-semibold">
-              {isHourly ? '약정 시급' : '기본 지급액 (월급)'}
+              {isHourly
+                ? '약정 시급'
+                : isCommission
+                  ? '비율제 수수료율'
+                  : '기본 지급액 (월급)'}
             </span>
             <p className="text-text-main mt-0.5 truncate text-xs font-bold">
               {isHourly
                 ? `시간당 ${wizHourlyRate ? wizHourlyRate.toLocaleString() : 10320}원`
-                : `월 ${wizSalaryAmount ? wizSalaryAmount.toLocaleString() : 0}원`}
+                : isCommission
+                  ? `${wizCommissionRate}% (최소보장 ${wizMinGuaranteeAmount ? wizMinGuaranteeAmount.toLocaleString() : 0}원)`
+                  : `월 ${wizSalaryAmount ? wizSalaryAmount.toLocaleString() : 0}원`}
             </p>
           </div>
           <button

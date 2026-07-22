@@ -9,6 +9,7 @@ interface AccordionCardProps {
   title: string;
   summary?: React.ReactNode;
   hasWarning?: boolean;
+  hasDanger?: boolean;
   isOpen: boolean;
   isDone?: boolean;
   onClick: () => void;
@@ -19,6 +20,7 @@ export default function AccordionCard({
   title,
   summary,
   hasWarning,
+  hasDanger,
   isOpen,
   isDone,
   onClick,
@@ -45,17 +47,22 @@ export default function AccordionCard({
           <div
             className={cx(
               'h-2 w-2 rounded-full transition-colors',
-              hasWarning
-                ? 'bg-custom-yellow'
-                : isDone
-                  ? 'bg-custom-emerald'
-                  : isOpen
-                    ? 'bg-custom-indigo'
-                    : 'bg-slate-300',
+              hasDanger
+                ? 'bg-rose-500'
+                : hasWarning
+                  ? 'bg-custom-yellow'
+                  : isDone
+                    ? 'bg-custom-emerald'
+                    : isOpen
+                      ? 'bg-custom-indigo'
+                      : 'bg-slate-300',
             )}
           />
           <span className="text-text-title text-sm font-bold">{title}</span>
-          {hasWarning && <AlertTriangle className="text-custom-yellow h-3.5 w-3.5 shrink-0" />}
+          {hasDanger && <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-rose-600" />}
+          {!hasDanger && hasWarning && (
+            <AlertTriangle className="text-custom-yellow h-3.5 w-3.5 shrink-0" />
+          )}
         </div>
 
         <div className="flex items-center gap-3">

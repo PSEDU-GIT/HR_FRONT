@@ -73,7 +73,6 @@ interface Step3State {
 
 interface Step4State {
   recipientPhone: string;
-  documentFontSize: number;
 }
 
 interface WizardState {
@@ -162,7 +161,6 @@ const initialStep3: Step3State = {
 
 const initialStep4: Step4State = {
   recipientPhone: '010-8273-0192',
-  documentFontSize: 12,
 };
 
 export const useWizardStore = create<WizardState>((set) => ({
