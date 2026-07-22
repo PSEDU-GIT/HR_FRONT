@@ -1,6 +1,6 @@
-import { type Instructor } from '@/app/(afterLogin)/wizard/step1/_model/Instructor.model';
+import { NextResponse } from 'next/server';
 
-const FALLBACK_INSTRUCTORS: Instructor[] = [
+const MOCK_INSTRUCTORS = [
   {
     code: 'CI_92817291',
     name: '김태희',
@@ -35,14 +35,6 @@ const FALLBACK_INSTRUCTORS: Instructor[] = [
   },
 ];
 
-export const getInstructors = async (): Promise<Instructor[]> => {
-  try {
-    const res = await fetch('/api/instructors');
-    if (!res.ok) {
-      return FALLBACK_INSTRUCTORS;
-    }
-    return await res.json();
-  } catch (error) {
-    return FALLBACK_INSTRUCTORS;
-  }
-};
+export async function GET() {
+  return NextResponse.json(MOCK_INSTRUCTORS);
+}
