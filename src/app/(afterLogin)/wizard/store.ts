@@ -40,7 +40,14 @@ export interface Step2State {
 
   wizSalaryType: SalaryType;
   wizSalaryApplied: boolean;
+  wizSalaryDone: boolean;
   wizSalaryAmount: number;
+  wizHourlyRate: number;
+  wizCommissionRate: number;
+  wizMinGuaranteeAmount: number;
+  wizIsCustomCommission: boolean;
+  wizSalarySubStep: 1 | 2 | 3 | 4 | 5 | 6;
+  maxUnlockedSalarySubStep: 1 | 2 | 3 | 4 | 5 | 6;
   wizHasTaxFree: boolean;
   wizNonTaxFood: number;
   wizHasCarAllowance: boolean;
@@ -66,6 +73,7 @@ interface Step3State {
 
 interface Step4State {
   recipientPhone: string;
+  documentFontSize: number;
 }
 
 interface WizardState {
@@ -121,7 +129,14 @@ const initialStep2: Step2State = {
 
   wizSalaryType: 'monthly',
   wizSalaryApplied: true,
+  wizSalaryDone: false,
   wizSalaryAmount: 2500000,
+  wizHourlyRate: 10320,
+  wizCommissionRate: 20,
+  wizMinGuaranteeAmount: 1883297,
+  wizIsCustomCommission: false,
+  wizSalarySubStep: 1,
+  maxUnlockedSalarySubStep: 1,
   wizHasTaxFree: true,
   wizNonTaxFood: 200000,
   wizHasCarAllowance: false,
@@ -133,9 +148,9 @@ const initialStep2: Step2State = {
   wizOtherAllowance: 0,
   wizOtherAllowanceName: '',
   wizHasNonCompete: false,
-  wizNonCompetePeriod: '1년',
-  wizNonCompeteRange: '동일 구/군 내',
-  wizNonCompeteAmount: 100000,
+  wizNonCompetePeriod: '6개월',
+  wizNonCompeteRange: '반경 3km',
+  wizNonCompeteAmount: 240000,
 
   highlightedAdvisoryKey: null,
 };
@@ -147,6 +162,7 @@ const initialStep3: Step3State = {
 
 const initialStep4: Step4State = {
   recipientPhone: '010-8273-0192',
+  documentFontSize: 12,
 };
 
 export const useWizardStore = create<WizardState>((set) => ({

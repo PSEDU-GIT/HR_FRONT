@@ -11,7 +11,7 @@ interface AdvisoryModalCardProps {
   onClose: () => void;
   title: string;
   children: React.ReactNode;
-  theme?: 'yellow' | 'emerald' | 'default';
+  theme?: 'yellow' | 'emerald' | 'default' | 'danger';
   cardClassName?: string;
   modalClassName?: string;
   autoCloseDuration?: number;
@@ -52,11 +52,13 @@ export default function AdvisoryModalCard({
   }, [isHighlighted, onClose, autoCloseDuration]);
 
   const themeCardClass =
-    theme === 'yellow'
-      ? 'border-custom-yellow-border bg-custom-yellow-bg text-custom-yellow'
-      : theme === 'emerald'
-        ? 'border-custom-emerald-border bg-custom-emerald-bg text-custom-emerald'
-        : 'bg-background text-text-main border-none';
+    theme === 'danger'
+      ? 'border-rose-300 bg-rose-50 text-rose-700'
+      : theme === 'yellow'
+        ? 'border-custom-yellow-border bg-custom-yellow-bg text-custom-yellow'
+        : theme === 'emerald'
+          ? 'border-custom-emerald-border bg-custom-emerald-bg text-custom-emerald'
+          : 'bg-background text-text-main border-none';
 
   return (
     <>

@@ -17,9 +17,9 @@ export default function ReadNavListAction() {
           icon={<LayoutDashboard size={18} />}
         />
         <NavItem
-          href="/wizard"
-          label="계약서 작성기"
-          isActive={pathname === '/wizard'}
+          href="/wizard/step1"
+          label="계약서 작성"
+          isActive={pathname.startsWith('/wizard')}
           icon={<FileText size={18} />}
         />
       </div>
@@ -27,7 +27,7 @@ export default function ReadNavListAction() {
       <NavItem
         href="/cabinet"
         label="계약보관함"
-        isActive={pathname === '/cabinet'}
+        isActive={pathname.startsWith('/cabinet')}
         icon={<Package size={18} />}
       />
     </nav>

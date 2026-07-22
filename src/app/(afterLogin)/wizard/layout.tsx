@@ -9,7 +9,7 @@ export default function WizardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="relative h-full flex-1 overflow-hidden pt-0 pr-8">
+    <div className="relative h-full flex-1 overflow-hidden pt-0">
       <div className="flex min-h-16 items-center justify-between">
         <header className="flex flex-1 items-center justify-between gap-4">
           <div className="flex items-center gap-3">

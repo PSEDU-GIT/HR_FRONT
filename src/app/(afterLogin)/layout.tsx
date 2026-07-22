@@ -14,7 +14,7 @@ export default function AfterLoginLayout({
       <div className="bg-foreground flex flex-1 flex-col overflow-hidden">
         <HeaderArea />
 
-        <main className="flex-1 pl-8">{children}</main>
+        <main className="flex-1 px-8 pb-8">{children}</main>
       </div>
 
       <ClickFontScaleAction />

@@ -38,7 +38,7 @@ export default function NextStepBtn({ className }: NextStepBtnProps) {
       onClick={handleNextStep}
       className={cx(
         'flex cursor-pointer items-center justify-center space-x-1 rounded-xl bg-slate-900 px-4 py-2 text-xs font-black text-white shadow-sm transition-all duration-200 hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200',
-        className ? className : 'absolute top-[14px] right-8 w-48',
+        className ? className : 'absolute top-[14px] right-0 w-48',
       )}
     >
       <span>{activeStep === 4 ? '작성 완료' : '다음 단계로'}</span>
