@@ -9,11 +9,11 @@ export default function ClickDarkModeAction() {
 
   return (
     <button
-      className="flex h-[40px] w-[40px] items-center justify-center rounded-[12px] text-slate-500 transition-colors hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-900"
+      className="text-text-side hover:bg-custom-indigo-bg hover:text-custom-indigo flex h-8 w-8 cursor-pointer items-center justify-center rounded-full transition-all"
       title="테마 변경"
       onClick={handleClick}
     >
-      <Moon size={20} className="h-[20px] w-[20px]" />
+      <Moon className="h-4 w-4" />
     </button>
   );
 }

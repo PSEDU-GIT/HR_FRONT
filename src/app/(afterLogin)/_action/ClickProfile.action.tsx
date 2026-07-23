@@ -1,6 +1,6 @@
 'use client';
 
-import { User, ChevronDown } from 'lucide-react';
+import { User } from 'lucide-react';
 
 export default function ClickProfileAction() {
   const handleClick = () => {
@@ -9,21 +9,14 @@ export default function ClickProfileAction() {
 
   return (
     <div
-      className="flex cursor-pointer items-center gap-[12px] rounded-[12px] px-[8px] py-[6px] transition-colors hover:bg-slate-50 dark:hover:bg-slate-900"
+      className="flex cursor-pointer items-center transition-colors"
       onClick={handleClick}
+      title="내 정보 설정"
+      aria-label="내 정보 설정"
     >
-      <div className="flex h-[36px] w-[36px] items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
-        <User size={18} className="h-[18px] w-[18px]" />
+      <div className="border-custom-slate-border text-text-side flex h-8 w-8 items-center justify-center rounded-full border transition-all hover:border-custom-indigo-border hover:bg-custom-indigo-bg hover:text-custom-indigo">
+        <User className="h-4 w-4" />
       </div>
-      <div className="flex flex-col text-left">
-        <span className="text-[13px] leading-tight font-bold text-slate-800 dark:text-slate-200">
-          총관리자 님
-        </span>
-        <span className="mt-0.5 text-[10px] leading-tight font-bold text-slate-400 dark:text-slate-500">
-          원장
-        </span>
-      </div>
-      <ChevronDown size={14} className="h-[14px] w-[14px] text-slate-400" />
     </div>
   );
 }

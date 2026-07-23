@@ -46,8 +46,8 @@
   --custom-slate: oklch(96.8% 0.007 247.896);
   --custom-slate-bg: oklch(97.8% 0.003 247.858);
   --custom-slate-hover: oklch(92.9% 0.013 255.508);
-  --custom-slate-border: oklch(90% 0.02 255);
-  --custom-slate-border-hover: oklch(80% 0.03 255);
+  --custom-slate-border: lab(90.952% 0 -.0000119209);
+  --custom-slate-border-hover: oklch(88% 0.015 255);
   --custom-slate-border-side: oklch(96.8% 0.007 247.896);
 
   --custom-success: oklch(65% 0.17 232);
@@ -153,8 +153,8 @@
   --custom-slate: oklch(24% 0.009 247.896);
   --custom-slate-bg: oklch(18% 0.005 247.858);
   --custom-slate-hover: oklch(28% 0.013 255.508);
-  --custom-slate-border: oklch(30% 0.018 255);
-  --custom-slate-border-hover: oklch(38% 0.025 255);
+  --custom-slate-border: oklch(25% 0.01 255);
+  --custom-slate-border-hover: oklch(34% 0.015 255);
   --custom-slate-border-side: oklch(26% 0.009 247.896);
 
   --custom-success: oklch(58% 0.15 232);

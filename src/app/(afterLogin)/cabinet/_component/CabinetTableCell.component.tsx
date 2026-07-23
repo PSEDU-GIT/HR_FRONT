@@ -30,22 +30,22 @@ export default function CabinetTableCellComponent({
   switch (columnKey) {
     case 'instructor':
       return (
-        <td className={cx('sticky left-0 w-[25%] bg-white group-hover:bg-slate-50/60 px-4 transition-colors', cellPadding)}>
-          <div className="text-text-title font-bold">{item.instructorName}</div>
-          <span className="text-text-side font-mono text-[10px]">{item.instructorPhone}</span>
+        <td className={cx('px-3 py-4 text-left', cellPadding)}>
+          <span className="font-bold text-neutral-900">{item.instructorName}</span>
+          <span className="ml-2 text-xs font-normal text-gray-500">({item.instructorPhone})</span>
         </td>
       );
 
     case 'status':
       return (
-        <td className={cx('w-[15%] px-4 text-left', cellPadding)}>
+        <td className={cx('px-3 py-4 text-left', cellPadding)}>
           {item.status === 'pending' ? (
-            <span className="bg-custom-yellow-bg border-custom-yellow-border text-custom-yellow inline-flex items-center rounded-lg border px-2.5 py-0.5 text-[10px] font-extrabold">
-              <span>대기</span>
+            <span className="inline-flex items-center justify-center rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-bold text-amber-600 border border-amber-200">
+              대기
             </span>
           ) : (
-            <span className="bg-custom-emerald-bg border-custom-emerald-border text-custom-emerald inline-flex items-center rounded-lg border px-2.5 py-0.5 text-[10px] font-extrabold">
-              <span>체결 완료</span>
+            <span className="inline-flex items-center justify-center rounded-full bg-[#e6fffa] px-2.5 py-0.5 text-xs font-bold text-[#0d9488]">
+              체결 완료
             </span>
           )}
         </td>
@@ -53,109 +53,79 @@ export default function CabinetTableCellComponent({
 
     case 'contractPeriod':
       return (
-        <td className={cx('text-text-main w-[30%] px-4 text-left font-mono text-xs font-medium', cellPadding)}>
+        <td className={cx('px-3 py-4 text-left font-semibold text-neutral-800', cellPadding)}>
           {item.startDate} ~ {item.endDate}
         </td>
       );
 
     case 'createdAt':
       return (
-        <td className={cx('text-text-side w-[15%] px-4 text-center font-mono text-xs font-medium', cellPadding)}>
+        <td className={cx('px-3 py-4 text-center font-semibold text-neutral-800', cellPadding)}>
           {item.createdAt}
         </td>
       );
 
     case 'action':
       return (
-        <td className={cx('w-[15%] px-4 text-right', cellPadding)}>
-          <div className="flex items-center justify-end gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-            <div className="relative group/tooltip inline-flex items-center justify-center">
-              <button
-                type="button"
-                onClick={onDetail}
-                className="text-text-side hover:text-text-title active:scale-95 cursor-pointer p-1 transition-colors"
-                aria-label="상세보기"
-              >
-                <Eye className="h-4 w-4" />
-              </button>
-              <div className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-slate-900 px-2 py-1 text-[10px] font-bold text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover/tooltip:opacity-100 z-30">
-                상세보기
-              </div>
-            </div>
+        <td className={cx('px-3 py-4 text-center', cellPadding)}>
+          <div className="flex items-center justify-center gap-2">
+            <button
+              type="button"
+              onClick={onDetail}
+              title="상세보기"
+              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-indigo-50 hover:text-indigo-600"
+            >
+              <Eye className="h-4 w-4" />
+            </button>
 
             {item.status === 'pending' ? (
               <>
-                <div className="relative group/tooltip inline-flex items-center justify-center">
-                  <button
-                    type="button"
-                    onClick={onEdit}
-                    className="text-text-side hover:text-text-title active:scale-95 cursor-pointer p-1 transition-colors"
-                    aria-label="수정"
-                  >
-                    <Pencil className="h-4 w-4" />
-                  </button>
-                  <div className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-slate-900 px-2 py-1 text-[10px] font-bold text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover/tooltip:opacity-100 z-30">
-                    수정
-                  </div>
-                </div>
+                <button
+                  type="button"
+                  onClick={onEdit}
+                  title="수정"
+                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-indigo-50 hover:text-indigo-600"
+                >
+                  <Pencil className="h-4 w-4" />
+                </button>
 
-                <div className="relative group/tooltip inline-flex items-center justify-center">
-                  <button
-                    type="button"
-                    onClick={() => onShare(item.instructorName)}
-                    className="text-text-side hover:text-text-title active:scale-95 cursor-pointer p-1 transition-colors"
-                    aria-label="카카오톡 링크 공유"
-                  >
-                    <Share2 className="h-4 w-4" />
-                  </button>
-                  <div className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-slate-900 px-2 py-1 text-[10px] font-bold text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover/tooltip:opacity-100 z-30">
-                    카카오톡 공유
-                  </div>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => onShare(item.instructorName)}
+                  title="카카오톡 공유"
+                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-indigo-50 hover:text-indigo-600"
+                >
+                  <Share2 className="h-4 w-4" />
+                </button>
 
-                <div className="relative group/tooltip inline-flex items-center justify-center">
-                  <button
-                    type="button"
-                    onClick={() => onDelete(item.id)}
-                    className="text-rose-400 hover:text-rose-600 active:scale-95 cursor-pointer p-1 transition-colors"
-                    aria-label="삭제"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                  <div className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-rose-600 px-2 py-1 text-[10px] font-bold text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover/tooltip:opacity-100 z-30">
-                    삭제
-                  </div>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => onDelete(item.id)}
+                  title="삭제"
+                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-rose-50 hover:text-rose-600"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
               </>
             ) : (
               <>
-                <div className="relative group/tooltip inline-flex items-center justify-center">
-                  <button
-                    type="button"
-                    onClick={onDownload}
-                    className="text-text-side hover:text-text-title active:scale-95 cursor-pointer p-1 transition-colors"
-                    aria-label="다운로드"
-                  >
-                    <Download className="h-4 w-4" />
-                  </button>
-                  <div className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-slate-900 px-2 py-1 text-[10px] font-bold text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover/tooltip:opacity-100 z-30">
-                    다운로드
-                  </div>
-                </div>
+                <button
+                  type="button"
+                  onClick={onDownload}
+                  title="다운로드"
+                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-indigo-50 hover:text-indigo-600"
+                >
+                  <Download className="h-4 w-4" />
+                </button>
 
-                <div className="relative group/tooltip inline-flex items-center justify-center">
-                  <button
-                    type="button"
-                    onClick={() => onShare(item.instructorName)}
-                    className="text-text-side hover:text-text-title active:scale-95 cursor-pointer p-1 transition-colors"
-                    aria-label="카카오톡 링크 공유"
-                  >
-                    <Share2 className="h-4 w-4" />
-                  </button>
-                  <div className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-slate-900 px-2 py-1 text-[10px] font-bold text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover/tooltip:opacity-100 z-30">
-                    카카오톡 공유
-                  </div>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => onShare(item.instructorName)}
+                  title="카카오톡 공유"
+                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-indigo-50 hover:text-indigo-600"
+                >
+                  <Share2 className="h-4 w-4" />
+                </button>
               </>
             )}
           </div>

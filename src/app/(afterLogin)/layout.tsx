@@ -8,13 +8,15 @@ export default function AfterLoginLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex h-screen w-screen overflow-hidden">
+    <div className="bg-foreground flex h-screen w-screen overflow-hidden">
       <NavArea />
 
-      <div className="bg-foreground flex flex-1 flex-col overflow-hidden">
-        <HeaderArea />
+      <div className="flex-1 p-2">
+        <div className="bg-background border-custom-slate-border-side flex flex-col overflow-y-auto rounded-2xl shadow-sm">
+          <HeaderArea />
 
-        <main className="flex-1 px-8 pb-8">{children}</main>
+          <main className="flex-1 px-8 pb-8">{children}</main>
+        </div>
       </div>
 
       <ClickFontScaleAction />

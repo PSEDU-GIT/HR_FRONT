@@ -1,27 +1,38 @@
-import Link from 'next/link';
+'use client';
 
+import Link from 'next/link';
+import cx from 'classnames';
 interface NavItemProps {
   href: string;
   icon: React.ReactNode;
   label: string;
   isActive: boolean;
+  isCollapsed: boolean;
 }
 
-export default function NavItem({ href, icon, label, isActive }: NavItemProps) {
-  const baseClass =
-    'relative flex items-center gap-[10px] rounded-[10px] p-[9px_12px] text-[14px] cursor-pointer transition-all duration-150';
-  const activeClass = 'bg-[oklch(0.347_0.042_267.6)] font-semibold text-white';
-  const inactiveClass =
-    'text-[oklch(0.88_0.015_260)] hover:bg-[oklch(0.32_0.03_260)] hover:text-white font-medium';
-
+export default function NavItem({ href, icon, label, isActive, isCollapsed }: NavItemProps) {
   return (
     <Link
-      className={`${baseClass} ${isActive ? activeClass : inactiveClass}`}
       href={href}
-      data-discover="true"
+      title={isCollapsed ? label : undefined}
+      className={cx(
+        'my-1 flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all duration-300 ease-in-out',
+        {
+          'bg-custom-indigo text-white shadow-xs': isActive,
+          'text-muted-foreground hover:bg-custom-indigo-bg hover:text-custom-indigo': !isActive,
+        },
+        !isCollapsed && 'hover:translate-x-1 hover:transform',
+      )}
     >
-      {icon}
-      <span>{label}</span>
+      <div className="flex shrink-0 items-center justify-center">{icon}</div>
+      <span
+        className={cx(
+          'inline-block overflow-hidden font-semibold whitespace-nowrap transition-all duration-300 ease-in-out',
+          isCollapsed ? 'max-w-0 opacity-0' : 'max-w-[150px] opacity-100',
+        )}
+      >
+        {label}
+      </span>
     </Link>
   );
 }

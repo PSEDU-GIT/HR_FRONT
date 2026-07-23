@@ -9,6 +9,9 @@ import ReactQueryProvider from '../providers/ReactQueryProvider';
 export const metadata: Metadata = {
   title: '학온 HR',
   description: '전자계약에서 시작하는 학원 인사 운영',
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({
