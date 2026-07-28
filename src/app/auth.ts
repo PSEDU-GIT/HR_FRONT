@@ -94,8 +94,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         path: '/',
         secure: process.env.NODE_ENV === 'production',
         domain:
-          process.env.NODE_ENV === 'production'
-            ? process.env.COOKIE_DOMAIN || '.n-e.kr'
+          process.env.NODE_ENV === 'production' && process.env.COOKIE_DOMAIN
+            ? process.env.COOKIE_DOMAIN
             : undefined,
       },
     },
