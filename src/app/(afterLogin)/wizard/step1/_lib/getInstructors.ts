@@ -1,48 +1,26 @@
 import { type Instructor } from '@/app/(afterLogin)/wizard/step1/_model/Instructor.model';
 
-const FALLBACK_INSTRUCTORS: Instructor[] = [
-  {
-    code: 'CI_92817291',
-    name: '김태희',
-    phone: '010-4829-1928',
-    subject: '영어',
-    birth: '1990-03-15',
-    address: '서울특별시 강남구 테헤란로 123',
-  },
-  {
-    code: 'CI_10283719',
-    name: '박서준',
-    phone: '010-8273-0192',
-    subject: '수학',
-    birth: '1988-12-16',
-    address: '서울특별시 서초구 반포대로 456',
-  },
-  {
-    code: 'CI_83921029',
-    name: '이지은',
-    phone: '010-1234-5678',
-    subject: '국어',
-    birth: '1993-05-16',
-    address: '서울특별시 마포구 독막로 789',
-  },
-  {
-    code: 'CI_58291028',
-    name: '이민호',
-    phone: '010-9876-5432',
-    subject: '과학',
-    birth: '1987-06-22',
-    address: '서울특별시 송파구 올림픽로 321',
-  },
-];
-
 export const getInstructors = async (): Promise<Instructor[]> => {
   try {
-    const res = await fetch('/api/instructors');
+    const res = await fetch('/api/hr/contract/existing-teachers', { cache: 'no-store' });
     if (!res.ok) {
-      return FALLBACK_INSTRUCTORS;
+      return [];
     }
-    return await res.json();
+    const json = await res.json();
+    if (Array.isArray(json?.data)) {
+      return json.data
+        .filter((item: any) => item.phone && item.phone.trim() !== '')
+        .map((item: any) => ({
+          staffId: Number(item.staffId),
+          name: item.name,
+          phone: item.phone,
+          gender: item.gender ?? null,
+          hasContractHistory: item.hasContractHistory ?? false,
+        }));
+    }
+    return [];
   } catch (error) {
-    return FALLBACK_INSTRUCTORS;
+    console.error('getInstructors fetch error:', error);
+    return [];
   }
 };

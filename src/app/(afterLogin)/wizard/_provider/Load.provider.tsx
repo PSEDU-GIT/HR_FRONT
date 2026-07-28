@@ -1,13 +1,13 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
+import { useWizardStore } from '../store';
 
-export default function ResetWizardStoreAction() {
+export default function LoadProvider() {
   const reset = useWizardStore((state) => state.reset);
 
   useEffect(() => {
-    reset();
+    return () => reset();
   }, [reset]);
 
   return null;

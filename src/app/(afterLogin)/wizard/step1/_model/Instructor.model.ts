@@ -1,8 +1,10 @@
 export interface Instructor {
-  code: string;
+  staffId: number;
   name: string;
   phone: string;
-  subject: string;
-  birth: string;
-  address: string;
+  gender?: 'MALE' | 'FEMALE' | null;
+  subject?: string;
+  birth?: string;
+  address?: string;
+  hasContractHistory?: boolean;
 }

@@ -41,7 +41,7 @@ export default function Step2WorkScheduleArea() {
   return (
     <motion.article
       layout="position"
-      transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+      transition={{ duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
       style={{ order: isCurrentOpen ? -1 : 2 }}
     >
       <AccordionCard

@@ -29,7 +29,7 @@ export default function AccordionCard({
   return (
     <div
       className={cx(
-        'border-custom-slate-border rounded-2xl border transition-all duration-200',
+        'border-custom-slate-border rounded-2xl border transition-all duration-500',
         isOpen ? 'bg-white shadow-sm' : 'bg-white hover:bg-slate-50',
       )}
     >
@@ -82,7 +82,7 @@ export default function AccordionCard({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2, ease: 'easeInOut' }}
+            transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
             className="border-custom-slate-border bg-background rounded-b-2xl border-t"
           >
             <div className="space-y-4 p-5">{children}</div>

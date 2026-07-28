@@ -8,10 +8,12 @@ import ReadFilterInstructorCountAction from '@/app/(afterLogin)/cabinet/_action/
 
 export default function CabinetFilterArea() {
   return (
-    <aside className="border-custom-slate-border-side w-full shrink-0 space-y-6 rounded-2xl border bg-white p-5 lg:w-80 xl:w-96">
+    <aside className="border-custom-slate-border w-full shrink-0 space-y-6 rounded-2xl border bg-white p-5 lg:w-80 xl:w-96">
       <div className="space-y-4">
         <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-          <h3 className="text-text-title text-sm font-extrabold tracking-tight">상세 검색 및 필터</h3>
+          <h3 className="text-text-title text-sm font-extrabold tracking-tight">
+            상세 검색 및 필터
+          </h3>
           <ReadFilterResetAction />
         </div>
 

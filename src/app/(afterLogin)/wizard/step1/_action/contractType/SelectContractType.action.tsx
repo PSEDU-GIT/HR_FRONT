@@ -2,7 +2,7 @@
 
 import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
-import ContractTypeCard from '@/app/(afterLogin)/wizard/step1/_component/ContractTypeCard';
+import ToggleButton from '@/app/_component/button/ToggleButton';
 
 export default function SelectContractTypeAction() {
   const { step1, setStep1 } = useWizardStore(
@@ -10,13 +10,19 @@ export default function SelectContractTypeAction() {
   );
 
   return (
-    <div className="flex">
-      <ContractTypeCard
-        title="강사근로계약서"
-        description="학원과 강사 간의 근로관계를 명확히 하는 계약서입니다. 법적 요건을 충족하는 표준 계약서 양식으로 작성됩니다."
-        isActive={step1.contractType === '강사근로계약서'}
+    <div className="flex w-1/2 gap-2">
+      <ToggleButton
+        label="강사근로계약서"
+        isSelected={step1.contractType === '강사근로계약서'}
         onClick={() => setStep1({ contractType: '강사근로계약서' })}
+        className="!py-2.5 !text-sm"
       />
+      {/* <ToggleButton
+        label="강사용역계약서"
+        isSelected={step1.contractType === '강사용역계약서'}
+        onClick={() => setStep1({ contractType: '강사용역계약서' })}
+        className="!py-2.5 !text-sm"
+      /> */}
     </div>
   );
 }

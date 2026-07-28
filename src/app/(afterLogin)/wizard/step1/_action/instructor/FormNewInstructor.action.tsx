@@ -3,13 +3,8 @@
 import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
 import CustomDate from '@/app/_component/date/CustomDate';
-
-const formatPhoneNumber = (value: string): string => {
-  const raw = value.replace(/[^0-9]/g, '');
-  if (raw.length <= 3) return raw;
-  if (raw.length <= 7) return `${raw.slice(0, 3)}-${raw.slice(3)}`;
-  return `${raw.slice(0, 3)}-${raw.slice(3, 7)}-${raw.slice(7, 11)}`;
-};
+import ToggleButton from '@/app/_component/button/ToggleButton';
+import { formatPhoneNumber } from '@/app/_lib/formatPhoneNumber';
 
 export default function FormNewInstructorAction() {
   const { step1, setStep1 } = useWizardStore(
@@ -45,6 +40,27 @@ export default function FormNewInstructorAction() {
       </div>
       <div>
         <label className="text-text-main mb-1.5 block text-xs font-bold">
+          성별 <span className="text-red-500">*</span>
+        </label>
+        <div className="flex gap-2">
+          <ToggleButton
+            label="남"
+            isSelected={step1.instructorGender === 'MALE'}
+            onClick={() =>
+              setStep1({ instructorGender: step1.instructorGender === 'MALE' ? null : 'MALE' })
+            }
+          />
+          <ToggleButton
+            label="여"
+            isSelected={step1.instructorGender === 'FEMALE'}
+            onClick={() =>
+              setStep1({ instructorGender: step1.instructorGender === 'FEMALE' ? null : 'FEMALE' })
+            }
+          />
+        </div>
+      </div>
+      <div>
+        <label className="text-text-main mb-1.5 block text-xs font-bold">
           담당 과목 <span className="text-red-500">*</span>
         </label>
         <input
@@ -68,7 +84,7 @@ export default function FormNewInstructorAction() {
           hasReset={false}
         />
       </div>
-      <div className="col-span-2">
+      <div>
         <label className="text-text-main mb-1.5 block text-xs font-bold">
           주소 <span className="text-red-500">*</span>
         </label>

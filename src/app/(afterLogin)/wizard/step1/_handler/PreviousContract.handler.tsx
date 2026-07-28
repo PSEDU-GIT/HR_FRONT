@@ -7,6 +7,7 @@ import ReadPreviousContractSummaryAction from '@/app/(afterLogin)/wizard/step1/_
 
 export default function PreviousContractHandler() {
   const isNewInstructor = useWizardStore((state) => state.step1.isNewInstructor);
+  const hasContractHistory = useWizardStore((state) => state.step1.hasContractHistory);
 
   return (
     <AnimatePresence>
@@ -21,9 +22,15 @@ export default function PreviousContractHandler() {
           <div className="border-custom-slate-border-side space-y-4 rounded-3xl border bg-white p-6">
             <div className="border-custom-slate-border-side flex items-center justify-between border-b pb-3">
               <h4 className="text-13 text-text-title font-bold">이전 계약서 불러오기</h4>
-              <ClickLoadPreviousContractAction />
+              {hasContractHistory && <ClickLoadPreviousContractAction />}
             </div>
-            <ReadPreviousContractSummaryAction />
+            {hasContractHistory ? (
+              <ReadPreviousContractSummaryAction />
+            ) : (
+              <div className="border-custom-slate-border bg-custom-slate-bg/30 text-text-side rounded-2xl border p-6 text-center text-xs font-medium">
+                이전 계약 정보가 없습니다
+              </div>
+            )}
           </div>
         </motion.div>
       )}

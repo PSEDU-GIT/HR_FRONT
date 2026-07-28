@@ -6,8 +6,11 @@ interface Step1State {
   instructorSubject: string;
   instructorBirth: string;
   instructorAddress: string;
+  instructorGender: 'MALE' | 'FEMALE' | null;
   contractType: string;
   isNewInstructor: boolean;
+  hasContractHistory?: boolean;
+  selectedStaffId?: number;
 }
 
 export type DaysConfig = {
@@ -95,6 +98,7 @@ const initialStep1: Step1State = {
   instructorSubject: '',
   instructorBirth: '',
   instructorAddress: '',
+  instructorGender: null,
   contractType: '강사근로계약서',
   isNewInstructor: false,
 };

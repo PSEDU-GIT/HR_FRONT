@@ -12,7 +12,7 @@ export default function AfterLoginLayout({
       <NavArea />
 
       <div className="flex-1 p-2">
-        <div className="bg-background border-custom-slate-border-side flex flex-col overflow-y-auto rounded-2xl shadow-sm">
+        <div className="bg-background border-custom-slate-border-side flex h-full flex-col overflow-y-auto rounded-2xl shadow-sm">
           <HeaderArea />
 
           <main className="flex-1 px-8 pb-8">{children}</main>

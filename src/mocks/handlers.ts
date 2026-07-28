@@ -3,7 +3,7 @@ import { type Instructor } from '../app/(afterLogin)/wizard/step1/_model/Instruc
 
 const MOCK_INSTRUCTORS: Instructor[] = [
   {
-    code: 'CI_92817291',
+    staffId: 92817291,
     name: '김태희',
     phone: '010-4829-1928',
     subject: '영어',
@@ -11,7 +11,7 @@ const MOCK_INSTRUCTORS: Instructor[] = [
     address: '서울특별시 강남구 테헤란로 123',
   },
   {
-    code: 'CI_10283719',
+    staffId: 10283719,
     name: '박서준',
     phone: '010-8273-0192',
     subject: '수학',
@@ -19,7 +19,7 @@ const MOCK_INSTRUCTORS: Instructor[] = [
     address: '서울특별시 서초구 반포대로 456',
   },
   {
-    code: 'CI_83921029',
+    staffId: 83921029,
     name: '이지은',
     phone: '010-1234-5678',
     subject: '국어',
@@ -27,7 +27,7 @@ const MOCK_INSTRUCTORS: Instructor[] = [
     address: '서울특별시 마포구 독막로 789',
   },
   {
-    code: 'CI_58291028',
+    staffId: 58291028,
     name: '이민호',
     phone: '010-9876-5432',
     subject: '과학',

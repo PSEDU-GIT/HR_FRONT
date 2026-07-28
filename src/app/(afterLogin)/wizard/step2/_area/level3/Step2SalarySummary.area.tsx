@@ -65,30 +65,26 @@ export default function Step2SalarySummaryArea() {
 
   return (
     <div className="space-y-4">
-      {/* 요약 2열 카드 그리드 레이아웃 */}
-      <div className="grid grid-cols-2 gap-2">
-        {/* 1. 시급 또는 월급 또는 비율제 */}
-        <div className="border-custom-slate-border flex items-center justify-between rounded-xl border bg-white px-3 py-2 shadow-2xs">
-          <div className="min-w-0 pr-1">
-            <span className="text-text-side block truncate text-[10px] font-semibold">
-              {isHourly
-                ? '약정 시급'
-                : isCommission
-                  ? '비율제 수수료율'
-                  : '기본 지급액 (월급)'}
+      {/* 통일감 있고 깔끔한 라인 리스트 카드 레이아웃 */}
+      <div className="border-custom-slate-border divide-custom-slate-border/60 divide-y overflow-hidden rounded-2xl border bg-white shadow-2xs">
+        {/* 1. 기본 급여 / 비율 / 시급 */}
+        <div className="flex items-center justify-between p-3.5 transition-colors hover:bg-slate-50/60">
+          <div className="flex items-center gap-3 min-w-0 pr-2">
+            <span className="w-24 shrink-0 text-xs font-semibold text-text-side">
+              {isHourly ? '약정 시급' : isCommission ? '비율제 수수료율' : '기본 지급액'}
             </span>
-            <p className="text-text-main mt-0.5 truncate text-xs font-bold">
+            <span className="truncate text-xs font-bold text-text-main">
               {isHourly
                 ? `시간당 ${wizHourlyRate ? wizHourlyRate.toLocaleString() : 10320}원`
                 : isCommission
                   ? `${wizCommissionRate}% (최소보장 ${wizMinGuaranteeAmount ? wizMinGuaranteeAmount.toLocaleString() : 0}원)`
                   : `월 ${wizSalaryAmount ? wizSalaryAmount.toLocaleString() : 0}원`}
-            </p>
+            </span>
           </div>
           <button
             type="button"
             onClick={() => goToSubStep(1)}
-            className="text-text-side hover:text-text-main shrink-0 cursor-pointer rounded-lg p-1 transition-colors"
+            className="text-text-side hover:text-custom-indigo shrink-0 cursor-pointer rounded-lg p-1.5 transition-colors hover:bg-custom-indigo-bg"
             title="금액 수정"
           >
             <Pencil className="h-3.5 w-3.5" />
@@ -96,42 +92,37 @@ export default function Step2SalarySummaryArea() {
         </div>
 
         {/* 2. 급여 지급일 */}
-        <div className="border-custom-slate-border flex items-center justify-between rounded-xl border bg-white px-3 py-2 shadow-2xs">
-          <div className="min-w-0 pr-1">
-            <span className="text-text-side block truncate text-[10px] font-semibold">
-              급여 지급일
-            </span>
-            <p className="text-text-main mt-0.5 truncate text-xs font-bold">매월 {wizPayDay}</p>
+        <div className="flex items-center justify-between p-3.5 transition-colors hover:bg-slate-50/60">
+          <div className="flex items-center gap-3 min-w-0 pr-2">
+            <span className="w-24 shrink-0 text-xs font-semibold text-text-side">급여 지급일</span>
+            <span className="truncate text-xs font-bold text-text-main">매월 {wizPayDay}</span>
           </div>
           <button
             type="button"
             onClick={() => goToSubStep(2)}
-            className="text-text-side hover:text-text-main shrink-0 cursor-pointer rounded-lg p-1 transition-colors"
+            className="text-text-side hover:text-custom-indigo shrink-0 cursor-pointer rounded-lg p-1.5 transition-colors hover:bg-custom-indigo-bg"
             title="급여일 수정"
           >
             <Pencil className="h-3.5 w-3.5" />
           </button>
         </div>
 
-        {/* 고정급일 때만 아래 3, 4, 5번 세부 수당 노출 */}
         {!isHourly && (
           <>
             {/* 3. 비과세 수당 */}
-            <div className="border-custom-slate-border flex items-center justify-between rounded-xl border bg-white px-3 py-2 shadow-2xs">
-              <div className="min-w-0 pr-1">
-                <span className="text-text-side block truncate text-[10px] font-semibold">
-                  비과세 수당
-                </span>
-                <p className="text-text-main mt-0.5 truncate text-xs font-bold">
+            <div className="flex items-center justify-between p-3.5 transition-colors hover:bg-slate-50/60">
+              <div className="flex items-center gap-3 min-w-0 pr-2">
+                <span className="w-24 shrink-0 text-xs font-semibold text-text-side">비과세 수당</span>
+                <span className="truncate text-xs font-bold text-text-main">
                   {wizHasTaxFree
                     ? `식대: ${wizNonTaxFood.toLocaleString()}원${wizNonTaxCar > 0 ? ` / 자가운전: ${wizNonTaxCar.toLocaleString()}원` : ''}`
                     : '미적용'}
-                </p>
+                </span>
               </div>
               <button
                 type="button"
                 onClick={() => goToSubStep(3)}
-                className="text-text-side hover:text-text-main shrink-0 cursor-pointer rounded-lg p-1 transition-colors"
+                className="text-text-side hover:text-custom-indigo shrink-0 cursor-pointer rounded-lg p-1.5 transition-colors hover:bg-custom-indigo-bg"
                 title="비과세 수당 수정"
               >
                 <Pencil className="h-3.5 w-3.5" />
@@ -139,21 +130,19 @@ export default function Step2SalarySummaryArea() {
             </div>
 
             {/* 4. 경업금지 약정 */}
-            <div className="border-custom-slate-border flex items-center justify-between rounded-xl border bg-white px-3 py-2 shadow-2xs">
-              <div className="min-w-0 pr-1">
-                <span className="text-text-side block truncate text-[10px] font-semibold">
-                  경업금지 약정
-                </span>
-                <p className="text-text-main mt-0.5 truncate text-xs font-bold">
+            <div className="flex items-center justify-between p-3.5 transition-colors hover:bg-slate-50/60">
+              <div className="flex items-center gap-3 min-w-0 pr-2">
+                <span className="w-24 shrink-0 text-xs font-semibold text-text-side">경업금지 약정</span>
+                <span className="truncate text-xs font-bold text-text-main">
                   {wizHasNonCompete
                     ? `${wizNonCompetePeriod} / ${wizNonCompeteRange} (${wizNonCompeteAmount.toLocaleString()}원)`
                     : '약정 없음'}
-                </p>
+                </span>
               </div>
               <button
                 type="button"
                 onClick={() => goToSubStep(4)}
-                className="text-text-side hover:text-text-main shrink-0 cursor-pointer rounded-lg p-1 transition-colors"
+                className="text-text-side hover:text-custom-indigo shrink-0 cursor-pointer rounded-lg p-1.5 transition-colors hover:bg-custom-indigo-bg"
                 title="경업금지 약정 수정"
               >
                 <Pencil className="h-3.5 w-3.5" />
@@ -161,12 +150,10 @@ export default function Step2SalarySummaryArea() {
             </div>
 
             {/* 5. 추가 고정수당 */}
-            <div className="border-custom-slate-border col-span-2 flex items-center justify-between rounded-xl border bg-white px-3 py-2 shadow-2xs">
-              <div className="min-w-0 pr-1">
-                <span className="text-text-side block truncate text-[10px] font-semibold">
-                  추가 고정수당
-                </span>
-                <p className="text-text-main mt-0.5 truncate text-xs font-bold">
+            <div className="flex items-center justify-between p-3.5 transition-colors hover:bg-slate-50/60">
+              <div className="flex items-center gap-3 min-w-0 pr-2">
+                <span className="w-24 shrink-0 text-xs font-semibold text-text-side">추가 고정수당</span>
+                <span className="truncate text-xs font-bold text-text-main">
                   {wizHasExtraAllowance
                     ? [
                         wizPositionAllowance > 0 &&
@@ -179,12 +166,12 @@ export default function Step2SalarySummaryArea() {
                         .filter(Boolean)
                         .join(' / ') || '추가 수당 없음'
                     : '추가 수당 없음'}
-                </p>
+                </span>
               </div>
               <button
                 type="button"
                 onClick={() => goToSubStep(5)}
-                className="text-text-side hover:text-text-main shrink-0 cursor-pointer rounded-lg p-1 transition-colors"
+                className="text-text-side hover:text-custom-indigo shrink-0 cursor-pointer rounded-lg p-1.5 transition-colors hover:bg-custom-indigo-bg"
                 title="추가 고정수당 수정"
               >
                 <Pencil className="h-3.5 w-3.5" />

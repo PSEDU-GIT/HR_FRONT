@@ -46,10 +46,19 @@ const SALARY_TYPE_LABELS: Record<SalaryType, string> = {
 };
 
 export default function SalaryFormHandler() {
-  const { wizSalaryType, wizSalarySubStep, wizHourlyRate, setStep2 } = useWizardStore(
+  const {
+    wizSalaryType,
+    wizSalarySubStep,
+    maxUnlockedSalarySubStep,
+    wizSalaryDone,
+    wizHourlyRate,
+    setStep2,
+  } = useWizardStore(
     useShallow((state) => ({
       wizSalaryType: state.step2.wizSalaryType,
       wizSalarySubStep: state.step2.wizSalarySubStep || 1,
+      maxUnlockedSalarySubStep: state.step2.maxUnlockedSalarySubStep || 1,
+      wizSalaryDone: state.step2.wizSalaryDone,
       wizHourlyRate: state.step2.wizHourlyRate,
       setStep2: state.setStep2,
     })),
@@ -57,6 +66,9 @@ export default function SalaryFormHandler() {
 
   const subLevel = wizSalarySubStep;
   const maxSubLevel = wizSalaryType === 'hourly' ? 3 : 6;
+  const isSummaryUnlocked =
+    wizSalaryDone || (maxUnlockedSalarySubStep && maxUnlockedSalarySubStep >= maxSubLevel);
+
   const isHourlyBelowMinimum =
     wizSalaryType === 'hourly' && subLevel === 1 && wizHourlyRate < 10320;
 
@@ -77,6 +89,10 @@ export default function SalaryFormHandler() {
 
   const handleNext = () => {
     if (isHourlyBelowMinimum) return;
+    if (isSummaryUnlocked && subLevel < maxSubLevel) {
+      setStep2({ wizSalarySubStep: maxSubLevel });
+      return;
+    }
     if (subLevel < maxSubLevel) {
       const nextLevel = (subLevel + 1) as 1 | 2 | 3 | 4 | 5 | 6;
       setStep2((prev) => ({
@@ -163,7 +179,7 @@ export default function SalaryFormHandler() {
 
       {subLevel < maxSubLevel && (
         <footer className="flex items-center gap-2 pt-1">
-          {subLevel > 1 && (
+          {subLevel > 1 && !isSummaryUnlocked && (
             <button
               type="button"
               onClick={handlePrev}
@@ -185,9 +201,18 @@ export default function SalaryFormHandler() {
                 : 'text-text-title cursor-pointer bg-white hover:bg-slate-50 active:scale-[0.99]',
             )}
           >
-            <span>{subLevel === maxSubLevel - 1 ? '다음 (최종 요약 확인)' : '다음'}</span>
+            <span>
+              {isSummaryUnlocked
+                ? '수정 완료'
+                : subLevel === maxSubLevel - 1
+                  ? '다음 (최종 요약 확인)'
+                  : '다음'}
+            </span>
             <ArrowRight
-              className={cx('h-3.5 w-3.5 shrink-0', isHourlyBelowMinimum ? 'text-slate-400' : 'text-text-side')}
+              className={cx(
+                'h-3.5 w-3.5 shrink-0',
+                isHourlyBelowMinimum ? 'text-slate-400' : 'text-text-side',
+              )}
             />
           </button>
         </footer>

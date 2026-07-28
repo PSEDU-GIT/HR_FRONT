@@ -17,11 +17,6 @@ export default function SelectInstructorModeAction() {
   const handleModeChange = (isNew: boolean) => {
     setStep1({
       isNewInstructor: isNew,
-      instructorName: '',
-      instructorPhone: '',
-      instructorSubject: '',
-      instructorBirth: '',
-      instructorAddress: '',
     });
   };
 
