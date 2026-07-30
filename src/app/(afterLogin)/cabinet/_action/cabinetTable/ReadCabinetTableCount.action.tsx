@@ -16,17 +16,20 @@ export default function ReadCabinetTableCountAction() {
 
   const count = useMemo(() => {
     return contracts.filter((item) => {
-      if (selectedInstructor !== '전체 강사' && item.instructorName !== selectedInstructor) {
+      const name = item.pendingStaffName || (item.staffId ? `직원 #${item.staffId}` : '');
+      if (selectedInstructor !== '전체 강사' && name !== selectedInstructor) {
         return false;
       }
-      if (statusFilter !== 'all' && item.status !== statusFilter) {
+      if (statusFilter === 'completed' && item.status !== 'SIGNED') {
+        return false;
+      }
+      if (statusFilter === 'pending' && item.status === 'SIGNED') {
         return false;
       }
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
-        const matchName = item.instructorName.toLowerCase().includes(q);
-        const matchPhone = item.instructorPhone.includes(q);
-        if (!matchName && !matchPhone) return false;
+        const matchName = name.toLowerCase().includes(q);
+        if (!matchName) return false;
       }
       return true;
     }).length;

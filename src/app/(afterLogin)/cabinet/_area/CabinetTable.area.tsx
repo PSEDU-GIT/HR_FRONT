@@ -16,14 +16,14 @@ export default function CabinetTableArea() {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse text-left text-sm">
+        <table className="w-full table-fixed border-collapse text-left text-sm min-w-[640px]">
           <thead>
             <tr className="border-b border-gray-200 font-bold text-neutral-900">
-              <th className="px-3 py-3.5 text-left">서명 대상자</th>
-              <th className="px-3 py-3.5 text-left">상태</th>
-              <th className="px-3 py-3.5 text-left">계약일</th>
-              <th className="px-3 py-3.5 text-center">계약서 작성일</th>
-              <th className="px-3 py-3.5 text-center">Action</th>
+              <th className="w-[17%] px-3 py-3.5 text-left">서명 대상자</th>
+              <th className="w-[13%] px-3 py-3.5 text-left">상태</th>
+              <th className="w-[23%] px-3 py-3.5 text-left">계약 유형</th>
+              <th className="w-[20%] px-3 py-3.5 text-center">계약서 작성일</th>
+              <th className="w-[27%] px-3 py-3.5 text-left">Action</th>
             </tr>
           </thead>
           <ReadCabinetTableTbodyAction />

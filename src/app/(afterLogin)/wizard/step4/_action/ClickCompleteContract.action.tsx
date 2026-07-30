@@ -3,13 +3,14 @@
 import { useRouter } from 'next/navigation';
 import { Send, Loader2 } from 'lucide-react';
 import cx from 'classnames';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
 import {
   createTeacherContract,
   type TeacherContractPayload,
 } from '@/app/(afterLogin)/wizard/_lib/createTeacherContract';
+import { getContractArchiveQueryKey } from '@/app/(afterLogin)/cabinet/_lib/getContractArchiveQuery';
 
 interface ClickCompleteContractActionProps {
   className?: string;
@@ -29,6 +30,7 @@ export default function ClickCompleteContractAction({
   className,
 }: ClickCompleteContractActionProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { step1, step2, step3, reset } = useWizardStore(
     useShallow((state) => ({
@@ -42,9 +44,10 @@ export default function ClickCompleteContractAction({
   const { mutate: completeContract, isPending } = useMutation({
     mutationFn: createTeacherContract,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: getContractArchiveQueryKey });
       alert('계약서 작성이 성공적으로 완료되었습니다.');
       reset();
-      router.push('/dashboard');
+      router.push('/cabinet');
     },
     onError: (error: any) => {
       console.error('계약서 작성 완료 실패:', error);

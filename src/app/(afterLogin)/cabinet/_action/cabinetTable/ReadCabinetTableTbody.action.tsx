@@ -1,9 +1,10 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useShallow } from 'zustand/react/shallow';
 import { useCabinetStore } from '@/app/(afterLogin)/cabinet/_state/useCabinetStore';
+import { getContractArchiveQuery } from '@/app/(afterLogin)/cabinet/_lib/getContractArchiveQuery';
 import CabinetTableCellComponent, {
   ColumnKey,
 } from '@/app/(afterLogin)/cabinet/_component/CabinetTableCell.component';
@@ -11,15 +12,16 @@ import CabinetTableCellComponent, {
 const COLUMN_KEYS: ColumnKey[] = [
   'instructor',
   'status',
-  'contractPeriod',
+  'contractType',
   'createdAt',
   'action',
 ];
 
 export default function ReadCabinetTableTbodyAction() {
   const router = useRouter();
+  const { data: archiveData } = getContractArchiveQuery();
 
-  const { searchQuery, selectedInstructor, statusFilter, density, contracts, deleteContract } =
+  const { searchQuery, selectedInstructor, statusFilter, density, contracts, setContracts, deleteContract } =
     useCabinetStore(
       useShallow((state) => ({
         searchQuery: state.searchQuery,
@@ -27,29 +29,39 @@ export default function ReadCabinetTableTbodyAction() {
         statusFilter: state.statusFilter,
         density: state.density,
         contracts: state.contracts,
+        setContracts: state.setContracts,
         deleteContract: state.deleteContract,
       })),
     );
 
+  useEffect(() => {
+    if (archiveData) {
+      setContracts(archiveData);
+    }
+  }, [archiveData, setContracts]);
+
   const filteredContracts = useMemo(() => {
     return contracts.filter((item) => {
-      if (selectedInstructor !== '전체 강사' && item.instructorName !== selectedInstructor) {
+      const name = item.pendingStaffName || (item.staffId ? `직원 #${item.staffId}` : '');
+      if (selectedInstructor !== '전체 강사' && name !== selectedInstructor) {
         return false;
       }
-      if (statusFilter !== 'all' && item.status !== statusFilter) {
+      if (statusFilter === 'completed' && item.status !== 'SIGNED') {
+        return false;
+      }
+      if (statusFilter === 'pending' && item.status === 'SIGNED') {
         return false;
       }
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
-        const matchName = item.instructorName.toLowerCase().includes(q);
-        const matchPhone = item.instructorPhone.includes(q);
-        if (!matchName && !matchPhone) return false;
+        const matchName = name.toLowerCase().includes(q);
+        if (!matchName) return false;
       }
       return true;
     });
   }, [contracts, selectedInstructor, statusFilter, searchQuery]);
 
-  const handleDetail = (id: string) => {
+  const handleDetail = (id: number) => {
     router.push(`/cabinet/${id}`);
   };
 
@@ -57,7 +69,7 @@ export default function ReadCabinetTableTbodyAction() {
     router.push('/wizard/step1');
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (id: number) => {
     if (confirm('해당 계약서를 삭제하시겠습니까?')) {
       deleteContract(id);
     }
@@ -72,7 +84,7 @@ export default function ReadCabinetTableTbodyAction() {
   };
 
   const cellPadding =
-    density === 'comfortable' ? 'py-3.5' : density === 'compact' ? 'py-1.5' : 'py-2.5';
+    density === 'comfortable' ? 'py-5' : density === 'compact' ? 'py-1.5' : 'py-3';
 
   return (
     <tbody className="divide-y divide-gray-100">

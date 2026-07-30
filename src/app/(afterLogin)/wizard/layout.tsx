@@ -17,7 +17,7 @@ export default function WizardLayout({
         <header className="flex flex-1 items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <h2 className="text-text-title font-extrabold tracking-tight">계약서 작성</h2>
-            <ClickAcademySettingAction />
+            {/* <ClickAcademySettingAction /> */}
           </div>
           <SelectStepNavAction />
         </header>
