@@ -2,14 +2,7 @@ import { Suspense } from 'react';
 import ReadDraftContractsAction from './_action/cabinetDraft/ReadDraftContracts.action';
 import CabinetTableArea from './_area/CabinetTable.area';
 import CabinetFilterArea from './_area/CabinetFilter.area';
-
-function CabinetSkeleton() {
-  return (
-    <div className="w-full animate-pulse p-8 text-center text-xs font-semibold text-slate-400">
-      계약서 보관함 데이터를 불러오는 중...
-    </div>
-  );
-}
+import CabinetSkeleton from './_component/CabinetSkeleton';
 
 export default function CabinetPage() {
   return (
