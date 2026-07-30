@@ -16,7 +16,7 @@ export default function ReadContractTimelineAction() {
 
   return (
     <div className="relative flex flex-col gap-6 py-2">
-      <div className="absolute top-3.5 bottom-3.5 left-[4.25rem] w-[1.5px] -translate-x-1/2 bg-gray-200" />
+      <div className="absolute top-3.5 bottom-3.5 left-[4.125rem] w-[1.5px] -translate-x-1/2 bg-gray-200" />
 
       {timelineList.map((item, index) => (
         <ActivityTimelineItem key={`${item.hrDocumentId}-${item.occurredAt}-${index}`} item={item} />
