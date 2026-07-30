@@ -1,9 +1,9 @@
 'use client';
 
-import { useMemo } from 'react';
 import cx from 'classnames';
 import { useShallow } from 'zustand/react/shallow';
 import { useCabinetStore } from '@/app/(afterLogin)/cabinet/_state/useCabinetStore';
+import { useContractArchiveState } from '@/app/(afterLogin)/cabinet/_state/getContractArchive.state';
 
 export interface InstructorFilterItem {
   id: string;
@@ -12,36 +12,18 @@ export interface InstructorFilterItem {
 }
 
 export default function ReadFilterInstructorListAction() {
-  const { selectedInstructor, setSelectedInstructor, contracts } = useCabinetStore(
+  const { selectedInstructor, setSelectedInstructor } = useCabinetStore(
     useShallow((state) => ({
       selectedInstructor: state.selectedInstructor,
       setSelectedInstructor: state.setSelectedInstructor,
-      contracts: state.contracts,
     })),
   );
 
-  const instructors = useMemo<InstructorFilterItem[]>(() => {
-    const map = new Map<string, number>();
-    contracts.forEach((item) => {
-      const name = item.pendingStaffName || (item.staffId ? `직원 #${item.staffId}` : '미지정');
-      map.set(name, (map.get(name) || 0) + 1);
-    });
-
-    const list: InstructorFilterItem[] = [
-      { id: 'all', name: '전체 강사', count: contracts.length },
-    ];
-
-    let idx = 1;
-    map.forEach((count, name) => {
-      list.push({ id: String(idx++), name, count });
-    });
-
-    return list;
-  }, [contracts]);
+  const { instructorList } = useContractArchiveState();
 
   return (
     <div className="border-custom-slate-border-side max-h-[320px] space-y-1 overflow-y-auto rounded-xl border bg-slate-50/40 p-1.5">
-      {instructors.map((item) => {
+      {instructorList.map((item) => {
         const isSelected = selectedInstructor === item.name;
         const isDisabled = item.count === 0;
 

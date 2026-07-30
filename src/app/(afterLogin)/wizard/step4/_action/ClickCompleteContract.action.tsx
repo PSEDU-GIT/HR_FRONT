@@ -10,7 +10,7 @@ import {
   createTeacherContract,
   type TeacherContractPayload,
 } from '@/app/(afterLogin)/wizard/_lib/createTeacherContract';
-import { getContractArchiveQueryKey } from '@/app/(afterLogin)/cabinet/_lib/getContractArchiveQuery';
+import { getContractArchiveQueryKey } from '@/app/(afterLogin)/cabinet/_state/getContractArchive.state';
 
 interface ClickCompleteContractActionProps {
   className?: string;

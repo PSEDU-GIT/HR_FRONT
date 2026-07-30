@@ -15,7 +15,7 @@ interface CabinetTableCellComponentProps {
   onEdit: () => void;
   onDelete: (id: number) => void;
   onDownload: () => void;
-  onShare: (name: string) => void;
+  onShare: (id: number, name: string) => void;
 }
 
 const getFormattedDate = (dateStr?: string | null) => {
@@ -141,7 +141,7 @@ export default function CabinetTableCellComponent({
                 <div className="group relative inline-flex">
                   <button
                     type="button"
-                    onClick={() => onShare(displayName)}
+                    onClick={() => onShare(item.id, displayName)}
                     className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-slate-100/80 text-slate-500 transition-all hover:bg-indigo-50 hover:text-indigo-600 active:scale-95"
                   >
                     <Share2 className="h-4 w-4" />
@@ -182,7 +182,7 @@ export default function CabinetTableCellComponent({
                 <div className="group relative inline-flex">
                   <button
                     type="button"
-                    onClick={() => onShare(displayName)}
+                    onClick={() => onShare(item.id, displayName)}
                     className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-slate-100/80 text-slate-500 transition-all hover:bg-indigo-50 hover:text-indigo-600 active:scale-95"
                   >
                     <Share2 className="h-4 w-4" />
