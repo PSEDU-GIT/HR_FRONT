@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { type Instructor } from '../app/(afterLogin)/wizard/step1/_model/Instructor.model';
+import { type Instructor } from '../app/(afterLogin)/wizard/(standard)/step1/_model/Instructor.model';
 
 const MOCK_INSTRUCTORS: Instructor[] = [
   {

@@ -14,6 +14,7 @@ export default function NextStepBtn({ className }: NextStepBtnProps) {
 
   const getActiveStep = () => {
     if (pathname.includes('/step4')) return 4;
+    if (pathname.includes('/summary')) return 3;
     if (pathname.includes('/step3')) return 3;
     if (pathname.includes('/step2')) return 2;
     return 1;
@@ -22,6 +23,7 @@ export default function NextStepBtn({ className }: NextStepBtnProps) {
   const activeStep = getActiveStep();
 
   const getNextStepPath = () => {
+    if (pathname.includes('/summary')) return '/wizard/summary/preview';
     if (activeStep === 1) return '/wizard/step2';
     if (activeStep === 2) return '/wizard/step3';
     if (activeStep === 3) return '/wizard/step4';

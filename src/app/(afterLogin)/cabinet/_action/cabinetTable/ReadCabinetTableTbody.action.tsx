@@ -27,7 +27,7 @@ export default function ReadCabinetTableTbodyAction() {
   };
 
   const handleEdit = () => {
-    router.push('/wizard/step1');
+    router.push('/wizard/summary');
   };
 
   const handleDelete = (id: number) => {
