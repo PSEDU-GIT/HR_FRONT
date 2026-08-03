@@ -7,18 +7,7 @@ export async function GET(
 ) {
   const { contractId } = await params;
   return handleApiProxy(req, {
-    path: `/hr/contract/${contractId}`,
+    path: `/hr/contract/${contractId}/event-log`,
     method: 'GET',
-  });
-}
-
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: Promise<{ contractId: string }> },
-) {
-  const { contractId } = await params;
-  return handleApiProxy(req, {
-    path: `/hr/contract/${contractId}`,
-    method: 'DELETE',
   });
 }
