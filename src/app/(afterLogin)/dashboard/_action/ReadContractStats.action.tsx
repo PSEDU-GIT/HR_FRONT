@@ -2,17 +2,7 @@
 
 import { Clock, AlertTriangle, FileEdit, CheckCircle2 } from 'lucide-react';
 import { useDashboardSummaryState } from '@/app/(afterLogin)/dashboard/_state/getDashboardSummary.state';
-
-interface StatItem {
-  id: string;
-  label: string;
-  count: number;
-  unit: string;
-  description: string;
-  badgeBg: string;
-  badgeText: string;
-  icon: React.ReactNode;
-}
+import DashboardStatCard, { type StatItem } from '@/app/(afterLogin)/dashboard/_component/DashboardStatCard';
 
 export default function ReadContractStatsAction() {
   const { summary } = useDashboardSummaryState();
@@ -24,8 +14,6 @@ export default function ReadContractStatsAction() {
       count: summary?.pendingSignatureCount ?? 0,
       unit: '건',
       description: '강사 서명 필요',
-      badgeBg: 'bg-custom-yellow-bg border-custom-yellow-border text-custom-yellow',
-      badgeText: '서명 요청 완료',
       icon: <Clock className="h-4 w-4" />,
     },
     {
@@ -34,8 +22,6 @@ export default function ReadContractStatsAction() {
       count: summary?.expiringCount ?? 0,
       unit: '건',
       description: '30일 이내 만료',
-      badgeBg: 'bg-custom-rose-bg border-custom-rose-border text-custom-rose',
-      badgeText: '갱신 필요',
       icon: <AlertTriangle className="h-4 w-4" />,
     },
     {
@@ -44,8 +30,6 @@ export default function ReadContractStatsAction() {
       count: summary?.draftCount ?? 0,
       unit: '건',
       description: '임시 저장 계약',
-      badgeBg: 'bg-custom-indigo-bg border-custom-indigo-border text-custom-indigo',
-      badgeText: '임시 저장',
       icon: <FileEdit className="h-4 w-4" />,
     },
     {
@@ -54,8 +38,6 @@ export default function ReadContractStatsAction() {
       count: summary?.totalSignedCount ?? 0,
       unit: '건',
       description: '보관 중인 계약',
-      badgeBg: 'bg-custom-emerald-bg border-custom-emerald-border text-custom-emerald',
-      badgeText: '정상 보관',
       icon: <CheckCircle2 className="h-4 w-4" />,
     },
   ];
@@ -63,38 +45,9 @@ export default function ReadContractStatsAction() {
   return (
     <div className="flex w-full flex-wrap items-center lg:flex-nowrap">
       {STATS.map((stat, index) => (
-        <div
-          key={stat.id}
-          className={`border-custom-slate-border w-full p-6 md:w-1/2 lg:w-1/4 ${
-            index < STATS.length - 1 ? 'border-b lg:border-r lg:border-b-0' : ''
-          } ${index % 2 === 0 ? 'md:border-r' : ''} ${
-            index >= 2 ? 'md:border-b-0' : 'md:border-b'
-          }`}
-        >
-          <div className="flex items-start justify-between">
-            <div className="flex flex-col gap-3">
-              <p className="text-text-sub text-sm font-medium">{stat.label}</p>
-              <div>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-text-main text-2xl font-bold">{stat.count}</span>
-                  <span className="text-text-side text-xs font-semibold">{stat.unit}</span>
-                </div>
-                <div className="mt-1.5 flex items-center gap-2">
-                  <p className="text-text-side text-xs font-medium">{stat.description}</p>
-                  <span
-                    className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold ${stat.badgeBg}`}
-                  >
-                    {stat.badgeText}
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="border-custom-slate-border text-text-side flex h-10 w-10 shrink-0 items-center justify-center rounded-full border bg-transparent p-2.5">
-              {stat.icon}
-            </div>
-          </div>
-        </div>
+        <DashboardStatCard key={stat.id} stat={stat} index={index} totalLength={STATS.length} />
       ))}
     </div>
   );
 }
+

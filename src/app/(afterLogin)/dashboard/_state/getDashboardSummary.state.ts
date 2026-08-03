@@ -1,10 +1,13 @@
 'use client';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { getDashboardSummary } from '@/app/(afterLogin)/dashboard/_lib/getDashboardSummary';
+import {
+  getDashboardSummary,
+  getDashboardSummaryQueryKey,
+} from '@/app/(afterLogin)/dashboard/_lib/getDashboardSummary';
 import { type DashboardSummary } from '@/app/(afterLogin)/dashboard/_model/DashboardSummary.model';
 
-export const getDashboardSummaryQueryKey = ['dashboardSummary'];
+export { getDashboardSummaryQueryKey };
 
 export const useDashboardSummaryState = () => {
   const { data: summary } = useSuspenseQuery<DashboardSummary>({
@@ -17,3 +20,4 @@ export const useDashboardSummaryState = () => {
     summary,
   };
 };
+

@@ -19,7 +19,7 @@ export default function ReadRenewalContractsAction() {
   if (contracts.length === 0) {
     return (
       <tr>
-        <td colSpan={4} className="p-8 text-center font-medium text-gray-400">
+        <td colSpan={4} className="text-text-side p-8 text-center font-medium">
           갱신이 필요한 계약서가 없습니다.
         </td>
       </tr>
@@ -29,7 +29,7 @@ export default function ReadRenewalContractsAction() {
   return (
     <>
       {contracts.map((item) => (
-        <tr key={item.hrDocumentId} className="transition-colors hover:bg-gray-50/60">
+        <tr key={item.hrDocumentId} className="hover:bg-custom-slate-hover transition-colors">
           {COLUMN_KEYS.map((key) => (
             <RenewalContractTableCell
               key={key}

@@ -55,10 +55,10 @@ export default function ReadCabinetTableTbodyAction() {
     density === 'comfortable' ? 'py-5' : density === 'compact' ? 'py-1.5' : 'py-3';
 
   return (
-    <tbody className="divide-y divide-gray-100">
+    <tbody className="divide-custom-slate-border divide-y">
       {filteredContracts.length > 0 ? (
         filteredContracts.map((item) => (
-          <tr key={item.id} className="transition-colors hover:bg-gray-50/60">
+          <tr key={item.id} className="hover:bg-custom-slate-hover transition-colors">
             {COLUMN_KEYS.map((key) => (
               <CabinetTableCellComponent
                 key={key}
@@ -76,7 +76,7 @@ export default function ReadCabinetTableTbodyAction() {
         ))
       ) : (
         <tr>
-          <td colSpan={5} className="p-8 text-center font-medium text-gray-400">
+          <td colSpan={5} className="text-text-side p-8 text-center font-medium">
             검색 조건에 맞는 계약서가 없습니다.
           </td>
         </tr>

@@ -74,8 +74,8 @@ export default function Select({
         type="button"
         className={cx(
           'bg-background border-custom-slate-border text-text-main flex w-full cursor-pointer items-center gap-2 rounded-xl border px-4 py-2.5 text-sm transition-all outline-none',
-          'hover:border-primary-border/30 hover:bg-custom-slate-bg',
-          isVisible && 'border-primary-border! bg-custom-slate-bg!',
+          'hover:border-custom-indigo-border/50 hover:bg-custom-slate-bg focus:border-custom-indigo-border focus-visible:border-custom-indigo-border',
+          isVisible && 'border-custom-indigo-border! bg-custom-indigo-bg/30!',
           buttonClassName && buttonClassName,
           readMode && 'pointer-events-none',
         )}
@@ -94,7 +94,7 @@ export default function Select({
           ) : (
             <ChevronDown
               className={cx(
-                isVisible && 'rotate-180',
+                isVisible && 'rotate-180 text-custom-indigo',
                 'text-text-sub ml-auto shrink-0 transition-all duration-300 ease-in-out',
               )}
               size={14}
@@ -105,7 +105,7 @@ export default function Select({
         {isVisible && (
           <motion.div
             className={cx(
-              'border-custom-slate bg-background absolute right-0 left-0 z-50 max-h-55 cursor-pointer space-y-0.5 overflow-y-auto rounded-xl border p-1.5 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] dark:shadow-none',
+              'border-custom-slate-border bg-background absolute right-0 left-0 z-50 max-h-55 cursor-pointer space-y-0.5 overflow-y-auto rounded-xl border p-1.5',
               direction === 'up' ? 'bottom-full mb-2' : 'top-full mt-2',
             )}
             initial={{ opacity: 0, y: direction === 'up' ? '15%' : '-15%' }}
@@ -121,8 +121,8 @@ export default function Select({
                 className={cx(
                   'letterSpacing-num w-full cursor-pointer rounded-lg px-3 py-2.5 transition-colors duration-200',
                   selectData.id === datum.id
-                    ? 'text-primary bg-primary-bg flex items-center justify-between gap-0.5'
-                    : 'text-text-main hover:text-primary hover:bg-custom-slate-bg flex items-center justify-between gap-0.5',
+                    ? 'text-custom-indigo bg-custom-indigo-bg flex items-center justify-between gap-0.5 font-bold'
+                    : 'text-text-main hover:text-custom-indigo hover:bg-custom-indigo-bg/40 flex items-center justify-between gap-0.5',
                   itemClassName && itemClassName,
                 )}
                 onClick={() => onChangeAction && onChangeAction(datum)}
@@ -136,7 +136,7 @@ export default function Select({
                 {datum.element && datum.element}
 
                 {selectData.id === datum.id ? (
-                  <Check size={14} className="shrink-0" />
+                  <Check size={14} className="shrink-0 text-custom-indigo" />
                 ) : (
                   datum.element && <div className="w-[14px] shrink-0" />
                 )}

@@ -23,15 +23,15 @@ export default function RenewalContractTableCell({
     case 'signer':
       return (
         <td className="px-3 py-4">
-          <span className="font-bold text-neutral-900">{item.signerName}</span>
-          <span className="ml-2 text-xs font-normal text-gray-500">
+          <span className="text-text-main font-bold">{item.signerName}</span>
+          <span className="text-text-sub ml-2 text-xs font-normal">
             ({item.signerPhone || '010-0000-0000'})
           </span>
         </td>
       );
     case 'date':
       return (
-        <td className="px-3 py-4 font-semibold text-neutral-800">
+        <td className="text-text-main px-3 py-4 font-semibold">
           {item.contractStartDate} ~ {item.contractEndDate}
         </td>
       );
@@ -39,11 +39,11 @@ export default function RenewalContractTableCell({
       return (
         <td className="px-3 py-4">
           {isExpired ? (
-            <span className="inline-flex items-center justify-center rounded-full bg-rose-50 border border-rose-200 px-2.5 py-0.5 text-xs font-bold text-rose-500">
+            <span className="bg-custom-rose-bg border-custom-rose-border text-custom-rose inline-flex items-center justify-center rounded-full border px-2.5 py-0.5 text-xs font-bold">
               {dDayLabel}
             </span>
           ) : (
-            <span className="inline-flex items-center justify-center rounded-full bg-amber-50 border border-amber-200 px-2.5 py-0.5 text-xs font-bold text-amber-600">
+            <span className="bg-custom-yellow-bg border-custom-yellow-border text-custom-yellow inline-flex items-center justify-center rounded-full border px-2.5 py-0.5 text-xs font-bold">
               {dDayLabel}
             </span>
           )}
@@ -57,7 +57,7 @@ export default function RenewalContractTableCell({
               type="button"
               onClick={onRecontract}
               title="재계약 작성"
-              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-indigo-50 hover:text-indigo-600"
+              className="bg-custom-slate-bg text-text-side hover:bg-custom-indigo-bg hover:text-custom-indigo flex h-8 w-8 cursor-pointer items-center justify-center rounded-full transition-colors"
             >
               <Edit3 className="h-4 w-4" />
             </button>

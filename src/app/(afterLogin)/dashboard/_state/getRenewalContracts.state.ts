@@ -1,12 +1,15 @@
 'use client';
 
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { useShallow } from 'zustand/react/shallow';
 import { useDashboardStore } from '@/app/(afterLogin)/dashboard/_state/useDashboardStore';
-import { getRenewalContracts } from '@/app/(afterLogin)/dashboard/_lib/getRenewalContracts';
+import {
+  getRenewalContracts,
+  getRenewalContractsQueryKey,
+} from '@/app/(afterLogin)/dashboard/_lib/getRenewalContracts';
 import { type RenewalContractsResponse } from '@/app/(afterLogin)/dashboard/_model/RenewalContracts.model';
 
-export const getRenewalContractsQueryKey = ['renewalContracts'];
+export { getRenewalContractsQueryKey };
 
 export const useRenewalContractsState = () => {
   const { searchQuery, page, take } = useDashboardStore(
@@ -17,9 +20,10 @@ export const useRenewalContractsState = () => {
     })),
   );
 
-  const { data } = useSuspenseQuery<RenewalContractsResponse>({
+  const { data } = useQuery<RenewalContractsResponse>({
     queryKey: [...getRenewalContractsQueryKey, page, take, searchQuery],
     queryFn: () => getRenewalContracts(page, take, searchQuery),
+    placeholderData: keepPreviousData,
     staleTime: 1000 * 60 * 5,
   });
 
@@ -28,3 +32,4 @@ export const useRenewalContractsState = () => {
     paging: data?.paging || { page: 1, size: 10, totalCount: 0, hasNext: false },
   };
 };
+

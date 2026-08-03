@@ -28,15 +28,15 @@ export default function ActivityTimelineItem({ item }: ActivityTimelineItemProps
   return (
     <div className="relative flex min-h-[2.5rem] items-center text-sm">
       <div className="flex w-14 shrink-0 flex-col items-end pr-2 text-right">
-        <span className="text-xs font-bold text-neutral-900 leading-tight">{time}</span>
-        {date && <span className="text-[10px] font-semibold text-gray-400 leading-tight mt-0.5">{date}</span>}
+        <span className="text-text-main text-xs font-bold leading-tight">{time}</span>
+        {date && <span className="text-text-side mt-0.5 text-[10px] font-semibold leading-tight">{date}</span>}
       </div>
 
       <div className="relative z-10 flex w-5 shrink-0 items-center justify-center">
-        <div className="h-3.5 w-3.5 rounded-full border-2 border-neutral-900 bg-white" />
+        <div className="border-custom-indigo-side bg-background h-3.5 w-3.5 rounded-full border-2" />
       </div>
 
-      <div className="flex-1 pl-3 leading-normal font-medium text-gray-600">
+      <div className="text-text-sub flex-1 pl-3 font-medium leading-normal">
         <span>{item.content}</span>
       </div>
     </div>

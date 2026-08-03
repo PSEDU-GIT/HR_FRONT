@@ -1,12 +1,12 @@
 'use client';
 
 import { useShallow } from 'zustand/react/shallow';
-import { useDashboardStore } from '@/app/(afterLogin)/dashboard/_state/useDashboardStore';
-import { useRenewalContractsState } from '@/app/(afterLogin)/dashboard/_state/getRenewalContracts.state';
+import { useCabinetStore } from '@/app/(afterLogin)/cabinet/_state/useCabinetStore';
+import { useContractArchiveState } from '@/app/(afterLogin)/cabinet/_state/getContractArchive.state';
 import PaginationFooter from '@/app/_component/table/PaginationFooter';
 
-export default function ReadRenewalContractsFooterAction() {
-  const { page, take, setPage, setTake } = useDashboardStore(
+export default function ReadCabinetTableFooterAction() {
+  const { page, take, setPage, setTake } = useCabinetStore(
     useShallow((state) => ({
       page: state.page,
       take: state.take,
@@ -15,7 +15,7 @@ export default function ReadRenewalContractsFooterAction() {
     })),
   );
 
-  const { paging } = useRenewalContractsState();
+  const { paging } = useContractArchiveState();
 
   return (
     <PaginationFooter

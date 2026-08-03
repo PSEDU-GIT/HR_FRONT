@@ -46,7 +46,7 @@
   --custom-slate: oklch(96.8% 0.007 247.896);
   --custom-slate-bg: oklch(97.8% 0.003 247.858);
   --custom-slate-hover: oklch(92.9% 0.013 255.508);
-  --custom-slate-border: lab(90.952% 0 -.0000119209);
+  --custom-slate-border: lab(90.952% 0 -0.0000119209);
   --custom-slate-border-hover: oklch(88% 0.015 255);
   --custom-slate-border-side: oklch(96.8% 0.007 247.896);
 
@@ -114,48 +114,48 @@
 
 .dark {
   --background: rgb(30 41 59 / 1);
-  --foreground: rgb(2 6 23);
-  --border: oklch(37.2% 0.044 257.287);
+  --foreground: rgb(15 23 42 / 1);
+  --border: oklch(42% 0.035 257.287);
 
-  --text-title: oklch(92% 0.02 260.031);
-  --text-main: oklch(88% 0.018 257.28);
-  --text-sub: oklch(78% 0.022 257.417);
-  --text-side: oklch(55% 0.03 256.788);
+  --text-title: oklch(95% 0.015 260.031);
+  --text-main: oklch(90% 0.018 257.28);
+  --text-sub: oklch(80% 0.02 257.417);
+  --text-side: oklch(68% 0.025 256.788);
 
-  --hover-icon: oklch(22% 0.005 264.542);
+  --hover-icon: oklch(28% 0.01 264.542);
 
   --scroll-track: oklch(14% 0 0);
   --scroll-thumb: #3a3a3a;
 
   --primary: oklch(60% 0.2488 264.05);
-  --primary-bg: oklch(20% 0.04 264.05);
+  --primary-bg: oklch(22% 0.04 264.05);
   --primary-hover: oklch(70% 0.23 264.05);
-  --primary-border: oklch(40% 0.18 264.05);
-  --primary-border-hover: oklch(35% 0.1 264.05);
-  --primary-side: oklch(40% 0.18 264.05);
+  --primary-border: oklch(48% 0.18 264.05);
+  --primary-border-hover: oklch(42% 0.1 264.05);
+  --primary-side: oklch(48% 0.18 264.05);
 
   --secondary: oklch(60% 0.14 210);
-  --secondary-bg: oklch(18% 0.025 210);
+  --secondary-bg: oklch(20% 0.025 210);
   --secondary-hover: oklch(68% 0.17 210);
-  --secondary-border: oklch(32% 0.06 210);
-  --secondary-border-hover: oklch(40% 0.1 210);
+  --secondary-border: oklch(42% 0.06 210);
+  --secondary-border-hover: oklch(50% 0.1 210);
 
   --neutral: oklch(72% 0.005 260);
   --neutral-bg: oklch(22% 0.006 260);
   --neutral-hover: oklch(82% 0.006 260);
-  --neutral-border: oklch(32% 0.01 260);
-  --neutral-border-hover: oklch(38% 0.012 260);
+  --neutral-border: oklch(42% 0.01 260);
+  --neutral-border-hover: oklch(48% 0.012 260);
 
   --foreground-slate: oklch(58% 0.022 257.281);
   --foreground-slate-bg: oklch(20% 0.01 255.508);
   --foreground-slate-hover: oklch(25% 0.014 252.894);
 
-  --custom-slate: oklch(24% 0.009 247.896);
-  --custom-slate-bg: oklch(18% 0.005 247.858);
-  --custom-slate-hover: oklch(28% 0.013 255.508);
-  --custom-slate-border: oklch(25% 0.01 255);
-  --custom-slate-border-hover: oklch(34% 0.015 255);
-  --custom-slate-border-side: oklch(26% 0.009 247.896);
+  --custom-slate: oklch(28% 0.009 247.896);
+  --custom-slate-bg: oklch(22% 0.01 247.858);
+  --custom-slate-hover: oklch(32% 0.015 255.508);
+  --custom-slate-border: oklch(42% 0.03 255);
+  --custom-slate-border-hover: oklch(50% 0.035 255);
+  --custom-slate-border-side: oklch(40% 0.03 247.896);
 
   --custom-success: oklch(58% 0.15 232);
   --custom-success-bg: oklch(16% 0.02 232);
@@ -446,4 +446,40 @@ body {
   background: var(--background);
   color: var(--color-text-main);
   font-family: var(--font-sans);
+}
+
+body,
+div,
+header,
+main,
+aside,
+section,
+article,
+nav,
+button,
+span,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+table,
+th,
+td {
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
+}
+
+input:focus-visible,
+input:focus,
+textarea:focus-visible,
+textarea:focus,
+select:focus-visible,
+select:focus {
+  border-color: var(--custom-indigo-border) !important;
+  outline: none !important;
 }
