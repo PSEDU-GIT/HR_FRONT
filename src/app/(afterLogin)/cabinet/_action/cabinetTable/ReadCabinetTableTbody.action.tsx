@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useShallow } from 'zustand/react/shallow';
 import { useCabinetStore } from '@/app/(afterLogin)/cabinet/_state/useCabinetStore';
 import { useContractArchiveState } from '@/app/(afterLogin)/cabinet/_state/getContractArchive.state';
+import { useDownloadContractPdfState } from '@/app/(afterLogin)/cabinet/_state/downloadContractPdf.state';
 import { updateSendSignatureLinkMutation } from '@/app/(afterLogin)/cabinet/_lib/updateSendSignatureLinkMutation';
 import CabinetTableCellComponent, {
   ColumnKey,
@@ -13,7 +14,9 @@ const COLUMN_KEYS: ColumnKey[] = ['instructor', 'status', 'contractType', 'creat
 
 export default function ReadCabinetTableTbodyAction() {
   const router = useRouter();
+
   const { filteredContracts } = useContractArchiveState();
+  const { downloadContractPdf } = useDownloadContractPdfState();
   const { mutate: sendSignatureLink } = updateSendSignatureLinkMutation();
 
   const { density } = useCabinetStore(
@@ -34,10 +37,6 @@ export default function ReadCabinetTableTbodyAction() {
     if (confirm('해당 계약서를 삭제하시겠습니까?')) {
       alert('삭제 요청이 처리되었습니다.');
     }
-  };
-
-  const handleDownload = () => {
-    alert('계약서 PDF 다운로드가 시작됩니다.');
   };
 
   const handleShare = (contractId: number, name: string) => {
@@ -68,7 +67,9 @@ export default function ReadCabinetTableTbodyAction() {
                 onDetail={() => handleDetail(item.id)}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
-                onDownload={handleDownload}
+                onDownload={() =>
+                  downloadContractPdf(item.id, item.counterpartyName || item.pendingStaffName || undefined)
+                }
                 onShare={handleShare}
               />
             ))}

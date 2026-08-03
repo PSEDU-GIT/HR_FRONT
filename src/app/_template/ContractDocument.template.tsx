@@ -96,16 +96,11 @@ export default function ContractDocumentTemplate({
       <div
         id="printable-contract-document"
         className={cx(
-          'border-custom-slate-border-side min-h-full rounded-2xl border bg-white p-6 text-xs leading-relaxed font-sans text-slate-800 md:p-8 shadow-sm print:max-h-none print:overflow-visible print:border-none print:shadow-none print:p-0 print:m-0',
+          'border-custom-slate-border-side min-h-full rounded-2xl border bg-white p-6 font-sans text-xs leading-relaxed text-slate-800 shadow-sm md:p-8 print:m-0 print:max-h-none print:overflow-visible print:border-none print:p-0 print:shadow-none',
           className,
         )}
       >
         <div className="space-y-6">
-          <p className="leading-normal font-semibold text-slate-700">
-            목동 학온 캠퍼스(이하 "갑"이라 한다)과 {instructorName}(이하 "을"이라 한다)는 다음과 같이
-            근로계약을 체결한다.
-          </p>
-
           {/* 별지 1 */}
           <div className="space-y-2">
             <h3 className="text-[13px] font-extrabold text-slate-900">
@@ -130,7 +125,7 @@ export default function ContractDocumentTemplate({
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={2} className="p-2.5 text-center text-slate-400 font-medium">
+                    <td colSpan={2} className="p-2.5 text-center font-medium text-slate-400">
                       설정된 근로요일이 없습니다.
                     </td>
                   </tr>
@@ -177,13 +172,21 @@ export default function ContractDocumentTemplate({
             </table>
           </div>
 
+          {/* 본 계약 전문 */}
+          <div className="page-break-before-always space-y-2 border-t border-slate-200 pt-6 print:break-before-page print:border-none">
+            <p className="leading-normal font-semibold text-slate-700">
+              목동 학온 캠퍼스(이하 "갑"이라 한다)과 {instructorName}(이하 "을"이라 한다)는 다음과
+              같이 근로계약을 체결한다.
+            </p>
+          </div>
+
           {/* 제1조 */}
-          <div className="space-y-2 pt-4 print:break-before-page page-break-before-always">
+          <div className="space-y-2">
             <h3 className="text-[13px] font-extrabold text-slate-900">제1조 (계약 당사자)</h3>
             <div className="border-custom-slate-border-side overflow-hidden rounded-xl border">
               <div className="border-custom-slate-border-side grid grid-cols-1 divide-y md:grid-cols-2 md:divide-x md:divide-y-0">
                 <div className="space-y-2 p-4">
-                  <div className="border-slate-100 mb-2 border-b pb-1.5 text-[12px] font-extrabold text-slate-900">
+                  <div className="mb-2 border-b border-slate-100 pb-1.5 text-[12px] font-extrabold text-slate-900">
                     갑 (사용자)
                   </div>
                   <div className="flex text-[11px]">
@@ -211,7 +214,7 @@ export default function ContractDocumentTemplate({
                 </div>
 
                 <div className="space-y-2 p-4">
-                  <div className="border-slate-100 mb-2 border-b pb-1.5 text-[12px] font-extrabold text-slate-900">
+                  <div className="mb-2 border-b border-slate-100 pb-1.5 text-[12px] font-extrabold text-slate-900">
                     을 (근로자)
                   </div>
                   <div className="flex text-[11px]">
@@ -314,13 +317,13 @@ export default function ContractDocumentTemplate({
           {/* 특약사항 */}
           <div className="space-y-1">
             <h3 className="text-[13px] font-extrabold text-slate-900">【특약사항】</h3>
-            <p className="border-custom-slate-border-side bg-custom-slate-bg/50 rounded-xl border p-4 font-medium leading-relaxed text-slate-800 whitespace-pre-wrap">
+            <p className="border-custom-slate-border-side bg-custom-slate-bg/50 rounded-xl border p-4 leading-relaxed font-medium whitespace-pre-wrap text-slate-800">
               {customTerms}
             </p>
           </div>
 
           {/* 하단 날짜 및 서명 란 */}
-          <div className="border-slate-100 border-t pt-4 text-center font-semibold text-slate-700">
+          <div className="border-t border-slate-100 pt-4 text-center font-semibold text-slate-700">
             위 계약을 증명하기 위하여 본 계약서 2부를 작성하여 갑과 을이 각각 서명 날인 후 1부씩
             보관한다.
             <div className="mt-4 text-[13px] font-extrabold text-slate-800">{todayStr}</div>
@@ -335,7 +338,7 @@ export default function ContractDocumentTemplate({
                 주소: 서울특별시 양천구 목동서로 201 학온빌딩 5층
               </div>
               <div className="mt-4 flex justify-end">
-                <div className="border-slate-300 flex h-10 w-10 items-center justify-center rounded-full border bg-white text-[11px] font-extrabold text-slate-400 shadow-2xs">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-white text-[11px] font-extrabold text-slate-400 shadow-2xs">
                   인
                 </div>
               </div>
@@ -348,7 +351,7 @@ export default function ContractDocumentTemplate({
                 주소: {instructorAddress}
               </div>
               <div className="mt-4 flex justify-end">
-                <div className="border-slate-300 flex h-10 w-10 items-center justify-center rounded-full border bg-white text-[11px] font-extrabold text-slate-400 shadow-2xs">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-white text-[11px] font-extrabold text-slate-400 shadow-2xs">
                   인
                 </div>
               </div>

@@ -1,8 +1,17 @@
 'use client';
 
-import cx from 'classnames';
 import { useShallow } from 'zustand/react/shallow';
-import { useCabinetStore } from '@/app/(afterLogin)/cabinet/_state/useCabinetStore';
+import {
+  useCabinetStore,
+  type TableDensity,
+} from '@/app/(afterLogin)/cabinet/_state/useCabinetStore';
+import RoundedTab from '@/app/_component/tab/RoundedTab';
+
+const DENSITY_TABS = [
+  { id: 'comfortable', displayName: '여유롭게' },
+  { id: 'standard', displayName: '기본' },
+  { id: 'compact', displayName: '조밀하게' },
+];
 
 export default function SelectCabinetDensityAction() {
   const { density, setDensity } = useCabinetStore(
@@ -13,43 +22,14 @@ export default function SelectCabinetDensityAction() {
   );
 
   return (
-    <div className="border-custom-slate-border-side hidden items-center gap-1 rounded-full border bg-slate-100/60 p-1 md:flex">
-      <button
-        type="button"
-        onClick={() => setDensity('comfortable')}
-        className={cx(
-          'cursor-pointer rounded-full px-3 py-1 text-[10px] font-bold transition-all',
-          density === 'comfortable'
-            ? 'bg-white text-text-title shadow-2xs'
-            : 'text-text-side hover:text-text-title',
-        )}
-      >
-        여유롭게
-      </button>
-      <button
-        type="button"
-        onClick={() => setDensity('standard')}
-        className={cx(
-          'cursor-pointer rounded-full px-3 py-1 text-[10px] font-bold transition-all',
-          density === 'standard'
-            ? 'bg-white text-text-title shadow-2xs'
-            : 'text-text-side hover:text-text-title',
-        )}
-      >
-        기본
-      </button>
-      <button
-        type="button"
-        onClick={() => setDensity('compact')}
-        className={cx(
-          'cursor-pointer rounded-full px-3 py-1 text-[10px] font-bold transition-all',
-          density === 'compact'
-            ? 'bg-white text-text-title shadow-2xs'
-            : 'text-text-side hover:text-text-title',
-        )}
-      >
-        조밀하게
-      </button>
+    <div className="hidden w-60 md:block">
+      <RoundedTab
+        data={DENSITY_TABS}
+        selectedData={density}
+        onChangeTab={(id) => setDensity(id as TableDensity)}
+        className="!py-1 !text-[10px]"
+        containerClassName="!p-0.5"
+      />
     </div>
   );
 }

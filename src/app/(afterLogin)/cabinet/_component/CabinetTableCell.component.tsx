@@ -55,7 +55,10 @@ export default function CabinetTableCellComponent({
   onDownload,
   onShare,
 }: CabinetTableCellComponentProps) {
-  const displayName = item.counterpartyName || item.pendingStaffName || (item.staffId ? `직원 #${item.staffId}` : '미지정 강사');
+  const displayName =
+    item.counterpartyName ||
+    item.pendingStaffName ||
+    (item.staffId ? `직원 #${item.staffId}` : '미지정 강사');
   const displayPhone = item.counterpartyPhone || item.phone || '010-0000-0000';
 
   switch (columnKey) {
@@ -63,7 +66,7 @@ export default function CabinetTableCellComponent({
       return (
         <td className={cx('px-3 text-left', cellPadding)}>
           <div className="flex flex-col gap-0.5">
-            <span className="text-text-main font-bold">{displayName}</span>
+            <span className="text-text-main font-semibold">{displayName}</span>
             <span className="text-text-sub text-xs font-normal">{displayPhone}</span>
           </div>
         </td>
@@ -73,20 +76,12 @@ export default function CabinetTableCellComponent({
       return (
         <td className={cx('px-3 text-left', cellPadding)}>
           {item.status === 'SIGNED' ? (
-            <span className="inline-flex items-center justify-center rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-bold text-emerald-600 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400">
+            <span className="inline-flex items-center justify-center rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-600 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400">
               체결 완료
             </span>
-          ) : item.status === 'SENT' ? (
-            <span className="bg-custom-yellow-bg border-custom-yellow-border text-custom-yellow inline-flex items-center justify-center rounded-full border px-2.5 py-0.5 text-xs font-bold">
-              대기
-            </span>
-          ) : item.status === 'DRAFT' ? (
-            <span className="bg-custom-indigo-bg border-custom-indigo-border text-custom-indigo inline-flex items-center justify-center rounded-full border px-2.5 py-0.5 text-xs font-bold">
-              작성 중
-            </span>
           ) : (
-            <span className="bg-custom-slate-bg border-custom-slate-border text-text-side inline-flex items-center justify-center rounded-full border px-2.5 py-0.5 text-xs font-bold">
-              파기
+            <span className="bg-custom-yellow-bg border-custom-yellow-border text-custom-yellow inline-flex items-center justify-center rounded-full border px-2.5 py-0.5 text-xs font-medium">
+              대기
             </span>
           )}
         </td>
@@ -94,14 +89,14 @@ export default function CabinetTableCellComponent({
 
     case 'contractType':
       return (
-        <td className={cx('text-text-main px-3 text-left font-semibold', cellPadding)}>
+        <td className={cx('text-text-main px-3 text-center font-medium', cellPadding)}>
           {getContractTypeLabel(item.contractType)}
         </td>
       );
 
     case 'createdAt':
       return (
-        <td className={cx('text-text-main px-3 text-center font-semibold', cellPadding)}>
+        <td className={cx('text-text-main px-3 text-center font-medium', cellPadding)}>
           {getFormattedDate(item.createdAt)}
         </td>
       );
@@ -118,7 +113,7 @@ export default function CabinetTableCellComponent({
               >
                 <Eye className="h-4 w-4" />
               </button>
-              <span className="bg-text-title pointer-events-none absolute -top-8 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-md px-2 py-1 text-[10px] font-medium text-white opacity-0 transition-all duration-150 group-hover:-top-9 group-hover:opacity-100">
+              <span className="bg-text-title pointer-events-none absolute -top-8 left-1/2 z-20 -translate-x-1/2 rounded-md px-2 py-1 text-[10px] font-medium whitespace-nowrap text-white opacity-0 transition-all duration-150 group-hover:-top-9 group-hover:opacity-100">
                 상세보기
               </span>
             </div>
@@ -133,7 +128,7 @@ export default function CabinetTableCellComponent({
                   >
                     <Pencil className="h-4 w-4" />
                   </button>
-                  <span className="bg-text-title pointer-events-none absolute -top-8 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-md px-2 py-1 text-[10px] font-medium text-white opacity-0 transition-all duration-150 group-hover:-top-9 group-hover:opacity-100">
+                  <span className="bg-text-title pointer-events-none absolute -top-8 left-1/2 z-20 -translate-x-1/2 rounded-md px-2 py-1 text-[10px] font-medium whitespace-nowrap text-white opacity-0 transition-all duration-150 group-hover:-top-9 group-hover:opacity-100">
                     수정
                   </span>
                 </div>
@@ -146,8 +141,8 @@ export default function CabinetTableCellComponent({
                   >
                     <Share2 className="h-4 w-4" />
                   </button>
-                  <span className="bg-text-title pointer-events-none absolute -top-8 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-md px-2 py-1 text-[10px] font-medium text-white opacity-0 transition-all duration-150 group-hover:-top-9 group-hover:opacity-100">
-                    카카오톡 공유
+                  <span className="bg-text-title pointer-events-none absolute -top-8 left-1/2 z-20 -translate-x-1/2 rounded-md px-2 py-1 text-[10px] font-medium whitespace-nowrap text-white opacity-0 transition-all duration-150 group-hover:-top-9 group-hover:opacity-100">
+                    공유
                   </span>
                 </div>
 
@@ -159,7 +154,7 @@ export default function CabinetTableCellComponent({
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
-                  <span className="bg-text-title pointer-events-none absolute -top-8 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-md px-2 py-1 text-[10px] font-medium text-white opacity-0 transition-all duration-150 group-hover:-top-9 group-hover:opacity-100">
+                  <span className="bg-text-title pointer-events-none absolute -top-8 left-1/2 z-20 -translate-x-1/2 rounded-md px-2 py-1 text-[10px] font-medium whitespace-nowrap text-white opacity-0 transition-all duration-150 group-hover:-top-9 group-hover:opacity-100">
                     삭제
                   </span>
                 </div>
@@ -174,7 +169,7 @@ export default function CabinetTableCellComponent({
                   >
                     <Download className="h-4 w-4" />
                   </button>
-                  <span className="bg-text-title pointer-events-none absolute -top-8 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-md px-2 py-1 text-[10px] font-medium text-white opacity-0 transition-all duration-150 group-hover:-top-9 group-hover:opacity-100">
+                  <span className="bg-text-title pointer-events-none absolute -top-8 left-1/2 z-20 -translate-x-1/2 rounded-md px-2 py-1 text-[10px] font-medium whitespace-nowrap text-white opacity-0 transition-all duration-150 group-hover:-top-9 group-hover:opacity-100">
                     다운로드
                   </span>
                 </div>
@@ -187,8 +182,8 @@ export default function CabinetTableCellComponent({
                   >
                     <Share2 className="h-4 w-4" />
                   </button>
-                  <span className="bg-text-title pointer-events-none absolute -top-8 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-md px-2 py-1 text-[10px] font-medium text-white opacity-0 transition-all duration-150 group-hover:-top-9 group-hover:opacity-100">
-                    카카오톡 공유
+                  <span className="bg-text-title pointer-events-none absolute -top-8 left-1/2 z-20 -translate-x-1/2 rounded-md px-2 py-1 text-[10px] font-medium whitespace-nowrap text-white opacity-0 transition-all duration-150 group-hover:-top-9 group-hover:opacity-100">
+                    공유
                   </span>
                 </div>
               </>
