@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { Minus, Plus, Type, Palette } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useSidebarStore } from '@/app/(afterLogin)/_state/useSidebarStore';
 
 export interface KeyColorOption {
   id: string;
@@ -104,8 +106,11 @@ export const KEY_COLORS: KeyColorOption[] = [
 ];
 
 export default function ClickFontScaleAction() {
+  const isCollapsed = useSidebarStore((state) => state.isCollapsed);
   const [fontSize, setFontSize] = useState(18);
   const [activeColor, setActiveColor] = useState('indigo');
+  const [hoverPalette, setHoverPalette] = useState(false);
+  const [hoverFont, setHoverFont] = useState(false);
 
   const applyKeyColor = (colorId: string) => {
     const selected = KEY_COLORS.find((c) => c.id === colorId) || KEY_COLORS[0];
@@ -149,55 +154,104 @@ export default function ClickFontScaleAction() {
   };
 
   const percentage = Math.round((fontSize / 16) * 100);
+  const showPaletteDetails = !isCollapsed || hoverPalette;
+  const showFontDetails = !isCollapsed || hoverFont;
 
   return (
-    <div className="fixed bottom-6 left-6 z-50 flex flex-col items-start gap-2">
-      <div className="flex items-center gap-1.5 rounded-full border border-slate-200 bg-white/90 p-1.5 shadow-lg backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/90">
-        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-slate-500 dark:bg-slate-900 dark:text-slate-400">
+    <motion.div
+      animate={{
+        left: isCollapsed ? 12 : 20,
+      }}
+      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+      className="fixed bottom-6 z-50 flex flex-col items-start gap-2"
+    >
+      {/* Palette Pill */}
+      <div
+        onMouseEnter={() => setHoverPalette(true)}
+        onMouseLeave={() => setHoverPalette(false)}
+        className="flex items-center rounded-full border border-slate-200 bg-white/90 p-1.5 shadow-lg backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/90"
+      >
+        <button
+          type="button"
+          onClick={() => setHoverPalette((prev) => !prev)}
+          className="flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded-full bg-slate-100 text-slate-500 dark:bg-slate-900 dark:text-slate-400"
+          title="키컬러 변경"
+        >
           <Palette size={12} />
-        </div>
-        {KEY_COLORS.map((c) => (
-          <button
-            key={c.id}
-            type="button"
-            title={`${c.name} 키컬러 변경`}
-            onClick={() => handleSelectColor(c.id)}
-            style={{ backgroundColor: c.hex }}
-            className={`h-4 w-4 cursor-pointer rounded-full transition-transform hover:scale-115 ${
-              activeColor === c.id
-                ? 'ring-2 ring-slate-700 ring-offset-1 dark:ring-slate-300'
-                : 'opacity-80 hover:opacity-100'
-            }`}
-          />
-        ))}
+        </button>
+
+        <motion.div
+          animate={{
+            width: showPaletteDetails ? 'auto' : 0,
+            opacity: showPaletteDetails ? 1 : 0,
+            marginLeft: showPaletteDetails ? 6 : 0,
+          }}
+          transition={{ duration: 0.2, ease: 'easeInOut' }}
+          className="flex items-center gap-1.5 overflow-hidden"
+        >
+          {KEY_COLORS.map((c) => (
+            <button
+              key={c.id}
+              type="button"
+              title={`${c.name} 키컬러 변경`}
+              onClick={() => handleSelectColor(c.id)}
+              style={{ backgroundColor: c.hex }}
+              className={`h-4 w-4 shrink-0 cursor-pointer rounded-full transition-transform hover:scale-115 ${
+                activeColor === c.id
+                  ? 'ring-2 ring-slate-700 ring-offset-1 dark:ring-slate-300'
+                  : 'opacity-80 hover:opacity-100'
+              }`}
+            />
+          ))}
+        </motion.div>
       </div>
 
-      <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white/90 p-1.5 shadow-lg backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/90">
-        <div className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-500 dark:bg-slate-900 dark:text-slate-400">
+      {/* Font Scale Pill */}
+      <div
+        onMouseEnter={() => setHoverFont(true)}
+        onMouseLeave={() => setHoverFont(false)}
+        className="flex items-center rounded-full border border-slate-200 bg-white/90 p-1 shadow-lg backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/90"
+      >
+        <button
+          type="button"
+          onClick={() => setHoverFont((prev) => !prev)}
+          className="flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full bg-slate-100 text-slate-500 dark:bg-slate-900 dark:text-slate-400"
+          title="글자 크기 조절"
+        >
           <Type size={14} />
-        </div>
-
-        <button
-          onClick={() => changeFontSize(-1)}
-          className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-900"
-          title="글자 크기 축소"
-        >
-          <Minus size={14} />
         </button>
 
-        <span className="w-9 text-center text-[11px] font-black text-slate-700 dark:text-slate-300">
-          {percentage}%
-        </span>
-
-        <button
-          onClick={() => changeFontSize(1)}
-          className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-900"
-          title="글자 크기 확대"
+        <motion.div
+          animate={{
+            width: showFontDetails ? 'auto' : 0,
+            opacity: showFontDetails ? 1 : 0,
+            marginLeft: showFontDetails ? 4 : 0,
+          }}
+          transition={{ duration: 0.2, ease: 'easeInOut' }}
+          className="flex items-center overflow-hidden"
         >
-          <Plus size={14} />
-        </button>
+          <button
+            onClick={() => changeFontSize(-1)}
+            className="flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-900"
+            title="글자 크기 축소"
+          >
+            <Minus size={14} />
+          </button>
+
+          <span className="w-9 shrink-0 text-center text-[11px] font-black text-slate-700 dark:text-slate-300">
+            {percentage}%
+          </span>
+
+          <button
+            onClick={() => changeFontSize(1)}
+            className="flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-900"
+            title="글자 크기 확대"
+          >
+            <Plus size={14} />
+          </button>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
