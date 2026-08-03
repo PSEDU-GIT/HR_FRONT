@@ -3,6 +3,7 @@
 import { useParams } from 'next/navigation';
 import ContractDocumentTemplate, { DaysConfig } from '@/app/_template/ContractDocument.template';
 import { useContractDetailState } from '@/app/(afterLogin)/cabinet/_state/getContractDetail.state';
+import { formatPhoneNumber } from '@/app/util/formatPhoneNumber.util';
 
 const DAY_KEY_MAP: Record<string, string> = {
   MON: '월요일',
@@ -66,7 +67,7 @@ export default function ReadCabinetDetailContractAction() {
   return (
     <ContractDocumentTemplate
       instructorName={contractDetail.pendingStaffName || '강사명 미지정'}
-      instructorPhone={contractDetail.pendingStaffPhone || '연락처 미지정'}
+      instructorPhone={formatPhoneNumber(contractDetail.pendingStaffPhone) || '연락처 미지정'}
       instructorSubject={contractDetail.pendingStaffSubject || '과목 미지정'}
       instructorAddress={contractDetail.pendingStaffAddress || '주소 미지정'}
       wizStartDate={contractDetail.contractStartDate || '시작일 미지정'}

@@ -3,7 +3,7 @@
 import { create } from 'zustand';
 import { type CounterpartyItem } from '@/app/(afterLogin)/cabinet/_model/ContractArchive.model';
 
-export type CabinetStatusFilter = 'all' | 'completed' | 'pending';
+export type CabinetStatusFilter = 'all' | 'completed' | 'sent' | 'draft' | 'pending';
 export type TableDensity = 'comfortable' | 'standard' | 'compact';
 
 interface CabinetState {

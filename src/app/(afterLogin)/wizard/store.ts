@@ -53,8 +53,6 @@ export interface Step2State {
   maxUnlockedSalarySubStep: 1 | 2 | 3 | 4 | 5 | 6;
   wizHasTaxFree: boolean;
   wizNonTaxFood: number;
-  wizHasCarAllowance: boolean;
-  wizNonTaxCar: number;
   wizPayDay: string;
   wizHasExtraAllowance: boolean;
   wizOvertimeAllowance: number;
@@ -142,8 +140,6 @@ const initialStep2: Step2State = {
   maxUnlockedSalarySubStep: 1,
   wizHasTaxFree: true,
   wizNonTaxFood: 200000,
-  wizHasCarAllowance: false,
-  wizNonTaxCar: 0,
   wizPayDay: '10일',
   wizHasExtraAllowance: false,
   wizOvertimeAllowance: 0,

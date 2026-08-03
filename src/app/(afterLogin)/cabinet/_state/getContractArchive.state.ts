@@ -34,7 +34,16 @@ export const useContractArchiveState = () => {
   );
 
   const instructorParam = selectedInstructor === '전체 강사' ? '' : selectedInstructor;
-  const statusParam = statusFilter === 'all' ? '' : statusFilter;
+  const statusParam =
+    statusFilter === 'all'
+      ? ''
+      : statusFilter === 'completed'
+        ? 'SIGNED'
+        : statusFilter === 'sent'
+          ? 'SENT'
+          : statusFilter === 'draft'
+            ? 'DRAFT'
+            : statusFilter;
 
   const { data, isFetching } = useQuery<ContractArchiveResponse>({
     queryKey: [
@@ -83,7 +92,10 @@ export const useContractArchiveState = () => {
       if (statusFilter === 'completed' && item.status !== 'SIGNED') {
         return false;
       }
-      if (statusFilter === 'pending' && item.status === 'SIGNED') {
+      if (statusFilter === 'sent' && item.status !== 'SENT') {
+        return false;
+      }
+      if (statusFilter === 'draft' && item.status !== 'DRAFT') {
         return false;
       }
       if (searchQuery.trim()) {

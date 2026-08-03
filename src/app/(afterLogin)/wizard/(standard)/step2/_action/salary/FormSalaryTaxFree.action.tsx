@@ -5,11 +5,10 @@ import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
 import cx from 'classnames';
 
 export default function FormSalaryTaxFreeAction() {
-  const { wizHasTaxFree, wizNonTaxFood, wizNonTaxCar, setStep2 } = useWizardStore(
+  const { wizHasTaxFree, wizNonTaxFood, setStep2 } = useWizardStore(
     useShallow((state) => ({
       wizHasTaxFree: state.step2.wizHasTaxFree,
       wizNonTaxFood: state.step2.wizNonTaxFood,
-      wizNonTaxCar: state.step2.wizNonTaxCar,
       setStep2: state.setStep2,
     })),
   );
@@ -18,7 +17,6 @@ export default function FormSalaryTaxFreeAction() {
     setStep2({
       wizHasTaxFree: false,
       wizNonTaxFood: 0,
-      wizNonTaxCar: 0,
     });
   };
 
@@ -32,11 +30,6 @@ export default function FormSalaryTaxFreeAction() {
   const handleFoodChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const num = Number(e.target.value.replace(/[^0-9]/g, ''));
     setStep2({ wizNonTaxFood: Math.min(num, 200000) });
-  };
-
-  const handleCarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const num = Number(e.target.value.replace(/[^0-9]/g, ''));
-    setStep2({ wizNonTaxCar: Math.min(num, 200000) });
   };
 
   return (
@@ -77,39 +70,20 @@ export default function FormSalaryTaxFreeAction() {
       {/* "예" 선택 시 상세 수당 금액 설정 박스 */}
       {wizHasTaxFree && (
         <div className="border-custom-slate-border bg-custom-slate-bg/60 space-y-3 rounded-2xl border p-4">
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="text-text-side mb-1 block text-xs font-bold">
-                식대 (월 최대 20만원)
-              </label>
-              <div className="relative">
-                <input
-                  type="text"
-                  value={wizNonTaxFood === 0 ? '' : wizNonTaxFood.toLocaleString()}
-                  onChange={handleFoodChange}
-                  placeholder="200,000"
-                />
-                <span className="text-text-side absolute top-1/2 right-3 -translate-y-1/2 text-xs font-bold">
-                  원
-                </span>
-              </div>
-            </div>
-
-            <div>
-              <label className="text-text-side mb-1 block text-xs font-bold">
-                자가운전보조금 (월 최대 20만원)
-              </label>
-              <div className="relative">
-                <input
-                  type="text"
-                  value={wizNonTaxCar === 0 ? '' : wizNonTaxCar.toLocaleString()}
-                  onChange={handleCarChange}
-                  placeholder="0"
-                />
-                <span className="text-text-side absolute top-1/2 right-3 -translate-y-1/2 text-xs font-bold">
-                  원
-                </span>
-              </div>
+          <div>
+            <label className="text-text-side mb-1 block text-xs font-bold">
+              식대 (월 최대 20만원)
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                value={wizNonTaxFood === 0 ? '' : wizNonTaxFood.toLocaleString()}
+                onChange={handleFoodChange}
+                placeholder="200,000"
+              />
+              <span className="text-text-side absolute top-1/2 right-3 -translate-y-1/2 text-xs font-bold">
+                원
+              </span>
             </div>
           </div>
         </div>

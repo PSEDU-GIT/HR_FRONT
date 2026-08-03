@@ -74,8 +74,8 @@ export default function TimePicker({
         type="button"
         className={cx(
           'bg-background border-custom-slate-border text-text-main flex h-[34px] cursor-pointer items-center justify-between gap-1.5 rounded-xl border px-3 text-xs transition-all outline-none',
-          'hover:border-primary-border/30 hover:bg-custom-slate-bg',
-          isVisible && 'border-primary-border! bg-custom-slate-bg!',
+          'hover:border-custom-indigo-border/50 hover:bg-custom-slate-bg',
+          isVisible && 'border-custom-indigo-border! bg-custom-indigo-bg/30!',
           buttonClassName,
           readMode && 'pointer-events-none',
         )}

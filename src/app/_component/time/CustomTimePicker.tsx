@@ -24,7 +24,7 @@ function CustomChip({
       className={cx(
         'cursor-pointer rounded-xl px-2 py-2 text-xs transition-all',
         isSelected
-          ? 'bg-primary-bg text-primary hover:bg-primary-bg font-black'
+          ? 'bg-custom-indigo-bg text-custom-indigo hover:bg-custom-indigo-bg font-black'
           : 'text-text-sub hover:bg-custom-slate-bg font-bold',
         isDisabled && 'cursor-not-allowed opacity-30 hover:bg-transparent',
       )}

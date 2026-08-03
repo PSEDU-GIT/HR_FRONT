@@ -34,8 +34,8 @@ export default function ReadCabinetTableTbodyAction() {
     router.push(`/cabinet/${id}`);
   };
 
-  const handleEdit = () => {
-    router.push('/wizard/summary');
+  const handleEdit = (id: number) => {
+    router.push(`/wizard/summary/edit/${id}`);
   };
 
   const handleDelete = (id: number) => {

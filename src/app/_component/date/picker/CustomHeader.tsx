@@ -128,7 +128,7 @@ export default function CustomHeader({
       </div>
       {onTodayButton && (
         <button
-          className="hover:bg-primary-border-hover/50 bg-primary-bg text-primary mr-2 ml-auto flex w-10 cursor-pointer items-center justify-center rounded-md py-1"
+          className="bg-custom-indigo-bg text-custom-indigo hover:bg-custom-indigo-bg/70 mr-2 ml-auto flex w-10 cursor-pointer items-center justify-center rounded-md py-1"
           onClick={onClickToday}
         >
           <p className="text-10 font-semibold">오늘</p>

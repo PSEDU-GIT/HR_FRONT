@@ -406,7 +406,7 @@
     font-weight: 700;
   }
   input:focus {
-    border-color: var(--color-primary-border);
+    border-color: var(--custom-indigo-border);
   }
   textarea {
     width: 100%;
@@ -423,7 +423,7 @@
     font-weight: 700;
   }
   textarea:focus {
-    border-color: var(--color-primary-border) !important;
+    border-color: var(--custom-indigo-border) !important;
   }
 }
 

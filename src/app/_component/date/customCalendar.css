@@ -41,7 +41,7 @@
 /** 선택된 날짜 */
 .react-datepicker__day--selected,
 .react-datepicker__day--keyboard-selected {
-  @apply bg-primary-bg text-primary rounded-full;
+  @apply bg-custom-indigo-bg text-custom-indigo rounded-full;
 }
 
 .react-datepicker__day--selected {
@@ -50,7 +50,7 @@
 
 .react-datepicker__day--selected:hover,
 .react-datepicker__day--keyboard-selected:hover {
-  @apply bg-primary-bg!;
+  @apply bg-custom-indigo-bg!;
 }
 
 /** 하이라이트 날짜 */
@@ -94,7 +94,7 @@
 }
 
 .react-datepicker__day--today::after {
-  @apply bg-primary ring-custom-danger absolute -bottom-0.5 left-1/2 size-1.5 -translate-x-1/2 rounded-full ring-1;
+  @apply bg-custom-indigo ring-custom-danger absolute -bottom-0.5 left-1/2 size-1.5 -translate-x-1/2 rounded-full ring-1;
   content: '';
 }
 
@@ -109,7 +109,7 @@
 }
 
 .react-datepicker__day--today.react-datepicker__day--selected:hover::after {
-  @apply bg-primary-hover!;
+  @apply bg-custom-indigo-hover!;
 }
 
 .react-datepicker__day--today.react-datepicker__day--highlighted-red.react-datepicker__day--selected:hover::before {
@@ -145,15 +145,15 @@
 
 /* 월 달력 선택된 텍스트 스타일 */
 .react-datepicker__month-text--selected {
-  @apply bg-primary rounded-lg font-bold text-white!;
+  @apply bg-custom-indigo rounded-lg font-bold text-white!;
 }
 
 .react-datepicker__month-text--selected:hover {
-  @apply bg-primary-hover! text-text-sub rounded-lg!;
+  @apply bg-custom-indigo-hover! text-text-sub rounded-lg!;
 }
 
 .react-datepicker__month-text--keyboard-selected {
-  @apply bg-primary-bg! text-primary! rounded-lg font-bold;
+  @apply bg-custom-indigo-bg! text-custom-indigo! rounded-lg font-bold;
 }
 
 /** 월 달력 텍스트 스타일 */

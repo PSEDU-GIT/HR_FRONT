@@ -1,13 +1,14 @@
 'use client';
 
 import { useShallow } from 'zustand/react/shallow';
-import { useCabinetStore } from '@/app/(afterLogin)/cabinet/_state/useCabinetStore';
+import { useCabinetStore, CabinetStatusFilter } from '@/app/(afterLogin)/cabinet/_state/useCabinetStore';
 import RoundedTab from '@/app/_component/tab/RoundedTab';
 
 const STATUS_TABS = [
   { id: 'all', displayName: '전체' },
   { id: 'completed', displayName: '체결완료' },
-  { id: 'pending', displayName: '대기' },
+  { id: 'sent', displayName: '서명대기' },
+  { id: 'draft', displayName: '임시저장' },
 ];
 
 export default function ReadFilterStatusAction() {
@@ -22,7 +23,7 @@ export default function ReadFilterStatusAction() {
     <RoundedTab
       data={STATUS_TABS}
       selectedData={statusFilter}
-      onChangeTab={(id) => setStatusFilter(id as 'all' | 'completed' | 'pending')}
+      onChangeTab={(id) => setStatusFilter(id as CabinetStatusFilter)}
       className="!text-[11px] !py-1.5"
     />
   );

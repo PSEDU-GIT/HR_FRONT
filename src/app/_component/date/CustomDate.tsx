@@ -93,7 +93,7 @@ export default function CustomDate({
         className={cx(
           'border-custom-slate-border bg-background flex min-h-[34px] min-w-[38px] cursor-pointer items-center justify-between gap-2.5 rounded-lg border px-2 py-1.5 text-xs transition-all',
           buttonClassName,
-          isVisible && 'border-primary-border! bg-custom-slate-bg',
+          isVisible && 'border-custom-indigo-border! bg-custom-indigo-bg/30!',
         )}
       >
         {selectDate ? (

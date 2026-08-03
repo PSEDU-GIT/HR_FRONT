@@ -17,7 +17,7 @@ export default function HoverChip({ icon, theme = 'default', shape = 'circle' }:
         shape === 'circle' && 'rounded-full',
         shape === 'square' && 'rounded-lg',
         theme === 'default' && 'hover:bg-slate-100',
-        theme === 'indigo' && 'hover:bg-indigo-50 hover:text-custom-indigo',
+        theme === 'indigo' && 'hover:text-custom-indigo hover:bg-indigo-50',
         theme === 'rose' && 'hover:bg-rose-50 hover:text-rose-600',
         theme === 'emerald' && 'hover:bg-emerald-50 hover:text-emerald-600',
       )}

@@ -21,7 +21,7 @@ export default function Step2SalaryTaxFreeArea() {
       <div>
         <div className="flex items-center gap-1.5">
           <legend className="text-text-side text-xs font-extrabold tracking-widest uppercase">
-            식대나 자가운전보조금 같은 비과세 수당을 비과세 한도 내에서 적용할까요?
+            식대 등 비과세 수당을 비과세 한도 내에서 적용할까요?
           </legend>
           <button
             type="button"

@@ -14,7 +14,6 @@ export default function Step2SalarySummaryArea() {
     wizPayDay,
     wizHasTaxFree,
     wizNonTaxFood,
-    wizNonTaxCar,
     wizHasNonCompete,
     wizNonCompetePeriod,
     wizNonCompeteRange,
@@ -35,7 +34,6 @@ export default function Step2SalarySummaryArea() {
       wizPayDay: state.step2.wizPayDay,
       wizHasTaxFree: state.step2.wizHasTaxFree,
       wizNonTaxFood: state.step2.wizNonTaxFood,
-      wizNonTaxCar: state.step2.wizNonTaxCar,
       wizHasNonCompete: state.step2.wizHasNonCompete,
       wizNonCompetePeriod: state.step2.wizNonCompetePeriod,
       wizNonCompeteRange: state.step2.wizNonCompeteRange,
@@ -115,7 +113,7 @@ export default function Step2SalarySummaryArea() {
                 <span className="w-24 shrink-0 text-xs font-semibold text-text-side">비과세 수당</span>
                 <span className="truncate text-xs font-bold text-text-main">
                   {wizHasTaxFree
-                    ? `식대: ${wizNonTaxFood.toLocaleString()}원${wizNonTaxCar > 0 ? ` / 자가운전: ${wizNonTaxCar.toLocaleString()}원` : ''}`
+                    ? `식대: ${wizNonTaxFood.toLocaleString()}원`
                     : '미적용'}
                 </span>
               </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Send, Loader2 } from 'lucide-react';
 import cx from 'classnames';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -11,9 +11,11 @@ import {
   createTeacherContract,
   type TeacherContractPayload,
 } from '@/app/(afterLogin)/wizard/_lib/createTeacherContract';
+import { updateTeacherContract } from '@/app/(afterLogin)/wizard/_lib/updateTeacherContract';
 import { getContractArchiveQueryKey } from '@/app/(afterLogin)/cabinet/_state/getContractArchive.state';
+import { getContractDetailQueryKey } from '@/app/(afterLogin)/cabinet/_state/getContractDetail.state';
 
-interface ClickCompleteContractActionProps {
+interface ClickSummaryCompleteActionProps {
   className?: string;
 }
 
@@ -27,10 +29,13 @@ const DAY_MAP: Record<string, string> = {
   일요일: 'SUN',
 };
 
-export default function ClickCompleteContractAction({
+export default function ClickSummaryCompleteAction({
   className,
-}: ClickCompleteContractActionProps) {
+}: ClickSummaryCompleteActionProps) {
   const router = useRouter();
+  const params = useParams<{ type?: string; id?: string }>();
+  const type = params?.type || 'edit';
+  const contractId = params?.id ? Number(params.id) : undefined;
   const queryClient = useQueryClient();
   const { handleAlert } = useAlert();
 
@@ -43,7 +48,7 @@ export default function ClickCompleteContractAction({
     })),
   );
 
-  const { mutate: completeContract, isPending } = useMutation({
+  const { mutate: completeContract, isPending: isCreating } = useMutation({
     mutationFn: createTeacherContract,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: getContractArchiveQueryKey });
@@ -65,8 +70,36 @@ export default function ClickCompleteContractAction({
     },
   });
 
+  const { mutate: updateContract, isPending: isUpdating } = useMutation({
+    mutationFn: updateTeacherContract,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: getContractArchiveQueryKey });
+      if (contractId) {
+        queryClient.invalidateQueries({
+          queryKey: [...getContractDetailQueryKey, contractId],
+        });
+      }
+      handleAlert({
+        type: 'success',
+        title: '수정 완료',
+        description: '계약서 수정이 성공적으로 완료되었습니다.',
+      });
+      reset();
+      router.push('/cabinet');
+    },
+    onError: (error: any) => {
+      console.error('계약서 수정 완료 실패:', error);
+      handleAlert({
+        type: 'error',
+        title: '오류 발생',
+        description: error.message || '계약서 수정 중 오류가 발생했습니다.',
+      });
+    },
+  });
+
+  const isPending = isCreating || isUpdating;
+
   const handleComplete = () => {
-    // 필수 정보 미입력 시 저장 차단
     if (!step1.instructorName?.trim()) {
       handleAlert({
         type: 'warning',
@@ -127,33 +160,42 @@ export default function ClickCompleteContractAction({
 
     const payload: TeacherContractPayload = {
       ...payloadInstructorInfo,
-      payType: payTypeMap[step2.wizSalaryType],
-      basePay: step2.wizSalaryAmount,
-      ratioPercent: step2.wizCommissionRate,
-      hourlyRate: step2.wizHourlyRate,
+      payType: payTypeMap[step2.wizSalaryType] || 'FIXED',
+      basePay: step2.wizSalaryAmount || 0,
+      ratioPercent: step2.wizCommissionRate || 0,
+      hourlyRate: step2.wizHourlyRate || 0,
       weeklyWorkHours: 20,
       specialTerms: step3.customTerms ? step3.customTerms.split('\n').filter(Boolean) : [],
       schedule: schedulePayload,
       contractStartDate: step2.wizStartDate,
       contractEndDate: step2.wizEndDate,
       probationPeriodMonths: parseInt(step2.wizProbation) || 0,
-      minGuaranteedAmount: step2.wizMinGuaranteeAmount,
+      minGuaranteedAmount: step2.wizMinGuaranteeAmount || 0,
       paymentDay: parseInt(step2.wizPayDay) || 0,
       nonTaxableMealAllowance: step2.wizHasTaxFree ? step2.wizNonTaxFood : 0,
       nonTaxableCarAllowance: 0,
       nonCompeteAgreed: step2.wizHasNonCompete,
       nonCompetePeriodMonths: parseInt(step2.wizNonCompetePeriod) || 0,
-      nonCompeteRadiusKm: parseInt(step2.wizNonCompeteRange.replace(/[^0-9]/g, '')) || 0,
-      nonCompeteCompensationAmount: step2.wizNonCompeteAmount,
+      nonCompeteRadiusKm: parseInt(step2.wizNonCompeteRange?.replace(/[^0-9]/g, '')) || 0,
+      nonCompeteCompensationAmount: step2.wizNonCompeteAmount || 0,
       additionalAllowanceEnabled: step2.wizHasExtraAllowance,
-      overtimeAllowance: step2.wizOvertimeAllowance,
-      positionAllowance: step2.wizPositionAllowance,
-      otherAllowance: step2.wizOtherAllowance,
-      otherAllowanceLabel: step2.wizOtherAllowanceName,
+      overtimeAllowance: step2.wizOvertimeAllowance || 0,
+      positionAllowance: step2.wizPositionAllowance || 0,
+      otherAllowance: step2.wizOtherAllowance || 0,
+      otherAllowanceLabel: step2.wizOtherAllowanceName || '',
     };
 
-    completeContract(payload);
+    if (type === 'edit' && contractId) {
+      updateContract({
+        contractId,
+        ...payload,
+      });
+    } else {
+      completeContract(payload);
+    }
   };
+
+  const isEditMode = type === 'edit';
 
   return (
     <button
@@ -166,7 +208,7 @@ export default function ClickCompleteContractAction({
       )}
     >
       {isPending ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
-      <span>{isPending ? '처리 중...' : '계약서 작성 완료'}</span>
+      <span>{isPending ? '처리 중...' : isEditMode ? '수정 완료' : '계약서 작성 완료'}</span>
     </button>
   );
 }
