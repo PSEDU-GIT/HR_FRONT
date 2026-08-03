@@ -73,16 +73,20 @@ export default function SelectDayScheduleToggleAction() {
             className={cx(
               'flex cursor-pointer flex-col items-center justify-center rounded-2xl border py-2.5 text-center transition-all duration-200',
               isEditing
-                ? 'border-slate-800 bg-slate-900 text-white shadow-sm ring-2 ring-slate-900/10'
+                ? 'border-custom-indigo bg-custom-indigo text-white shadow-xs'
                 : conf.enabled
-                  ? 'border-custom-slate-border-side bg-slate-100/70 text-slate-800 hover:bg-slate-200/60'
-                  : 'border-custom-slate-border-side text-text-side bg-white hover:bg-slate-50',
+                  ? 'border-custom-indigo-border/60 bg-custom-indigo-bg/40 text-custom-indigo hover:bg-custom-indigo-bg/70 dark:border-custom-indigo/60 dark:bg-slate-950/80 dark:text-custom-indigo dark:hover:bg-slate-900'
+                  : 'border-custom-slate-border-side text-text-side bg-white hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900/40 dark:text-slate-500 dark:hover:bg-slate-800',
             )}
           >
             <span
               className={cx(
                 'text-xs font-black',
-                isEditing ? 'text-white' : conf.enabled ? 'text-slate-900' : 'text-text-side',
+                isEditing
+                  ? 'text-white'
+                  : conf.enabled
+                    ? 'text-custom-indigo dark:text-custom-indigo'
+                    : 'text-text-side dark:text-slate-400',
               )}
             >
               {day.substring(0, 1)}
@@ -91,13 +95,13 @@ export default function SelectDayScheduleToggleAction() {
               <span
                 className={cx(
                   'mt-1 text-[10px] font-bold',
-                  isEditing ? 'text-slate-300' : 'text-slate-600',
+                  isEditing ? 'text-white/90' : 'text-custom-indigo/90 dark:text-custom-indigo/90',
                 )}
               >
                 {conf.startTime.split(':')[0]}~{conf.endTime.split(':')[0]}
               </span>
             ) : (
-              <span className="text-text-side mt-1 text-[10px]">-</span>
+              <span className="text-text-side mt-1 text-[10px] dark:text-slate-400">-</span>
             )}
           </button>
         );

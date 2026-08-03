@@ -33,12 +33,12 @@ export default function SelectSummaryStepNavAction() {
         ) : (
           <Link
             href={summaryPath}
-            className="text-slate-450 font-bold transition-all duration-200 hover:text-slate-800"
+            className="text-slate-450 font-bold transition-all duration-200 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
           >
             {step1Text}
           </Link>
         )}
-        <ChevronRight size={12} className="text-slate-300" />
+        <ChevronRight size={12} className="text-slate-300 dark:text-slate-600" />
       </div>
       <div className="flex shrink-0 items-center gap-2">
         {isPreviewPage ? (
@@ -48,7 +48,7 @@ export default function SelectSummaryStepNavAction() {
         ) : (
           <Link
             href={previewPath}
-            className="text-slate-450 font-bold transition-all duration-200 hover:text-slate-800"
+            className="text-slate-450 font-bold transition-all duration-200 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
           >
             2. 초안검토
           </Link>

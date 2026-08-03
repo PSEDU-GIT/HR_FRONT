@@ -39,9 +39,9 @@ export default function ReadWorkScheduleSummaryAction() {
 
   return (
     <>
-      주 <span className="font-bold text-slate-800">{totalWeeklyHours}시간</span> · 휴게{' '}
-      <span className="font-bold text-slate-800">{totalBreakHours}시간</span> · 소정{' '}
-      <span className="font-mono font-bold text-slate-800">{contractedHours}시간</span>
+      주 <span className="font-bold text-text-title dark:text-slate-200">{totalWeeklyHours}시간</span> · 휴게{' '}
+      <span className="font-bold text-text-title dark:text-slate-200">{totalBreakHours}시간</span> · 소정{' '}
+      <span className="font-mono font-bold text-text-title dark:text-slate-200">{contractedHours}시간</span>
     </>
   );
 }

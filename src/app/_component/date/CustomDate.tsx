@@ -91,13 +91,13 @@ export default function CustomDate({
       <div
         onClick={onToggle}
         className={cx(
-          'border-custom-slate-border bg-background flex min-h-[34px] min-w-[38px] cursor-pointer items-center justify-between gap-2.5 rounded-lg border px-2 py-1.5 text-xs transition-all',
+          'border-custom-slate-border dark:border-slate-800 bg-background dark:bg-slate-900 flex min-h-[34px] min-w-[38px] cursor-pointer items-center justify-between gap-2.5 rounded-lg border px-2 py-1.5 text-xs transition-all',
           buttonClassName,
-          isVisible && 'border-custom-indigo-border! bg-custom-indigo-bg/30!',
+          isVisible && 'border-custom-indigo-border! bg-custom-indigo-bg/30! dark:border-custom-indigo-border! dark:bg-indigo-950/40!',
         )}
       >
         {selectDate ? (
-          <span className="text-text-title font-semibold">{selectDate}</span>
+          <span className="text-text-title dark:text-slate-100 font-semibold">{selectDate}</span>
         ) : placeholder ? (
           <span className="text-text-side font-bold">{placeholder}</span>
         ) : null}

@@ -215,10 +215,10 @@ export default function SummarySalaryCardAction() {
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50/50 p-3">
+            <div className="flex items-center justify-between rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 p-3">
               <div className="space-y-0.5">
-                <span className="text-xs font-bold text-slate-800">식대 비과세</span>
-                <p className="text-[11px] text-slate-400">월 최대 20만원</p>
+                <span className="text-xs font-bold text-slate-800 dark:text-slate-100">식대 비과세</span>
+                <p className="text-[11px] text-slate-400 dark:text-slate-400">월 최대 20만원</p>
               </div>
               <input
                 type="text"

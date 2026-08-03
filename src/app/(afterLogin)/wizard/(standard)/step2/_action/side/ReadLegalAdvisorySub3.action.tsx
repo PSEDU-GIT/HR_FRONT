@@ -20,15 +20,15 @@ export default function ReadLegalAdvisorySub3Action() {
 
   return (
     <div className="space-y-3">
-      <div className="border-custom-slate-border-side space-y-2 rounded-2xl border bg-white p-4 transition-all">
-        <div className="text-text-title text-xs font-extrabold">
+      <div className="border-custom-slate-border-side dark:border-slate-800 bg-white dark:bg-slate-900 space-y-2 rounded-2xl border p-4 transition-all">
+        <div className="text-text-title dark:text-slate-100 text-xs font-extrabold">
           [자문] 임금 구성항목 명시 의무 및 최저임금 준수
         </div>
-        <p className="text-text-sub text-xs leading-relaxed font-medium">
+        <p className="text-text-sub dark:text-slate-300 text-xs leading-relaxed font-medium">
           근로기준법 제17조에 따라 기본급, 수당, 상여금 등 임금의 구성항목 및 계산방법, 지급방법을
           서면에 명확히 구체화하지 않으면 최대 500만원 이하의 과태료 대상이 됩니다.
         </p>
-        <p className="text-text-sub text-xs leading-relaxed font-medium">
+        <p className="text-text-sub dark:text-slate-300 text-xs leading-relaxed font-medium">
           또한, 최저임금법 제6조에 따라 주 소정근로시간에 대한 임금이 최저시급 및 주휴수당 포함
           최저월급 이상이어야 하며, 미달 시 3년 이하의 징역 또는 2천만원 이하의 벌금이 부과될 수
           있습니다.

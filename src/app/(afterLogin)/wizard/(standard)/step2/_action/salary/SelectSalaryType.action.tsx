@@ -43,19 +43,19 @@ export default function SelectSalaryTypeAction() {
             className={cx(
               'group relative flex w-full cursor-pointer flex-col items-start rounded-2xl border p-4 text-left transition-all duration-200',
               isSelected
-                ? 'border-custom-indigo-border ring-custom-indigo-border bg-white ring-2'
-                : 'border-custom-slate-border bg-white hover:border-slate-300 hover:bg-slate-50/60',
+                ? 'border-custom-indigo-border ring-custom-indigo-border bg-white ring-2 dark:border-custom-indigo/60 dark:bg-slate-900 dark:ring-custom-indigo/40'
+                : 'border-custom-slate-border bg-white hover:border-slate-300 hover:bg-slate-50/60 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:bg-slate-800',
             )}
           >
             <span
               className={cx(
                 'text-xs font-black tracking-tight',
-                isSelected ? 'text-custom-indigo' : 'text-slate-900',
+                isSelected ? 'text-custom-indigo' : 'text-slate-900 dark:text-slate-100',
               )}
             >
               {option.title}
             </span>
-            <p className="text-text-sub mt-1 text-xs leading-relaxed font-medium">
+            <p className="text-text-sub mt-1 text-xs leading-relaxed font-medium dark:text-slate-400">
               {option.description}
             </p>
           </button>

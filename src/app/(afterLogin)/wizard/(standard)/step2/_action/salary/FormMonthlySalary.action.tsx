@@ -35,11 +35,11 @@ export default function FormMonthlySalaryAction() {
           onChange={handleAmountChange}
           placeholder="0"
         />
-        <span className="text-text-side absolute top-1/2 right-4 -translate-y-1/2 text-xs font-extrabold">
+        <span className="text-text-side absolute top-1/2 right-4 -translate-y-1/2 text-xs font-extrabold dark:text-slate-400">
           원
         </span>
       </div>
-      {koreanText && <p className="text-text-side px-1 text-xs font-bold">{koreanText}</p>}
+      {koreanText && <p className="text-text-side px-1 text-xs font-bold dark:text-slate-300">{koreanText}</p>}
     </div>
   );
 }

@@ -25,27 +25,27 @@ export default function ReadContractPeriodAdvisoryAction() {
 
   return (
     <div className="space-y-3">
-      <div className="border-custom-slate-border-side space-y-2 rounded-2xl border bg-white p-4 transition-all">
-        <div className="text-text-title text-xs font-extrabold">
+      <div className="border-custom-slate-border-side dark:border-slate-800 bg-white dark:bg-slate-900 space-y-2 rounded-2xl border p-4 transition-all">
+        <div className="text-text-title dark:text-slate-100 text-xs font-extrabold">
           [자문] 기간제 근로계약 유효성 가이드
         </div>
-        <p className="text-text-sub text-xs leading-relaxed font-medium">
+        <p className="text-text-sub dark:text-slate-300 text-xs leading-relaxed font-medium">
           기간제법 제4조에 의거, 2년을 초과하여 기간제 근로자(강사)로 사용하는 경우 무기계약
           근로자(정규직)로 간주되어 퇴사 통보 시 해고예고 및 부당해고 구제신청 리스크가 발생합니다.
           총 계약 합산 기간이 2년을 넘지 않도록 세심히 관리하십시오.
         </p>
         {periodDays > 0 && (
-          <div className="border-custom-slate-border mt-2 flex flex-wrap gap-2 border-t pt-2">
+          <div className="border-custom-slate-border dark:border-slate-800 mt-2 flex flex-wrap gap-2 border-t pt-2">
             <span
               className={cx(
                 'inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-[11px] font-semibold',
                 periodDays >= 365
-                  ? 'border-custom-emerald-border bg-custom-emerald-bg text-custom-emerald'
-                  : 'border-custom-yellow-border bg-custom-yellow-bg text-custom-yellow',
+                  ? 'border-custom-emerald-border bg-custom-emerald-bg dark:bg-emerald-950/40 text-custom-emerald dark:text-emerald-300'
+                  : 'border-custom-yellow-border bg-custom-yellow-bg dark:bg-amber-950/40 text-custom-yellow dark:text-amber-300',
               )}
             >
               계약기간 {periodLabel}{' '}
-              <span className="text-text-side font-medium">({periodDays}일)</span> ·{' '}
+              <span className="text-text-side dark:text-slate-400 font-medium">({periodDays}일)</span> ·{' '}
               {periodDays >= 365 ? '퇴직금 의무 있음' : '퇴직금 없음'}
             </span>
           </div>

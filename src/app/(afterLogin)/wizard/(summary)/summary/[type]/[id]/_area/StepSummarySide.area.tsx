@@ -44,9 +44,9 @@ export default function StepSummarySideArea() {
         <NextStepBtn className="w-48" />
       </div>
 
-      <div className="border-custom-slate-border-side space-y-4 rounded-3xl border bg-white p-6">
-        <h4 className="text-13 font-bold text-text-title">{guide.title}</h4>
-        <div className="space-y-3 text-xs font-medium leading-relaxed text-slate-600">
+      <div className="border-custom-slate-border-side dark:border-slate-800 bg-white dark:bg-slate-900 space-y-4 rounded-3xl border p-6 transition-colors">
+        <h4 className="text-13 text-text-title dark:text-slate-100 font-bold">{guide.title}</h4>
+        <div className="text-text-sub dark:text-slate-300 space-y-3 text-xs font-medium leading-relaxed">
           <p>{guide.guide1}</p>
           <p>{guide.guide2}</p>
           <p className="text-custom-indigo font-bold">{guide.guide3}</p>

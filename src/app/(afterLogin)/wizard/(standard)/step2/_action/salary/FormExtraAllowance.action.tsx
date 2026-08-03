@@ -69,12 +69,12 @@ export default function FormExtraAllowanceAction() {
           className={cx(
             'flex cursor-pointer flex-col items-center justify-center rounded-2xl border px-4 py-3 text-center transition-all duration-200',
             !wizHasExtraAllowance
-              ? 'border-custom-indigo-border ring-custom-indigo-border bg-white ring-2'
-              : 'border-custom-slate-border bg-white hover:border-slate-300 hover:bg-slate-50/60',
+              ? 'border-custom-indigo-border ring-custom-indigo-border bg-white ring-2 dark:border-custom-indigo/60 dark:bg-slate-900 dark:ring-custom-indigo/40'
+              : 'border-custom-slate-border bg-white hover:border-slate-300 hover:bg-slate-50/60 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:bg-slate-800',
           )}
         >
-          <span className="text-sm font-extrabold text-slate-900">아니오</span>
-          <span className="text-text-side mt-0.5 text-[11px] font-medium">추가 수당 없음</span>
+          <span className="text-sm font-extrabold text-slate-900 dark:text-slate-100">아니오</span>
+          <span className="text-text-side mt-0.5 text-[11px] font-medium dark:text-slate-400">추가 수당 없음</span>
         </button>
 
         <button
@@ -83,12 +83,12 @@ export default function FormExtraAllowanceAction() {
           className={cx(
             'flex cursor-pointer flex-col items-center justify-center rounded-2xl border px-4 py-3 text-center transition-all duration-200',
             wizHasExtraAllowance
-              ? 'border-custom-indigo-border ring-custom-indigo-border bg-white ring-2'
-              : 'border-custom-slate-border bg-white hover:border-slate-300 hover:bg-slate-50/60',
+              ? 'border-custom-indigo-border ring-custom-indigo-border bg-white ring-2 dark:border-custom-indigo/60 dark:bg-slate-900 dark:ring-custom-indigo/40'
+              : 'border-custom-slate-border bg-white hover:border-slate-300 hover:bg-slate-50/60 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:bg-slate-800',
           )}
         >
-          <span className="text-sm font-extrabold text-slate-900">예</span>
-          <span className="text-text-side mt-0.5 text-[11px] font-medium">
+          <span className="text-sm font-extrabold text-slate-900 dark:text-slate-100">예</span>
+          <span className="text-text-side mt-0.5 text-[11px] font-medium dark:text-slate-400">
             직책/연장/기타 수당 설정
           </span>
         </button>
@@ -96,10 +96,10 @@ export default function FormExtraAllowanceAction() {
 
       {/* "예" 선택 시 하단 2개씩(2열 그리드) 펼쳐지는 추가 고정수당 입력 박스 */}
       {wizHasExtraAllowance && (
-        <div className="border-custom-slate-border bg-custom-slate-bg/60 space-y-3 rounded-2xl border p-4">
+        <div className="border-custom-slate-border bg-custom-slate-bg/60 space-y-3 rounded-2xl border p-4 dark:border-slate-800 dark:bg-slate-950/80">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-text-side mb-1 block text-xs font-bold">연장근로수당</label>
+              <label className="text-text-side mb-1 block text-xs font-bold dark:text-slate-400">연장근로수당</label>
               <div className="relative">
                 <input
                   type="text"
@@ -107,17 +107,17 @@ export default function FormExtraAllowanceAction() {
                   onChange={handleOvertimeChange}
                   placeholder="0"
                 />
-                <span className="text-text-side absolute top-1/2 right-3 -translate-y-1/2 text-xs font-bold">
+                <span className="text-text-side absolute top-1/2 right-3 -translate-y-1/2 text-xs font-bold dark:text-slate-400">
                   원
                 </span>
               </div>
-              <p className="text-text-side mt-1 text-[11px] font-medium">
+              <p className="text-text-side mt-1 text-[11px] font-medium dark:text-slate-400">
                 주 40시간 이하인 경우 선택사항
               </p>
             </div>
 
             <div>
-              <label className="text-text-side mb-1 block text-xs font-bold">직책수당</label>
+              <label className="text-text-side mb-1 block text-xs font-bold dark:text-slate-400">직책수당</label>
               <div className="relative">
                 <input
                   type="text"
@@ -125,7 +125,7 @@ export default function FormExtraAllowanceAction() {
                   onChange={handlePositionChange}
                   placeholder="50,000"
                 />
-                <span className="text-text-side absolute top-1/2 right-3 -translate-y-1/2 text-xs font-bold">
+                <span className="text-text-side absolute top-1/2 right-3 -translate-y-1/2 text-xs font-bold dark:text-slate-400">
                   원
                 </span>
               </div>
@@ -134,7 +134,7 @@ export default function FormExtraAllowanceAction() {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-text-side mb-1 block text-xs font-bold">기타수당</label>
+              <label className="text-text-side mb-1 block text-xs font-bold dark:text-slate-400">기타수당</label>
               <div className="relative">
                 <input
                   type="text"
@@ -142,14 +142,14 @@ export default function FormExtraAllowanceAction() {
                   onChange={handleOtherAmountChange}
                   placeholder="0"
                 />
-                <span className="text-text-side absolute top-1/2 right-3 -translate-y-1/2 text-xs font-bold">
+                <span className="text-text-side absolute top-1/2 right-3 -translate-y-1/2 text-xs font-bold dark:text-slate-400">
                   원
                 </span>
               </div>
             </div>
 
             <div>
-              <label className="text-text-side mb-1 block text-xs font-bold">기타수당 명칭</label>
+              <label className="text-text-side mb-1 block text-xs font-bold dark:text-slate-400">기타수당 명칭</label>
               <input
                 type="text"
                 value={wizOtherAllowanceName}

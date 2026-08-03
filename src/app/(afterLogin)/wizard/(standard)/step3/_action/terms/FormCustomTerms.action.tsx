@@ -33,7 +33,7 @@ export default function FormCustomTermsAction() {
       value={customTerms}
       onChange={handleTextChange}
       placeholder="추가적인 약정사항이 있으면 입력해주세요..."
-      className="border-custom-slate-border-side text-text-title min-h-[140px] max-h-[700px] w-full resize-none overflow-y-auto rounded-2xl border bg-white p-4 text-xs leading-relaxed font-medium transition-all focus:border-custom-indigo focus:outline-none"
+      className="border-custom-slate-border-side text-text-title min-h-[140px] max-h-[700px] w-full resize-none overflow-y-auto rounded-2xl border bg-white p-4 text-xs leading-relaxed font-medium transition-all focus:border-custom-indigo focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100 dark:placeholder-slate-500"
     />
   );
 }

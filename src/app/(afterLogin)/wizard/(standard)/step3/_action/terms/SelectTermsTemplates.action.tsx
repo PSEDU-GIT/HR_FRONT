@@ -46,8 +46,8 @@ export default function SelectTermsTemplatesAction() {
             className={cx(
               'flex cursor-pointer items-start gap-3 rounded-2xl border p-4 transition-all duration-200',
               isChecked
-                ? 'border-custom-indigo-border ring-custom-indigo-border bg-white ring-2'
-                : 'border-custom-slate-border bg-white hover:border-slate-300 hover:bg-slate-50/60',
+                ? 'border-custom-indigo-border ring-custom-indigo-border bg-white ring-2 dark:border-custom-indigo/60 dark:bg-slate-900 dark:ring-custom-indigo/40'
+                : 'border-custom-slate-border bg-white hover:border-slate-300 hover:bg-slate-50/60 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:bg-slate-800',
             )}
           >
             <input
@@ -57,8 +57,8 @@ export default function SelectTermsTemplatesAction() {
               className="accent-custom-indigo mt-0.5 h-4 w-4 shrink-0 cursor-pointer"
             />
             <div>
-              <h4 className="text-text-main text-xs font-bold">{tmpl.title}</h4>
-              <p className="text-text-sub mt-1 text-[11px] leading-relaxed font-medium">
+              <h4 className="text-text-main text-xs font-bold dark:text-slate-100">{tmpl.title}</h4>
+              <p className="text-text-sub mt-1 text-[11px] leading-relaxed font-medium dark:text-slate-400">
                 {tmpl.description}
               </p>
             </div>

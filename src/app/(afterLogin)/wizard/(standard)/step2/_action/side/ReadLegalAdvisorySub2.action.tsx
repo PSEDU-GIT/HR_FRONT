@@ -30,20 +30,20 @@ export default function ReadLegalAdvisorySub2Action() {
 
   return (
     <div className="space-y-3">
-      <div className="border-custom-slate-border-side space-y-2 rounded-2xl border bg-white p-4 transition-all">
-        <div className="text-text-title text-xs font-extrabold">
+      <div className="border-custom-slate-border-side space-y-2 rounded-2xl border bg-white p-4 transition-all dark:border-slate-800 dark:bg-slate-900">
+        <div className="text-text-title text-xs font-extrabold dark:text-slate-100">
           [자문] 소정근로일정 특정의 가치
         </div>
-        <p className="text-text-sub text-xs leading-relaxed font-medium">
+        <p className="text-text-sub text-xs leading-relaxed font-medium dark:text-slate-300">
           요일별 소정근로시간을 수치화하여 명확히 지정해 놓는 과정은 추후 강사와 근로일 증감 합의 및
           수당 계산 시 불필요한 마찰을 완전히 예방할 수 있는 훌륭한 실무입니다.
         </p>
-        <p className="text-text-sub text-xs leading-relaxed font-medium">
+        <p className="text-text-sub text-xs leading-relaxed font-medium dark:text-slate-300">
           근로기준법 제55조에 따라 주당 소정근로시간이 15시간 이상인 경우 매주 1회 이상의
           유급주휴일을 보장하고 주휴수당을 가산하여 지급해야 합니다.
         </p>
 
-        <div className="border-custom-slate-border mt-2 flex flex-wrap gap-2 border-t pt-2">
+        <div className="border-custom-slate-border mt-2 flex flex-wrap gap-2 border-t pt-2 dark:border-slate-800">
           <span
             className={cx(
               'inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-[11px] font-semibold',

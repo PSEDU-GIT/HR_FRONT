@@ -144,23 +144,23 @@ export default function SalaryFormHandler() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-900 text-[11px] font-bold text-white">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-900 text-[11px] font-bold text-white dark:bg-slate-700">
             {subLevel}
           </span>
-          <h4 className="text-text-main text-xs font-extrabold">
+          <h4 className="text-text-main text-xs font-extrabold dark:text-slate-100">
             {getSubLevelTitle(subLevel, wizSalaryType)}
           </h4>
           <button
             type="button"
             onClick={handleChangeSalaryType}
             title="급여 형태 변경"
-            className="border-custom-indigo-border bg-custom-indigo-bg text-custom-indigo hover:bg-custom-indigo-bg/80 inline-flex cursor-pointer items-center gap-1 rounded-md border px-2 py-0.5 text-[10px] font-bold transition-all active:scale-95"
+            className="border-custom-indigo-border bg-custom-indigo-bg text-custom-indigo hover:bg-custom-indigo-bg/80 inline-flex cursor-pointer items-center gap-1 rounded-md border px-2 py-0.5 text-[10px] font-bold transition-all active:scale-95 dark:border-custom-indigo/40 dark:bg-slate-900 dark:text-custom-indigo"
           >
             <span>{SALARY_TYPE_LABELS[wizSalaryType] || '고정급'}</span>
             <RotateCcw className="h-2.5 w-2.5" />
           </button>
         </div>
-        <span className="text-text-side text-[11px] font-bold">
+        <span className="text-text-side text-[11px] font-bold dark:text-slate-400">
           {subLevel} / {maxSubLevel} 단계
         </span>
       </div>
@@ -183,7 +183,7 @@ export default function SalaryFormHandler() {
             <button
               type="button"
               onClick={handlePrev}
-              className="border-custom-slate-border text-text-side hover:text-text-main flex shrink-0 cursor-pointer items-center justify-center gap-1 rounded-xl border bg-white px-3.5 py-2.5 text-xs font-bold whitespace-nowrap transition-all hover:bg-slate-50 active:scale-[0.99]"
+              className="border-custom-slate-border text-text-side hover:text-text-main flex shrink-0 cursor-pointer items-center justify-center gap-1 rounded-xl border bg-white px-3.5 py-2.5 text-xs font-bold whitespace-nowrap transition-all hover:bg-slate-50 active:scale-[0.99] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
             >
               <ArrowLeft className="h-3.5 w-3.5 shrink-0" />
               <span>이전</span>
@@ -195,10 +195,10 @@ export default function SalaryFormHandler() {
             onClick={handleNext}
             disabled={isHourlyBelowMinimum}
             className={cx(
-              'border-custom-slate-border flex flex-1 items-center justify-center gap-1.5 rounded-xl border py-2.5 text-xs font-bold transition-all',
+              'border-custom-slate-border flex flex-1 items-center justify-center gap-1.5 rounded-xl border py-2.5 text-xs font-bold transition-all dark:border-slate-700',
               isHourlyBelowMinimum
-                ? 'cursor-not-allowed bg-slate-100 text-slate-400 opacity-60'
-                : 'text-text-title cursor-pointer bg-white hover:bg-slate-50 active:scale-[0.99]',
+                ? 'cursor-not-allowed bg-slate-100 text-slate-400 opacity-60 dark:bg-slate-800 dark:text-slate-500'
+                : 'text-text-title cursor-pointer bg-white hover:bg-slate-50 active:scale-[0.99] dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700',
             )}
           >
             <span>
@@ -211,7 +211,7 @@ export default function SalaryFormHandler() {
             <ArrowRight
               className={cx(
                 'h-3.5 w-3.5 shrink-0',
-                isHourlyBelowMinimum ? 'text-slate-400' : 'text-text-side',
+                isHourlyBelowMinimum ? 'text-slate-400' : 'text-text-side dark:text-slate-400',
               )}
             />
           </button>

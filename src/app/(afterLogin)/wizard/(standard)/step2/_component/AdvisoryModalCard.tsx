@@ -53,12 +53,12 @@ export default function AdvisoryModalCard({
 
   const themeCardClass =
     theme === 'danger'
-      ? 'border-rose-300 bg-rose-50 text-rose-700'
+      ? 'border-rose-300 dark:border-rose-900 bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-300'
       : theme === 'yellow'
-        ? 'border-custom-yellow-border bg-custom-yellow-bg text-custom-yellow'
+        ? 'border-custom-yellow-border dark:border-amber-900 bg-custom-yellow-bg dark:bg-amber-950/50 text-custom-yellow dark:text-amber-300'
         : theme === 'emerald'
-          ? 'border-custom-emerald-border bg-custom-emerald-bg text-custom-emerald'
-          : 'bg-background text-text-main border-none';
+          ? 'border-custom-emerald-border dark:border-emerald-900 bg-custom-emerald-bg dark:bg-emerald-950/50 text-custom-emerald dark:text-emerald-300'
+          : 'bg-white dark:bg-slate-900 text-text-main dark:text-slate-200 border border-custom-slate-border dark:border-slate-800';
 
   return (
     <>

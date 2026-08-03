@@ -19,14 +19,14 @@ export default function ReadProbationAdvisoryAction() {
   return (
     <div className="space-y-3">
       {wizProbation !== '없음' && (
-        <div className="border-custom-slate-border-side space-y-2 rounded-2xl border bg-white p-4 transition-all">
-          <div className="text-text-title text-xs font-extrabold">[자문] 수습기간 설정 가이드</div>
-          <p className="text-text-sub text-xs leading-relaxed font-medium">
+        <div className="border-custom-slate-border-side space-y-2 rounded-2xl border bg-white p-4 transition-all dark:border-slate-800 dark:bg-slate-900">
+          <div className="text-text-title text-xs font-extrabold dark:text-slate-100">[자문] 수습기간 설정 가이드</div>
+          <p className="text-text-sub text-xs leading-relaxed font-medium dark:text-slate-300">
             근로기준법상 수습기간 중에는 업무 적격성 평가를 통한 계약 해지 요건이 일반 해고보다 다소
             완화되나, 3개월을 초과하는 수습기간 설정 시 최저임금 감액 적용 혜택은 최초 3개월까지만
             제한적으로 인정됩니다.
           </p>
-          <div className="border-custom-slate-border mt-2 flex flex-wrap gap-2 border-t pt-2">
+          <div className="border-custom-slate-border mt-2 flex flex-wrap gap-2 border-t pt-2 dark:border-slate-800">
             <span
               className={cx(
                 'inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-[11px] font-semibold',

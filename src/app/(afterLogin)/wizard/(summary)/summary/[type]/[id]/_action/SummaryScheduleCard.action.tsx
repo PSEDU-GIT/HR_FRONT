@@ -117,14 +117,18 @@ export default function SummaryScheduleCardAction() {
                     isSelected
                       ? 'border-custom-indigo bg-custom-indigo text-white shadow-xs'
                       : conf.enabled
-                        ? 'border-custom-indigo-border/60 bg-custom-indigo-bg/40 text-custom-indigo hover:bg-custom-indigo-bg/70'
-                        : 'border-custom-slate-border-side text-text-side bg-white hover:bg-slate-50',
+                        ? 'border-custom-indigo-border/60 bg-custom-indigo-bg/40 text-custom-indigo hover:bg-custom-indigo-bg/70 dark:border-custom-indigo/60 dark:bg-slate-950/80 dark:text-custom-indigo dark:hover:bg-slate-900'
+                        : 'border-custom-slate-border-side text-text-side bg-white hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900/40 dark:text-slate-500 dark:hover:bg-slate-800',
                   )}
                 >
                   <span
                     className={cx(
                       'text-xs font-black',
-                      isSelected ? 'text-white' : conf.enabled ? 'text-custom-indigo' : 'text-text-side',
+                      isSelected
+                        ? 'text-white'
+                        : conf.enabled
+                          ? 'text-custom-indigo dark:text-custom-indigo'
+                          : 'text-text-side dark:text-slate-400',
                     )}
                   >
                     {day.substring(0, 1)}
@@ -133,13 +137,15 @@ export default function SummaryScheduleCardAction() {
                     <span
                       className={cx(
                         'mt-1 text-[10px] font-bold',
-                        isSelected ? 'text-white/90' : 'text-custom-indigo/80',
+                        isSelected
+                          ? 'text-white/90'
+                          : 'text-custom-indigo/90 dark:text-custom-indigo/90',
                       )}
                     >
                       {conf.startTime?.split(':')[0]}~{conf.endTime?.split(':')[0]}
                     </span>
                   ) : (
-                    <span className="text-text-side mt-1 text-[10px]">-</span>
+                    <span className="text-text-side mt-1 text-[10px] dark:text-slate-400">-</span>
                   )}
                 </button>
               );
@@ -147,14 +153,14 @@ export default function SummaryScheduleCardAction() {
           </div>
 
           {editingDay && draftDaysConfig[editingDay] && (
-            <div className="border-custom-indigo-border/50 bg-custom-indigo-bg/20 flex flex-wrap items-center justify-between gap-3 rounded-2xl border p-3.5 shadow-2xs transition-all">
+            <div className="border-custom-indigo-border/50 bg-custom-indigo-bg/20 flex flex-wrap items-center justify-between gap-3 rounded-2xl border p-3.5 shadow-2xs transition-all dark:border-custom-indigo/50 dark:bg-slate-950/80">
               <div className="flex items-center gap-1.5">
                 <span className="text-custom-indigo text-xs font-black">
                   {editingDay.substring(0, 1)}요일 시간 설정
                 </span>
                 <span className="text-text-side text-xs font-semibold">
                   (소정{' '}
-                  <strong className="font-mono text-xs font-extrabold text-custom-indigo">
+                  <strong className="text-custom-indigo font-mono text-xs font-extrabold">
                     {calculateDailyHours(
                       draftDaysConfig[editingDay].startTime,
                       draftDaysConfig[editingDay].endTime,
@@ -205,8 +211,9 @@ export default function SummaryScheduleCardAction() {
                   <Select
                     data={BREAK_SELECT_DATA}
                     selectData={
-                      BREAK_SELECT_DATA.find((d) => d.id === draftDaysConfig[editingDay].breakTime) ||
-                      BREAK_SELECT_DATA[0]
+                      BREAK_SELECT_DATA.find(
+                        (d) => d.id === draftDaysConfig[editingDay].breakTime,
+                      ) || BREAK_SELECT_DATA[0]
                     }
                     onChangeAction={(sub) =>
                       setDraftDaysConfig((prev) => ({

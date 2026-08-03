@@ -137,7 +137,7 @@ export default function SummaryAllowanceCardAction() {
                   className={`rounded-xl border px-3 py-1.5 text-xs font-bold transition-all ${
                     !draft.wizHasExtraAllowance
                       ? 'border-custom-indigo bg-custom-indigo/10 text-custom-indigo'
-                      : 'border-custom-slate-border text-text-side bg-white hover:bg-slate-50'
+                      : 'border-custom-slate-border dark:border-slate-800 text-text-side dark:text-slate-400 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700'
                   }`}
                 >
                   미적용
@@ -153,7 +153,7 @@ export default function SummaryAllowanceCardAction() {
                   className={`rounded-xl border px-3 py-1.5 text-xs font-bold transition-all ${
                     draft.wizHasExtraAllowance
                       ? 'border-custom-indigo bg-custom-indigo/10 text-custom-indigo'
-                      : 'border-custom-slate-border text-text-side bg-white hover:bg-slate-50'
+                      : 'border-custom-slate-border dark:border-slate-800 text-text-side dark:text-slate-400 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700'
                   }`}
                 >
                   적용
@@ -248,7 +248,7 @@ export default function SummaryAllowanceCardAction() {
                   className={`rounded-xl border px-3 py-1.5 text-xs font-bold transition-all ${
                     !draft.wizHasNonCompete
                       ? 'border-custom-indigo bg-custom-indigo/10 text-custom-indigo'
-                      : 'border-custom-slate-border text-text-side bg-white hover:bg-slate-50'
+                      : 'border-custom-slate-border dark:border-slate-800 text-text-side dark:text-slate-400 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700'
                   }`}
                 >
                   미적용
@@ -264,7 +264,7 @@ export default function SummaryAllowanceCardAction() {
                   className={`rounded-xl border px-3 py-1.5 text-xs font-bold transition-all ${
                     draft.wizHasNonCompete
                       ? 'border-custom-indigo bg-custom-indigo/10 text-custom-indigo'
-                      : 'border-custom-slate-border text-text-side bg-white hover:bg-slate-50'
+                      : 'border-custom-slate-border dark:border-slate-800 text-text-side dark:text-slate-400 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700'
                   }`}
                 >
                   적용

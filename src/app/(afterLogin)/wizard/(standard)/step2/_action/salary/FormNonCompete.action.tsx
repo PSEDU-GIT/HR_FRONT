@@ -107,12 +107,12 @@ export default function FormNonCompeteAction() {
           className={cx(
             'flex cursor-pointer flex-col items-center justify-center rounded-2xl border px-4 py-3 text-center transition-all duration-200',
             !wizHasNonCompete
-              ? 'border-custom-indigo-border ring-custom-indigo-border bg-white ring-2'
-              : 'border-custom-slate-border bg-white hover:border-slate-300 hover:bg-slate-50/60',
+              ? 'border-custom-indigo-border ring-custom-indigo-border bg-white ring-2 dark:border-custom-indigo/60 dark:bg-slate-900 dark:ring-custom-indigo/40'
+              : 'border-custom-slate-border bg-white hover:border-slate-300 hover:bg-slate-50/60 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:bg-slate-800',
           )}
         >
-          <span className="text-sm font-extrabold text-slate-900">아니오</span>
-          <span className="text-text-side mt-0.5 text-[11px] font-medium">경업금지 약정 없음</span>
+          <span className="text-sm font-extrabold text-slate-900 dark:text-slate-100">아니오</span>
+          <span className="text-text-side mt-0.5 text-[11px] font-medium dark:text-slate-400">경업금지 약정 없음</span>
         </button>
 
         <button
@@ -121,12 +121,12 @@ export default function FormNonCompeteAction() {
           className={cx(
             'flex cursor-pointer flex-col items-center justify-center rounded-2xl border px-4 py-3 text-center transition-all duration-200',
             wizHasNonCompete
-              ? 'border-custom-indigo-border ring-custom-indigo-border bg-white ring-2'
-              : 'border-custom-slate-border bg-white hover:border-slate-300 hover:bg-slate-50/60',
+              ? 'border-custom-indigo-border ring-custom-indigo-border bg-white ring-2 dark:border-custom-indigo/60 dark:bg-slate-900 dark:ring-custom-indigo/40'
+              : 'border-custom-slate-border bg-white hover:border-slate-300 hover:bg-slate-50/60 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:bg-slate-800',
           )}
         >
-          <span className="text-sm font-extrabold text-slate-900">예</span>
-          <span className="text-text-side mt-0.5 text-[11px] font-medium">
+          <span className="text-sm font-extrabold text-slate-900 dark:text-slate-100">예</span>
+          <span className="text-text-side mt-0.5 text-[11px] font-medium dark:text-slate-400">
             경업금지 약정 및 보상 설정
           </span>
         </button>
@@ -134,10 +134,10 @@ export default function FormNonCompeteAction() {
 
       {/* "예" 선택 시 하단에 펼쳐지는 추가 입력 박스 */}
       {wizHasNonCompete && (
-        <div className="border-custom-slate-border bg-custom-slate-bg/60 space-y-3 rounded-2xl border p-4">
+        <div className="border-custom-slate-border bg-custom-slate-bg/60 space-y-3 rounded-2xl border p-4 dark:border-slate-800 dark:bg-slate-950/80">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-text-side mb-1 block text-xs font-bold">제한 기간</label>
+              <label className="text-text-side mb-1 block text-xs font-bold dark:text-slate-400">제한 기간</label>
               <Select
                 data={PERIOD_OPTIONS}
                 selectData={selectedPeriod}
@@ -149,7 +149,7 @@ export default function FormNonCompeteAction() {
             </div>
 
             <div>
-              <label className="text-text-side mb-1 block text-xs font-bold">제한 범위</label>
+              <label className="text-text-side mb-1 block text-xs font-bold dark:text-slate-400">제한 범위</label>
               <Select
                 data={RANGE_OPTIONS}
                 selectData={selectedRange}
@@ -160,7 +160,7 @@ export default function FormNonCompeteAction() {
           </div>
 
           <div>
-            <label className="text-text-side mb-1 block text-xs font-bold">월 보상수당액</label>
+            <label className="text-text-side mb-1 block text-xs font-bold dark:text-slate-400">월 보상수당액</label>
             <div className="relative">
               <input
                 type="text"
@@ -168,13 +168,13 @@ export default function FormNonCompeteAction() {
                 onChange={handleAmountChange}
                 placeholder="240,000"
               />
-              <span className="text-text-side absolute top-1/2 right-3 -translate-y-1/2 text-xs font-bold">
+              <span className="text-text-side absolute top-1/2 right-3 -translate-y-1/2 text-xs font-bold dark:text-slate-400">
                 원
               </span>
             </div>
             <div className="mt-1.5 flex items-center justify-between px-0.5 text-xs font-bold">
-              <span className="text-text-side">{koreanText}</span>
-              <span className="text-custom-indigo text-[11px]">
+              <span className="text-text-side dark:text-slate-400">{koreanText}</span>
+              <span className="text-custom-indigo text-[11px] dark:text-custom-indigo">
                 * 권장 대가 자동 계산 (월급의 10%: {recommendedCalc.toLocaleString()}원)
               </span>
             </div>
