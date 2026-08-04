@@ -4,9 +4,14 @@ import { auth } from '@/app/auth';
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  // 1. 정적 파일 및 API/에셋 예외 처리
+  // 1. 정적 파일 및 API/에셋/auth 예외 처리
   const isFileRequest = /\.(.*)$/.test(pathname);
-  if (pathname.startsWith('/api/') || pathname.startsWith('/_next/') || isFileRequest) {
+  if (
+    pathname.startsWith('/api/') ||
+    pathname.startsWith('/_next/') ||
+    pathname.startsWith('/auth') ||
+    isFileRequest
+  ) {
     return NextResponse.next();
   }
 
