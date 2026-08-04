@@ -5,6 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useShallow } from 'zustand/react/shallow';
 import { Loader2 } from 'lucide-react';
 import cx from 'classnames';
+import { useAlert } from '@/app/(afterLogin)/_state/useAlert';
 import { useTokenHandlerStore } from '../_state/useTokenHandlerStore';
 import { checkMembership } from '../_lib/checkMembership';
 
@@ -14,6 +15,7 @@ interface ClickCheckMembershipActionProps {
 
 export default function ClickCheckMembershipAction({ token }: ClickCheckMembershipActionProps) {
   const router = useRouter();
+  const { handleAlert } = useAlert();
   const { name, phone, setCheckResult } = useTokenHandlerStore(
     useShallow((state) => ({
       name: state.name,
@@ -45,17 +47,29 @@ export default function ClickCheckMembershipAction({ token }: ClickCheckMembersh
     },
     onError: (err: any) => {
       console.error('회원 여부 확인 실패:', err);
-      alert(err.message || '확인 과정 중 오류가 발생했습니다.');
+      handleAlert({
+        type: 'error',
+        title: '본인 확인',
+        description: err.message || '확인 과정 중 오류가 발생했습니다.',
+      });
     },
   });
 
   const handleClick = () => {
     if (!name.trim()) {
-      alert('이름을 입력해 주세요.');
+      handleAlert({
+        type: 'error',
+        title: '입력 오류',
+        description: '이름을 입력해 주세요.',
+      });
       return;
     }
     if (!cleanPhone || cleanPhone.length < 10) {
-      alert('올바른 휴대폰 번호를 입력해 주세요.');
+      handleAlert({
+        type: 'error',
+        title: '입력 오류',
+        description: '올바른 휴대폰 번호를 입력해 주세요.',
+      });
       return;
     }
     handleCheckMembership();

@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import cx from 'classnames';
+import { useAlert } from '@/app/(afterLogin)/_state/useAlert';
 import { verifyViaSignup } from '../_lib/verifyViaSignup';
 
 interface ClickVerifyAfterSignupActionProps {
@@ -18,6 +19,7 @@ export default function ClickVerifyAfterSignupAction({
   phone,
 }: ClickVerifyAfterSignupActionProps) {
   const router = useRouter();
+  const { handleAlert } = useAlert();
   const [isPending, startTransition] = useTransition();
   const [isVerifying, setIsVerifying] = useState(false);
 
@@ -33,7 +35,11 @@ export default function ClickVerifyAfterSignupAction({
       });
     } catch (err: any) {
       console.error('회원가입 세션 인증 실패:', err);
-      alert(err.message || '인증 처리에 실패했습니다. 회원가입 완료 후 다시 시도해 주세요.');
+      handleAlert({
+        type: 'error',
+        title: '인증 처리 실패',
+        description: err.message || '인증 처리에 실패했습니다. 회원가입 완료 후 다시 시도해 주세요.',
+      });
     } finally {
       setIsVerifying(false);
     }

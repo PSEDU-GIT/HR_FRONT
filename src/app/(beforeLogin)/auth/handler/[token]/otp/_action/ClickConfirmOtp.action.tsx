@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import cx from 'classnames';
+import { useAlert } from '@/app/(afterLogin)/_state/useAlert';
 import { confirmOtp } from '../_lib/otpService';
 
 interface ClickConfirmOtpActionProps {
@@ -22,6 +23,7 @@ export default function ClickConfirmOtpAction({
   disabled,
 }: ClickConfirmOtpActionProps) {
   const router = useRouter();
+  const { handleAlert } = useAlert();
   const cleanOtp = otpCode.trim();
   const isValidOtp = cleanOtp.length >= 4;
 
@@ -35,13 +37,21 @@ export default function ClickConfirmOtpAction({
     },
     onError: (err: any) => {
       console.error('OTP 인증 실패:', err);
-      alert(err.message || '인증번호 확인 중 오류가 발생했습니다.');
+      handleAlert({
+        type: 'error',
+        title: 'OTP 인증 오류',
+        description: err.message || '인증번호 확인 중 오류가 발생했습니다.',
+      });
     },
   });
 
   const handleClick = () => {
     if (!cleanOtp || cleanOtp.length < 4) {
-      alert('인증번호를 올바르게 입력해 주세요.');
+      handleAlert({
+        type: 'error',
+        title: '입력 오류',
+        description: '인증번호를 올바르게 입력해 주세요.',
+      });
       return;
     }
     handleConfirmOtp();

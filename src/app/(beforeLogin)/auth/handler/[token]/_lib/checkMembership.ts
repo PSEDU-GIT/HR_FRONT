@@ -31,8 +31,14 @@ export const checkMembership = async ({ token, name, phone }: CheckMembershipPay
   });
 
   const data = await res.json();
-  if (!res.ok) {
-    throw new Error(data.error || data.message || '회원 여부 확인 중 오류가 발생했습니다.');
+  if (!res.ok || data.success === false) {
+    const errorMsg =
+      data.error ||
+      data.message ||
+      data.data?.message ||
+      data.data?.error ||
+      '회원 여부 확인 중 오류가 발생했습니다.';
+    throw new Error(errorMsg);
   }
 
   return data as CheckMembershipResponse;

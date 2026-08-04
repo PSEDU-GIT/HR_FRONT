@@ -8,8 +8,14 @@ export const getContractByToken = async (token: string) => {
   });
 
   const data = await res.json();
-  if (!res.ok) {
-    throw new Error(data.error || data.message || '계약서 정보를 불러올 수 없습니다. (인증이 만료되었거나 올바르지 않습니다.)');
+  if (!res.ok || data.success === false) {
+    const errorMsg =
+      data.error ||
+      data.message ||
+      data.data?.message ||
+      data.data?.error ||
+      '계약서 정보를 불러올 수 없습니다. (인증이 만료되었거나 올바르지 않습니다.)';
+    throw new Error(errorMsg);
   }
 
   return data;

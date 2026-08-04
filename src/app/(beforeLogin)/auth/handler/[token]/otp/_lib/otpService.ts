@@ -20,8 +20,14 @@ export const requestOtp = async ({ token, name, phone }: RequestOtpPayload) => {
   });
 
   const data = await res.json();
-  if (!res.ok) {
-    throw new Error(data.error || data.message || 'OTP 발송에 실패했습니다.');
+  if (!res.ok || data.success === false) {
+    const errorMsg =
+      data.error ||
+      data.message ||
+      data.data?.message ||
+      data.data?.error ||
+      'OTP 발송에 실패했습니다.';
+    throw new Error(errorMsg);
   }
   return data;
 };
@@ -36,8 +42,14 @@ export const confirmOtp = async ({ token, code }: ConfirmOtpPayload) => {
   });
 
   const data = await res.json();
-  if (!res.ok) {
-    throw new Error(data.error || data.message || 'OTP 인증번호가 올바르지 않습니다.');
+  if (!res.ok || data.success === false) {
+    const errorMsg =
+      data.error ||
+      data.message ||
+      data.data?.message ||
+      data.data?.error ||
+      'OTP 인증번호가 올바르지 않습니다.';
+    throw new Error(errorMsg);
   }
   return data;
 };

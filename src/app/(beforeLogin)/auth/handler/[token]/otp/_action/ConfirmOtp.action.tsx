@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
+import { useAlert } from '@/app/(afterLogin)/_state/useAlert';
 import { requestOtp } from '../_lib/otpService';
 import ClickConfirmOtpAction from './ClickConfirmOtp.action';
 
@@ -12,6 +13,8 @@ interface ConfirmOtpActionProps {
 }
 
 export default function ConfirmOtpAction({ token, name, phone }: ConfirmOtpActionProps) {
+  const { handleAlert } = useAlert();
+
   const [otpCode, setOtpCode] = useState('');
   const [timer, setTimer] = useState(180);
   const [resendMessage, setResendMessage] = useState('');
@@ -25,6 +28,11 @@ export default function ConfirmOtpAction({ token, name, phone }: ConfirmOtpActio
     },
     onError: (err: any) => {
       console.error('OTP 요청 실패:', err);
+      handleAlert({
+        type: 'error',
+        title: '인증번호 발송 실패',
+        description: err.message || '인증번호 발송에 실패했습니다.',
+      });
     },
   });
 
@@ -34,7 +42,6 @@ export default function ConfirmOtpAction({ token, name, phone }: ConfirmOtpActio
 
   useEffect(() => {
     if (timer <= 0) return;
-
     const interval = setInterval(() => {
       setTimer((prev) => prev - 1);
     }, 1000);

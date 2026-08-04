@@ -21,8 +21,14 @@ export const submitSignature = async ({
   });
 
   const data = await res.json();
-  if (!res.ok) {
-    throw new Error(data.error || data.message || '전자서명 제출 및 계약 체결 중 오류가 발생했습니다.');
+  if (!res.ok || data.success === false) {
+    const errorMsg =
+      data.error ||
+      data.message ||
+      data.data?.message ||
+      data.data?.error ||
+      '전자서명 제출 및 계약 체결 중 오류가 발생했습니다.';
+    throw new Error(errorMsg);
   }
 
   return data;

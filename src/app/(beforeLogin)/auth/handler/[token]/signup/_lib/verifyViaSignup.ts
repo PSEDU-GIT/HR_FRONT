@@ -12,8 +12,14 @@ export const verifyViaSignup = async ({ token }: VerifyViaSignupPayload) => {
   });
 
   const data = await res.json();
-  if (!res.ok) {
-    throw new Error(data.error || data.message || '회원가입 후 인증 처리 중 오류가 발생했습니다.');
+  if (!res.ok || data.success === false) {
+    const errorMsg =
+      data.error ||
+      data.message ||
+      data.data?.message ||
+      data.data?.error ||
+      '회원가입 후 인증 처리 중 오류가 발생했습니다.';
+    throw new Error(errorMsg);
   }
 
   return data;
