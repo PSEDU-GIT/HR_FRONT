@@ -1,3 +1,4 @@
+import StepGuardAction from '../_action/StepGuard.action';
 import ConfirmOtpAction from './_action/ConfirmOtp.action';
 
 interface OtpPageProps {
@@ -14,6 +15,7 @@ export default async function OtpPage({ params, searchParams }: OtpPageProps) {
 
   return (
     <main className="px-5 pt-8 pb-32">
+      <StepGuardAction requiredStep={2} token={token} name={name} phone={phone} />
       <div className="space-y-2">
         <h1 className="text-text-title text-xl font-bold leading-snug tracking-tight dark:text-slate-100">
           인증번호 입력

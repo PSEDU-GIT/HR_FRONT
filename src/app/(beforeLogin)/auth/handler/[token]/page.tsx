@@ -1,3 +1,4 @@
+import StepGuardAction from './_action/StepGuard.action';
 import FormInputNameAction from './_action/FormInputName.action';
 import FormInputPhoneAction from './_action/FormInputPhone.action';
 import ClickCheckMembershipAction from './_action/ClickCheckMembership.action';
@@ -11,6 +12,8 @@ export default async function TokenPage({ params }: TokenPageProps) {
 
   return (
     <main className="px-5 pt-8 pb-32">
+      <StepGuardAction requiredStep={1} token={token} />
+
       <div className="space-y-2">
         <h1 className="text-text-title text-xl leading-snug font-bold tracking-tight dark:text-slate-100">
           강사 본인 확인

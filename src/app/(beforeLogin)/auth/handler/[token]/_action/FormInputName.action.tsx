@@ -22,7 +22,7 @@ export default function FormInputNameAction({ disabled }: FormInputNameActionPro
       onChange={(e) => setName(e.target.value)}
       placeholder="이름 입력"
       disabled={disabled}
-      className="border-custom-slate-border text-text-title placeholder:text-text-side focus:border-custom-indigo h-12 w-full rounded-lg border bg-white px-3.5 text-sm font-semibold focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
+      className="placeholder:text-text-side h-12 w-full rounded-lg px-3.5 text-sm font-semibold"
     />
   );
 }

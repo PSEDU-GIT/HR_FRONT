@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useAlert } from '@/app/(afterLogin)/_state/useAlert';
 import { requestOtp } from '../_lib/otpService';
@@ -18,6 +18,7 @@ export default function ConfirmOtpAction({ token, name, phone }: ConfirmOtpActio
   const [otpCode, setOtpCode] = useState('');
   const [timer, setTimer] = useState(180);
   const [resendMessage, setResendMessage] = useState('');
+  const isMountedRef = useRef(false);
 
   const { mutate: handleRequestOtp, isPending: isRequesting } = useMutation({
     mutationKey: ['request-otp', token],
@@ -37,14 +38,19 @@ export default function ConfirmOtpAction({ token, name, phone }: ConfirmOtpActio
   });
 
   useEffect(() => {
+    if (isMountedRef.current) return;
+
+    isMountedRef.current = true;
     handleRequestOtp();
   }, [token, name, phone]);
 
   useEffect(() => {
     if (timer <= 0) return;
+
     const interval = setInterval(() => {
       setTimer((prev) => prev - 1);
     }, 1000);
+
     return () => clearInterval(interval);
   }, [timer]);
 
@@ -79,7 +85,7 @@ export default function ConfirmOtpAction({ token, name, phone }: ConfirmOtpActio
           placeholder="인증번호 입력"
           maxLength={6}
           disabled={isRequesting}
-          className="border-custom-slate-border text-text-title placeholder:text-text-side focus:border-custom-indigo h-12 w-full rounded-lg border bg-white px-3.5 text-center text-lg font-bold tracking-widest focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
+          className="placeholder:text-text-side h-12 w-full rounded-lg px-3.5 text-sm font-semibold"
         />
 
         <div className="flex items-center justify-between pt-1 text-xs">

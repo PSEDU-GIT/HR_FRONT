@@ -6,6 +6,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { Loader2 } from 'lucide-react';
 import cx from 'classnames';
 import { useAlert } from '@/app/(afterLogin)/_state/useAlert';
+import { setTokenSession } from '../_lib/tokenSessionStorage';
 import { useTokenHandlerStore } from '../_state/useTokenHandlerStore';
 import { checkMembership } from '../_lib/checkMembership';
 
@@ -16,11 +17,12 @@ interface ClickCheckMembershipActionProps {
 export default function ClickCheckMembershipAction({ token }: ClickCheckMembershipActionProps) {
   const router = useRouter();
   const { handleAlert } = useAlert();
-  const { name, phone, setCheckResult } = useTokenHandlerStore(
-    useShallow((state) => ({
+  const { name, phone, setCheckResult, setStep } = useTokenHandlerStore(
+    useShallow((state: any) => ({
       name: state.name,
       phone: state.phone,
       setCheckResult: state.setCheckResult,
+      setStep: state.setStep,
     })),
   );
 
@@ -32,6 +34,9 @@ export default function ClickCheckMembershipAction({ token }: ClickCheckMembersh
     mutationFn: () => checkMembership({ token, name, phone: cleanPhone }),
     onSuccess: (res) => {
       setCheckResult(res.data);
+      setStep(2);
+      setTokenSession(token, { step: 2, name, phone: cleanPhone });
+
       const isMember =
         res.data?.isMember === true || res.data?.member === true || res.data?.isRegistered === true;
 

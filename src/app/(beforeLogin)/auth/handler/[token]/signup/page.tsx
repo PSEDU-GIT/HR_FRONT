@@ -1,5 +1,5 @@
-import ClickGoogleSignupAction from './_action/ClickGoogleSignup.action';
-import ClickStandardSignupAction from './_action/ClickStandardSignup.action';
+import StepGuardAction from '../_action/StepGuard.action';
+import ClickGoToSignupAction from './_action/ClickGoToSignup.action';
 import ClickVerifyAfterSignupAction from './_action/ClickVerifyAfterSignup.action';
 
 interface SignupPageProps {
@@ -13,20 +13,22 @@ export default async function SignupPage({ params, searchParams }: SignupPagePro
 
   return (
     <main className="px-5 pt-8 pb-32">
+      <StepGuardAction requiredStep={2} token={token} name={name} phone={phone} />
+
       <div className="space-y-2">
-        <h1 className="text-text-title text-xl font-bold leading-snug tracking-tight dark:text-slate-100">
+        <h1 className="text-text-title text-xl leading-snug font-bold tracking-tight dark:text-slate-100">
           {name ? `${name}님, ` : ''}회원가입 안내
         </h1>
-        <p className="text-text-sub text-xs font-normal leading-relaxed dark:text-slate-400">
-          전자계약서 체결을 위해 회원가입을 진행해 주세요.
+        <p className="text-text-sub text-xs leading-relaxed font-normal dark:text-slate-400">
+          전자계약서 체결을 위해 아래 버튼을 통해 회원가입을 완료해 주세요.
         </p>
       </div>
 
-      <div className="mt-6 space-y-3">
-        <ClickGoogleSignupAction token={token} name={name} phone={phone} />
-        <ClickStandardSignupAction token={token} name={name} phone={phone} />
-        <ClickVerifyAfterSignupAction token={token} name={name} phone={phone} />
+      <div className="mt-6">
+        <ClickGoToSignupAction token={token} />
       </div>
+
+      <ClickVerifyAfterSignupAction token={token} name={name} phone={phone} />
     </main>
   );
 }

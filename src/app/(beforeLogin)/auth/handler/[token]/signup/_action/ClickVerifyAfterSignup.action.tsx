@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import cx from 'classnames';
 import { useAlert } from '@/app/(afterLogin)/_state/useAlert';
+import { setTokenSession } from '../../_lib/tokenSessionStorage';
+import { useTokenHandlerStore } from '../../_state/useTokenHandlerStore';
 import { verifyViaSignup } from '../_lib/verifyViaSignup';
 
 interface ClickVerifyAfterSignupActionProps {
@@ -20,13 +22,18 @@ export default function ClickVerifyAfterSignupAction({
 }: ClickVerifyAfterSignupActionProps) {
   const router = useRouter();
   const { handleAlert } = useAlert();
+
+  const setStep = useTokenHandlerStore((state: any) => state.setStep);
   const [isPending, startTransition] = useTransition();
   const [isVerifying, setIsVerifying] = useState(false);
 
   const handleVerifyAfterSignup = async () => {
     try {
       setIsVerifying(true);
-      await verifyViaSignup({ token });
+      await verifyViaSignup({ token, name, phone });
+
+      setStep(3);
+      setTokenSession(token, { step: 3, name, phone });
 
       startTransition(() => {
         router.push(
@@ -38,7 +45,8 @@ export default function ClickVerifyAfterSignupAction({
       handleAlert({
         type: 'error',
         title: '인증 처리 실패',
-        description: err.message || '인증 처리에 실패했습니다. 회원가입 완료 후 다시 시도해 주세요.',
+        description:
+          err.message || '인증 처리에 실패했습니다. 회원가입 완료 후 다시 시도해 주세요.',
       });
     } finally {
       setIsVerifying(false);
@@ -49,22 +57,20 @@ export default function ClickVerifyAfterSignupAction({
 
   return (
     <div className="border-custom-slate-border fixed inset-x-0 bottom-0 z-50 border-t bg-white p-4 dark:border-slate-800 dark:bg-slate-950">
-      <div className="mx-auto max-w-md">
-        <button
-          type="button"
-          onClick={handleVerifyAfterSignup}
-          disabled={isDisabled}
-          className={cx(
-            'bg-custom-indigo hover:bg-custom-indigo-hover flex h-12 w-full cursor-pointer items-center justify-center rounded-lg text-xs font-semibold text-white disabled:opacity-50',
-          )}
-        >
-          {isDisabled ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <span>가입 완료 후 계약서 열기</span>
-          )}
-        </button>
-      </div>
+      <button
+        type="button"
+        onClick={handleVerifyAfterSignup}
+        disabled={isDisabled}
+        className={cx(
+          'bg-custom-indigo hover:bg-custom-indigo-hover flex h-12 w-full cursor-pointer items-center justify-center rounded-lg text-xs font-semibold text-white disabled:opacity-50',
+        )}
+      >
+        {isDisabled ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : (
+          <span>가입 완료 후 계약서 열기</span>
+        )}
+      </button>
     </div>
   );
 }

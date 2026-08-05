@@ -102,9 +102,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   providers: [
     Google({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      redirectProxyUrl: process.env.GOOGLE_REDIRECT_PROXY_URL,
+      clientId: process.env.AUTH_GOOGLE_ID || process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET || process.env.GOOGLE_CLIENT_SECRET,
     }),
     Credentials({
       credentials: {
@@ -161,10 +160,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               return token;
             } else {
               const { exp: accessTokenExpires } = jwtDecode<{ exp: number }>(
-                response.tokenInfo.accessToken
+                response.tokenInfo.accessToken,
               );
               const { exp: refreshTokenExpires } = jwtDecode<{ exp: number }>(
-                response.tokenInfo.refreshToken
+                response.tokenInfo.refreshToken,
               );
 
               token.id = response.email ?? user.email ?? '';
@@ -246,8 +245,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return session;
     },
-    redirect: async () => {
-      return '/';
+    redirect: async ({ url, baseUrl }) => {
+      if (url.startsWith('/')) return `${baseUrl}${url}`;
+      else if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
     },
   },
 });

@@ -1,14 +1,16 @@
 export interface VerifyViaSignupPayload {
   token: string;
+  name?: string;
+  phone?: string;
 }
 
-export const verifyViaSignup = async ({ token }: VerifyViaSignupPayload) => {
+export const verifyViaSignup = async ({ token, name, phone }: VerifyViaSignupPayload) => {
   const res = await fetch(`/api/account/contract-signature/${token}/verify-via-signup`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({}),
+    body: JSON.stringify({ name, phone }),
   });
 
   const data = await res.json();

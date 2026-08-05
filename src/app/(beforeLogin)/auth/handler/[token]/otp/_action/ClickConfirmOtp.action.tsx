@@ -5,6 +5,8 @@ import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import cx from 'classnames';
 import { useAlert } from '@/app/(afterLogin)/_state/useAlert';
+import { setTokenSession } from '../../_lib/tokenSessionStorage';
+import { useTokenHandlerStore } from '../../_state/useTokenHandlerStore';
 import { confirmOtp } from '../_lib/otpService';
 
 interface ClickConfirmOtpActionProps {
@@ -24,6 +26,7 @@ export default function ClickConfirmOtpAction({
 }: ClickConfirmOtpActionProps) {
   const router = useRouter();
   const { handleAlert } = useAlert();
+  const setStep = useTokenHandlerStore((state: any) => state.setStep);
   const cleanOtp = otpCode.trim();
   const isValidOtp = cleanOtp.length >= 4;
 
@@ -31,6 +34,8 @@ export default function ClickConfirmOtpAction({
     mutationKey: ['confirm-otp', token],
     mutationFn: () => confirmOtp({ token, code: cleanOtp }),
     onSuccess: () => {
+      setStep(3);
+      setTokenSession(token, { step: 3, name, phone });
       router.push(
         `/auth/handler/${token}/contract?name=${encodeURIComponent(name)}&phone=${phone}`,
       );
