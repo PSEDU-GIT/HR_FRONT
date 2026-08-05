@@ -4,7 +4,8 @@ export interface Instructor {
   phone: string;
   gender?: 'MALE' | 'FEMALE' | null;
   subject?: string;
+  birthDate?: string | null;
   birth?: string;
-  address?: string;
+  address?: string | null;
   hasContractHistory?: boolean;
 }

@@ -60,22 +60,24 @@ export default function ReadCabinetTableTbodyAction() {
   };
 
   const handleShare = (contractId: number, name: string) => {
-    sendSignatureLink(contractId, {
-      onSuccess: (res) => {
-        handleAlert({
-          type: 'success',
-          title: '링크 발송 성공',
-          description: res?.message || `${name}님께 문자로 서명 링크가 발송되었습니다.`,
-        });
-      },
-      onError: (err: any) => {
-        handleAlert({
-          type: 'error',
-          title: '발송 실패',
-          description: err.message || '문자 서명 링크 발송에 실패했습니다.',
-        });
-      },
-    });
+    if (confirm(`${name}님께 서명 링크를 문자로 발송하시겠습니까?`)) {
+      sendSignatureLink(contractId, {
+        onSuccess: (res) => {
+          handleAlert({
+            type: 'success',
+            title: '링크 발송 성공',
+            description: res?.message || `${name}님께 문자로 서명 링크가 발송되었습니다.`,
+          });
+        },
+        onError: (err: any) => {
+          handleAlert({
+            type: 'error',
+            title: '발송 실패',
+            description: err.message || '문자 서명 링크 발송에 실패했습니다.',
+          });
+        },
+      });
+    }
   };
 
   const cellPadding =

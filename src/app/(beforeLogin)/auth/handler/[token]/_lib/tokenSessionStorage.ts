@@ -1,6 +1,6 @@
 export interface TokenSessionData {
   token: string;
-  step: number; // 1: 본인확인, 2: OTP/가입안내, 3: 서명체결
+  step: number; // 1: 본인확인, 2: OTP/가입안내, 3: 서명체결, 4: 체결완료
   name: string;
   phone: string;
   isMember?: boolean;
@@ -19,6 +19,34 @@ export const clearOldTokenSessions = (currentToken: string) => {
     keysToRemove.forEach((key) => sessionStorage.removeItem(key));
   } catch (e) {
     console.error('Failed to clear old token sessions:', e);
+  }
+};
+
+export const clearAllTokenSessions = () => {
+  if (typeof window === 'undefined') return;
+  try {
+    const keysToRemove: string[] = [];
+    for (let i = 0; i < sessionStorage.length; i++) {
+      const key = sessionStorage.key(i);
+      if (
+        key &&
+        (key.startsWith('contract_session_') || key === 'hr-token-handler-session')
+      ) {
+        keysToRemove.push(key);
+      }
+    }
+    keysToRemove.forEach((key) => sessionStorage.removeItem(key));
+  } catch (e) {
+    console.error('Failed to clear all token sessions:', e);
+  }
+};
+
+export const removeTokenSession = (token: string) => {
+  if (typeof window === 'undefined' || !token) return;
+  try {
+    sessionStorage.removeItem(`contract_session_${token}`);
+  } catch (e) {
+    console.error('Failed to remove token session:', e);
   }
 };
 

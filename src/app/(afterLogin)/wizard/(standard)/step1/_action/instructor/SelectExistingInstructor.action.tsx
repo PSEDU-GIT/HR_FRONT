@@ -12,8 +12,6 @@ export default function SelectExistingInstructorAction() {
     useShallow((state) => ({ step1: state.step1, setStep1: state.setStep1 })),
   );
 
-  console.log(step1);
-
   const { data: instructors } = useSuspenseQuery({
     queryKey: ['instructors'],
     queryFn: getInstructors,
@@ -50,7 +48,7 @@ export default function SelectExistingInstructorAction() {
         instructorPhone: formatPhoneNumber(instructor.phone),
         instructorGender: instructor.gender ?? null,
         instructorSubject: instructor.subject || '',
-        instructorBirth: instructor.birth || '',
+        instructorBirth: instructor.birthDate || instructor.birth || '',
         instructorAddress: instructor.address || '',
         hasContractHistory: instructor.hasContractHistory ?? false,
         selectedStaffId: instructor.staffId,

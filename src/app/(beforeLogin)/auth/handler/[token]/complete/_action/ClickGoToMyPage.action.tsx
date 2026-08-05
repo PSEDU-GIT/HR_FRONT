@@ -1,9 +1,24 @@
 'use client';
 
-export default function ClickGoToMyPageAction() {
-  const handleGoToMyPage = () => {
-    const mainAppUrl = process.env.NEXT_PUBLIC_MAIN_APP_URL || 'https://hakon.co.kr';
+import { useTokenHandlerStore } from '../../_state/useTokenHandlerStore';
+import { clearAllTokenSessions } from '../../_lib/tokenSessionStorage';
 
+export default function ClickGoToMyPageAction() {
+  const resetStore = useTokenHandlerStore((state: any) => state.reset);
+
+  const handleGoToMyPage = () => {
+    // 계약 체결 완료 후 모든 세션 초기화
+    resetStore();
+    clearAllTokenSessions();
+    if (typeof window !== 'undefined') {
+      try {
+        sessionStorage.clear();
+      } catch (e) {
+        console.error('Failed to clear sessionStorage:', e);
+      }
+    }
+
+    const mainAppUrl = process.env.NEXT_PUBLIC_MAIN_APP_URL || 'https://hakon.co.kr';
     window.location.href = mainAppUrl;
   };
 

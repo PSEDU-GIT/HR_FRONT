@@ -3,6 +3,7 @@ import { type Instructor } from '@/app/(afterLogin)/wizard/(standard)/step1/_mod
 export const getInstructors = async (): Promise<Instructor[]> => {
   try {
     const res = await fetch('/api/hr/contract/existing-teachers', { cache: 'no-store' });
+
     if (!res.ok) {
       return [];
     }
@@ -15,6 +16,8 @@ export const getInstructors = async (): Promise<Instructor[]> => {
           name: item.name,
           phone: item.phone,
           gender: item.gender ?? null,
+          birthDate: item.birthDate ?? item.birth ?? null,
+          address: item.address ?? null,
           hasContractHistory: item.hasContractHistory ?? false,
         }));
     }
