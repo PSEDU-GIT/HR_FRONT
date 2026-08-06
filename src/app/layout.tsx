@@ -5,6 +5,7 @@ import './styles/keyframes.css';
 import './styles/format.css';
 import MSWProvider from '../mocks/MSWProvider';
 import ReactQueryProvider from '../providers/ReactQueryProvider';
+import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 
 export const metadata: Metadata = {
   title: '학온 HR',
@@ -21,10 +22,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className="h-full font-sans antialiased" suppressHydrationWarning>
+      <GoogleTagManager gtmId="GTM-TM379J8H" />
       <body className="flex min-h-full flex-col">
         <MSWProvider>
           <ReactQueryProvider>{children}</ReactQueryProvider>
         </MSWProvider>
+        <GoogleAnalytics gaId="G-ERZ3JFWZFT" />
       </body>
     </html>
   );
