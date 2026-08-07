@@ -13,12 +13,12 @@ export interface TeacherContractPayload {
   pendingStaffSubject?: string;
   pendingStaffBirthDate?: string;
   pendingStaffAddress?: string;
-  pendingStaffGender?: string;
   payType: 'FIXED' | 'PERCENT' | 'HOURLY' | string;
   basePay: number;
   ratioPercent: number;
   hourlyRate: number;
   weeklyWorkHours: number;
+  weeklyHolidayDay?: string;
   specialTerms: string[];
   schedule: SchedulePayload[];
   contractStartDate: string;

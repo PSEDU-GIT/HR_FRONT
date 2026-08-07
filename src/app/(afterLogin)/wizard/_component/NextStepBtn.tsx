@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, RotateCcw } from 'lucide-react';
 import cx from 'classnames';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
 import { useAlert } from '@/app/(afterLogin)/_state/useAlert';
@@ -16,6 +16,7 @@ export default function NextStepBtn({ className, disabled }: NextStepBtnProps) {
   const router = useRouter();
   const step1 = useWizardStore((state) => state.step1);
   const step2 = useWizardStore((state) => state.step2);
+  const reset = useWizardStore((state) => state.reset);
   const { handleAlert } = useAlert();
 
   const getActiveStep = () => {
@@ -62,15 +63,6 @@ export default function NextStepBtn({ className, disabled }: NextStepBtnProps) {
         type: 'warning',
         title: '강사 정보 입력 필요',
         description: '연락처를 입력해 주세요.',
-      });
-      return false;
-    }
-
-    if (!step1.instructorGender) {
-      handleAlert({
-        type: 'warning',
-        title: '강사 정보 입력 필요',
-        description: '성별을 선택해 주세요.',
       });
       return false;
     }
@@ -150,20 +142,42 @@ export default function NextStepBtn({ className, disabled }: NextStepBtnProps) {
     router.push(getNextStepPath());
   };
 
+  const handleReset = () => {
+    reset();
+    handleAlert({
+      type: 'info',
+      title: '초기화 완료',
+      description: '모든 입력 항목이 초기 설정값으로 리셋되었습니다.',
+    });
+  };
+
   return (
-    <button
-      type="button"
-      onClick={handleNextStep}
-      disabled={disabled}
+    <div
       className={cx(
-        'flex cursor-pointer items-center justify-center space-x-1 rounded-xl bg-slate-900 px-4 py-2 text-xs font-black text-white shadow-sm transition-all duration-200 hover:bg-slate-800 disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200',
-        className ? className : 'absolute top-[14px] right-0 w-48',
+        'flex items-center gap-2',
+        className ? className : 'absolute top-[14px] right-0',
       )}
     >
-      <span>{activeStep === 4 ? '작성 완료' : '다음 단계로'}</span>
-      <ArrowRight size={14} />
-    </button>
+      {activeStep === 1 && (
+        <button
+          type="button"
+          onClick={handleReset}
+          className="flex h-9 cursor-pointer items-center justify-center space-x-1.5 rounded-xl border border-slate-200 bg-white px-3.5 text-xs font-black text-slate-700 shadow-2xs transition-all duration-200 hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+        >
+          <RotateCcw size={14} className="text-slate-500 dark:text-slate-400" />
+          <span>초기화</span>
+        </button>
+      )}
+
+      <button
+        type="button"
+        onClick={handleNextStep}
+        disabled={disabled}
+        className="flex h-9 w-48 cursor-pointer items-center justify-center space-x-1 rounded-xl bg-slate-900 px-4 text-xs font-black text-white shadow-sm transition-all duration-200 hover:bg-slate-800 disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200"
+      >
+        <span>{activeStep === 4 ? '작성 완료' : '다음 단계로'}</span>
+        <ArrowRight size={14} />
+      </button>
+    </div>
   );
 }
-
-

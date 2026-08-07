@@ -10,19 +10,19 @@ export default function SelectContractTypeAction() {
   );
 
   return (
-    <div className="flex w-1/2 gap-2">
+    <div className="flex w-full gap-2">
       <ToggleButton
         label="강사근로계약서"
-        isSelected={step1.contractType === '강사근로계약서'}
+        isSelected={step1.contractType === '강사근로계약서' || !step1.contractType}
         onClick={() => setStep1({ contractType: '강사근로계약서' })}
-        className="!py-2.5 !text-sm"
+        className="!py-2.5 !text-sm flex-1"
       />
-      {/* <ToggleButton
-        label="강사용역계약서"
-        isSelected={step1.contractType === '강사용역계약서'}
-        onClick={() => setStep1({ contractType: '강사용역계약서' })}
-        className="!py-2.5 !text-sm"
-      /> */}
+      <ToggleButton
+        label="강사근로계약서 (5인 미만)"
+        isSelected={step1.contractType === '강사근로계약서 (5인 미만)'}
+        onClick={() => setStep1({ contractType: '강사근로계약서 (5인 미만)' })}
+        className="!py-2.5 !text-sm flex-1"
+      />
     </div>
   );
 }

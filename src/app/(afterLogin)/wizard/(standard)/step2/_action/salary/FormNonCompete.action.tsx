@@ -17,6 +17,8 @@ const RANGE_OPTIONS: SelectDataTypes[] = [
   { id: '반경 5km', displayName: '반경 5km' },
 ];
 
+const PERCENT_PRESETS = [5, 10, 15, 20];
+
 function numberToKorean(num: number): string {
   if (!num || num <= 0) return '';
   const units = ['', '만', '억', '조'];
@@ -55,7 +57,8 @@ export default function FormNonCompeteAction() {
     wizNonCompetePeriod,
     wizNonCompeteRange,
     wizNonCompeteAmount,
-    wizSalaryAmount,
+    wizNonCompeteCalcType,
+    wizNonCompetePercent,
     setStep2,
   } = useWizardStore(
     useShallow((state) => ({
@@ -63,7 +66,8 @@ export default function FormNonCompeteAction() {
       wizNonCompetePeriod: state.step2.wizNonCompetePeriod,
       wizNonCompeteRange: state.step2.wizNonCompeteRange,
       wizNonCompeteAmount: state.step2.wizNonCompeteAmount,
-      wizSalaryAmount: state.step2.wizSalaryAmount,
+      wizNonCompeteCalcType: state.step2.wizNonCompeteCalcType || 'percent',
+      wizNonCompetePercent: state.step2.wizNonCompetePercent ?? 10,
       setStep2: state.setStep2,
     })),
   );
@@ -73,12 +77,17 @@ export default function FormNonCompeteAction() {
   };
 
   const handleSelectYes = () => {
-    const recommendedAmount = Math.round((wizSalaryAmount || 2500000) * 0.1);
     setStep2({
       wizHasNonCompete: true,
       wizNonCompetePeriod: wizNonCompetePeriod || '6개월',
       wizNonCompeteRange: wizNonCompeteRange || '반경 3km',
-      wizNonCompeteAmount: wizNonCompeteAmount || recommendedAmount,
+    });
+  };
+
+  const handlePercentChange = (pct: number) => {
+    setStep2({
+      wizNonCompeteCalcType: 'percent',
+      wizNonCompetePercent: pct,
     });
   };
 
@@ -86,7 +95,10 @@ export default function FormNonCompeteAction() {
     const rawValue = e.target.value.replace(/[^0-9]/g, '');
     let num = Number(rawValue);
     if (num > 1000000000) num = 1000000000;
-    setStep2({ wizNonCompeteAmount: num });
+    setStep2({
+      wizNonCompeteCalcType: 'manual',
+      wizNonCompeteAmount: num,
+    });
   };
 
   const selectedPeriod =
@@ -94,7 +106,6 @@ export default function FormNonCompeteAction() {
   const selectedRange =
     RANGE_OPTIONS.find((opt) => opt.id === wizNonCompeteRange) || RANGE_OPTIONS[1];
 
-  const recommendedCalc = Math.round((wizSalaryAmount || 2500000) * 0.1);
   const koreanText = numberToKorean(wizNonCompeteAmount);
 
   return (
@@ -107,12 +118,14 @@ export default function FormNonCompeteAction() {
           className={cx(
             'flex cursor-pointer flex-col items-center justify-center rounded-2xl border px-4 py-3 text-center transition-all duration-200',
             !wizHasNonCompete
-              ? 'border-custom-indigo-border ring-custom-indigo-border bg-white ring-2 dark:border-custom-indigo/60 dark:bg-slate-900 dark:ring-custom-indigo/40'
+              ? 'border-custom-indigo-border ring-custom-indigo-border dark:border-custom-indigo/60 dark:ring-custom-indigo/40 bg-white ring-2 dark:bg-slate-900'
               : 'border-custom-slate-border bg-white hover:border-slate-300 hover:bg-slate-50/60 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:bg-slate-800',
           )}
         >
           <span className="text-sm font-extrabold text-slate-900 dark:text-slate-100">아니오</span>
-          <span className="text-text-side mt-0.5 text-[11px] font-medium dark:text-slate-400">경업금지 약정 없음</span>
+          <span className="text-text-side mt-0.5 text-[11px] font-medium dark:text-slate-400">
+            경업금지 약정 없음
+          </span>
         </button>
 
         <button
@@ -121,7 +134,7 @@ export default function FormNonCompeteAction() {
           className={cx(
             'flex cursor-pointer flex-col items-center justify-center rounded-2xl border px-4 py-3 text-center transition-all duration-200',
             wizHasNonCompete
-              ? 'border-custom-indigo-border ring-custom-indigo-border bg-white ring-2 dark:border-custom-indigo/60 dark:bg-slate-900 dark:ring-custom-indigo/40'
+              ? 'border-custom-indigo-border ring-custom-indigo-border dark:border-custom-indigo/60 dark:ring-custom-indigo/40 bg-white ring-2 dark:bg-slate-900'
               : 'border-custom-slate-border bg-white hover:border-slate-300 hover:bg-slate-50/60 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:bg-slate-800',
           )}
         >
@@ -134,10 +147,12 @@ export default function FormNonCompeteAction() {
 
       {/* "예" 선택 시 하단에 펼쳐지는 추가 입력 박스 */}
       {wizHasNonCompete && (
-        <div className="border-custom-slate-border bg-custom-slate-bg/60 space-y-3 rounded-2xl border p-4 dark:border-slate-800 dark:bg-slate-950/80">
+        <div className="border-custom-slate-border bg-custom-slate-bg/60 space-y-4 rounded-2xl border p-4 dark:border-slate-800 dark:bg-slate-950/80">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-text-side mb-1 block text-xs font-bold dark:text-slate-400">제한 기간</label>
+              <label className="text-text-side mb-1 block text-xs font-bold dark:text-slate-400">
+                제한 기간
+              </label>
               <Select
                 data={PERIOD_OPTIONS}
                 selectData={selectedPeriod}
@@ -149,7 +164,9 @@ export default function FormNonCompeteAction() {
             </div>
 
             <div>
-              <label className="text-text-side mb-1 block text-xs font-bold dark:text-slate-400">제한 범위</label>
+              <label className="text-text-side mb-1 block text-xs font-bold dark:text-slate-400">
+                제한 범위
+              </label>
               <Select
                 data={RANGE_OPTIONS}
                 selectData={selectedRange}
@@ -159,25 +176,82 @@ export default function FormNonCompeteAction() {
             </div>
           </div>
 
-          <div>
-            <label className="text-text-side mb-1 block text-xs font-bold dark:text-slate-400">월 보상수당액</label>
-            <div className="relative">
-              <input
-                type="text"
-                value={wizNonCompeteAmount === 0 ? '' : wizNonCompeteAmount.toLocaleString()}
-                onChange={handleAmountChange}
-                placeholder="240,000"
-              />
-              <span className="text-text-side absolute top-1/2 right-3 -translate-y-1/2 text-xs font-bold dark:text-slate-400">
-                원
-              </span>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="text-text-side text-xs font-bold dark:text-slate-400">
+                월 보상수당 산정 방식
+              </label>
+              <div className="flex items-center gap-1 rounded-lg bg-slate-100 p-0.5 dark:bg-slate-800">
+                <button
+                  type="button"
+                  onClick={() => setStep2({ wizNonCompeteCalcType: 'percent' })}
+                  className={cx(
+                    'rounded-md px-2.5 py-1 text-[11px] font-extrabold transition-all',
+                    wizNonCompeteCalcType === 'percent'
+                      ? 'text-custom-indigo dark:text-custom-indigo bg-white shadow-2xs dark:bg-slate-900'
+                      : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200',
+                  )}
+                >
+                  비율 지정 (권장)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setStep2({ wizNonCompeteCalcType: 'manual', wizNonCompeteAmount: 0 })}
+                  className={cx(
+                    'rounded-md px-2.5 py-1 text-[11px] font-extrabold transition-all',
+                    wizNonCompeteCalcType === 'manual'
+                      ? 'text-custom-indigo dark:text-custom-indigo bg-white shadow-2xs dark:bg-slate-900'
+                      : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200',
+                  )}
+                >
+                  직접 금액 입력
+                </button>
+              </div>
             </div>
-            <div className="mt-1.5 flex items-center justify-between px-0.5 text-xs font-bold">
-              <span className="text-text-side dark:text-slate-400">{koreanText}</span>
-              <span className="text-custom-indigo text-[11px] dark:text-custom-indigo">
-                * 권장 대가 자동 계산 (월급의 10%: {recommendedCalc.toLocaleString()}원)
-              </span>
-            </div>
+
+            {wizNonCompeteCalcType === 'percent' ? (
+              <div className="space-y-2">
+                <div className="grid grid-cols-4 gap-1.5">
+                  {PERCENT_PRESETS.map((pct) => (
+                    <button
+                      key={pct}
+                      type="button"
+                      onClick={() => handlePercentChange(pct)}
+                      className={cx(
+                        'flex h-9 cursor-pointer items-center justify-center rounded-xl border text-xs font-extrabold transition-all',
+                        wizNonCompetePercent === pct
+                          ? 'border-custom-indigo-border bg-custom-indigo-bg text-custom-indigo dark:border-custom-indigo dark:text-custom-indigo dark:bg-slate-900'
+                          : 'border-custom-slate-border bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300',
+                      )}
+                    >
+                      {pct}% {pct === 10 && '(권장)'}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-custom-indigo px-0.5 text-[11px] font-semibold dark:text-indigo-400">
+                  * 선택하신 비율({wizNonCompetePercent}%)은 5단계에서 약정 월급 입력 시 월 보상수당액으로 자동 반영됩니다.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-1">
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={wizNonCompeteAmount === 0 ? '' : wizNonCompeteAmount.toLocaleString()}
+                    onChange={handleAmountChange}
+                    placeholder="예: 240,000"
+                  />
+                  <span className="text-text-side absolute top-1/2 right-3 -translate-y-1/2 text-xs font-bold dark:text-slate-400">
+                    원
+                  </span>
+                </div>
+                {koreanText && (
+                  <p className="text-text-side px-1 text-xs font-bold dark:text-slate-400">
+                    {koreanText}
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         </div>
       )}

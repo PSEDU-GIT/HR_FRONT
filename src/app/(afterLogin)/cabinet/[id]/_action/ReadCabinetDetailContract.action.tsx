@@ -64,8 +64,12 @@ export default function ReadCabinetDetailContractAction() {
     ? contractDetail.specialTerms.join('\n')
     : '특약사항 없음';
 
+  const rawHolidayDay = (contractDetail as any).weeklyHolidayDay || 'SUN';
+  const resolvedWeeklyHoliday = DAY_KEY_MAP[rawHolidayDay] || rawHolidayDay || '일요일';
+
   return (
     <ContractDocumentTemplate
+      contractType={contractDetail.contractType}
       instructorName={contractDetail.pendingStaffName || '강사명 미지정'}
       instructorPhone={formatPhoneNumber(contractDetail.pendingStaffPhone) || '연락처 미지정'}
       instructorSubject={contractDetail.pendingStaffSubject || '과목 미지정'}
@@ -78,12 +82,30 @@ export default function ReadCabinetDetailContractAction() {
           : '수습 없음'
       }
       wizDaysConfig={daysConfig}
+      wizWeeklyHoliday={resolvedWeeklyHoliday}
       wizSalaryType={salaryType}
       wizSalaryAmount={contractDetail.basePay}
       wizHourlyRate={contractDetail.hourlyRate}
       wizCommissionRate={contractDetail.ratioPercent}
       wizMinGuaranteeAmount={contractDetail.minGuaranteedAmount}
       wizPayDay={contractDetail.paymentDay ? `${contractDetail.paymentDay}일` : '10일'}
+      wizHasTaxFree={(contractDetail.nonTaxableMealAllowance || 0) > 0}
+      wizNonTaxFood={contractDetail.nonTaxableMealAllowance || 0}
+      wizHasNonCompete={contractDetail.nonCompeteAgreed || false}
+      wizNonCompetePeriod={
+        contractDetail.nonCompetePeriodMonths
+          ? `${contractDetail.nonCompetePeriodMonths}개월`
+          : '6개월'
+      }
+      wizNonCompeteRange={
+        contractDetail.nonCompeteRadiusKm ? `반경 ${contractDetail.nonCompeteRadiusKm}km` : '3km'
+      }
+      wizNonCompeteAmount={contractDetail.nonCompeteCompensationAmount || 0}
+      wizHasExtraAllowance={contractDetail.additionalAllowanceEnabled || false}
+      wizOvertimeAllowance={contractDetail.overtimeAllowance || 0}
+      wizPositionAllowance={contractDetail.positionAllowance || 0}
+      wizOtherAllowance={contractDetail.otherAllowance || 0}
+      wizOtherAllowanceName={contractDetail.otherAllowanceLabel || ''}
       customTerms={customTermsStr}
       showPrintStyles={false}
       className="min-h-full border-none shadow-none"

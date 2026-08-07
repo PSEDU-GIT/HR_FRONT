@@ -22,13 +22,15 @@ export default function FormEditingDayTimeAction() {
     })),
   );
 
-  if (!editingDay) return null;
+  if (!editingDay || !wizDaysConfig?.[editingDay]) return null;
+
+  const currentDayConfig = wizDaysConfig[editingDay];
 
   const handleExcludeDay = () => {
     setStep2((prev) => ({
       wizDaysConfig: {
         ...prev.wizDaysConfig,
-        [editingDay]: { ...prev.wizDaysConfig[editingDay], enabled: false },
+        [editingDay]: { ...(prev.wizDaysConfig[editingDay] || {}), enabled: false },
       },
       editingDay: null,
       wizWorkDaysType: 'custom',
@@ -45,9 +47,9 @@ export default function FormEditingDayTimeAction() {
           (소정{' '}
           <strong className="text-custom-indigo font-mono text-xs font-extrabold">
             {calculateDailyHours(
-              wizDaysConfig[editingDay].startTime,
-              wizDaysConfig[editingDay].endTime,
-              wizDaysConfig[editingDay].breakTime,
+              currentDayConfig.startTime || '14:00',
+              currentDayConfig.endTime || '22:00',
+              currentDayConfig.breakTime || '1시간',
             )}
             시간
           </strong>
@@ -62,7 +64,7 @@ export default function FormEditingDayTimeAction() {
           </span>
           <div className="flex items-center gap-1.5">
             <TimePicker
-              value={wizDaysConfig[editingDay].startTime}
+              value={currentDayConfig.startTime || '14:00'}
               onChange={(t) =>
                 setStep2((prev) => ({
                   wizDaysConfig: {
@@ -80,7 +82,7 @@ export default function FormEditingDayTimeAction() {
               ~
             </span>
             <TimePicker
-              value={wizDaysConfig[editingDay].endTime}
+              value={currentDayConfig.endTime || '22:00'}
               onChange={(t) =>
                 setStep2((prev) => ({
                   wizDaysConfig: {
@@ -104,7 +106,7 @@ export default function FormEditingDayTimeAction() {
           <Select
             data={BREAK_SELECT_DATA}
             selectData={
-              BREAK_SELECT_DATA.find((d) => d.id === wizDaysConfig[editingDay].breakTime) ||
+              BREAK_SELECT_DATA.find((d) => d.id === currentDayConfig.breakTime) ||
               BREAK_SELECT_DATA[0]
             }
             onChangeAction={(sub) =>

@@ -33,8 +33,9 @@ export default function CustomHeader({
   const [month, year] = format(date, 'M월 yyyy').split(' ');
 
   const years = useMemo(() => {
-    const start = Number(year) - 20;
-    const end = Number(year) + 20;
+    const currentY = new Date().getFullYear();
+    const start = 1950;
+    const end = Math.max(Number(year) + 10, currentY + 10);
     const arr: number[] = [];
     for (let y = end; y >= start; y--) arr.push(y);
     return arr;

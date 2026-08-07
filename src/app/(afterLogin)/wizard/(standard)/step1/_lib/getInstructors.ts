@@ -15,7 +15,6 @@ export const getInstructors = async (): Promise<Instructor[]> => {
           staffId: Number(item.staffId),
           name: item.name,
           phone: item.phone,
-          gender: item.gender ?? null,
           birthDate: item.birthDate ?? item.birth ?? null,
           address: item.address ?? null,
           hasContractHistory: item.hasContractHistory ?? false,

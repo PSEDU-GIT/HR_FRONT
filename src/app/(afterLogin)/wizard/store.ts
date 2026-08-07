@@ -6,7 +6,6 @@ interface Step1State {
   instructorSubject: string;
   instructorBirth: string;
   instructorAddress: string;
-  instructorGender: 'MALE' | 'FEMALE' | null;
   contractType: string;
   isNewInstructor: boolean;
   hasContractHistory?: boolean;
@@ -35,6 +34,7 @@ export interface Step2State {
   wizWorkDaysType: '5days' | '3days' | 'custom';
   wizScheduleApplied: boolean;
   wizDaysConfig: DaysConfig;
+  wizWeeklyHoliday: string; // 지정 유급 주휴일 (예: '일요일')
   selectedBatchDays: string[];
   batchStartTime: string;
   batchEndTime: string;
@@ -63,6 +63,8 @@ export interface Step2State {
   wizNonCompetePeriod: string;
   wizNonCompeteRange: string;
   wizNonCompeteAmount: number;
+  wizNonCompeteCalcType: 'percent' | 'manual';
+  wizNonCompetePercent: number;
 
   highlightedAdvisoryKey: string | null;
 }
@@ -96,42 +98,63 @@ const initialStep1: Step1State = {
   instructorSubject: '',
   instructorBirth: '',
   instructorAddress: '',
-  instructorGender: null,
   contractType: '강사근로계약서',
   isNewInstructor: false,
 };
 
+// 학원 현장 맞춤 기본 근로시간 설정 (평일 14:00~22:00, 토 10:00~15:00)
 const initialDaysConfig: DaysConfig = {
-  월요일: { enabled: true, startTime: '09:00', endTime: '18:00', breakTime: '1시간' },
-  화요일: { enabled: true, startTime: '09:00', endTime: '18:00', breakTime: '1시간' },
-  수요일: { enabled: true, startTime: '09:00', endTime: '18:00', breakTime: '1시간' },
-  목요일: { enabled: true, startTime: '09:00', endTime: '18:00', breakTime: '1시간' },
-  금요일: { enabled: true, startTime: '09:00', endTime: '18:00', breakTime: '1시간' },
-  토요일: { enabled: false, startTime: '09:00', endTime: '18:00', breakTime: '1시간' },
-  일요일: { enabled: false, startTime: '09:00', endTime: '18:00', breakTime: '1시간' },
+  월요일: { enabled: true, startTime: '14:00', endTime: '22:00', breakTime: '1시간' },
+  화요일: { enabled: true, startTime: '14:00', endTime: '22:00', breakTime: '1시간' },
+  수요일: { enabled: true, startTime: '14:00', endTime: '22:00', breakTime: '1시간' },
+  목요일: { enabled: true, startTime: '14:00', endTime: '22:00', breakTime: '1시간' },
+  금요일: { enabled: true, startTime: '14:00', endTime: '22:00', breakTime: '1시간' },
+  토요일: { enabled: false, startTime: '10:00', endTime: '15:00', breakTime: '없음' },
+  일요일: { enabled: false, startTime: '10:00', endTime: '15:00', breakTime: '없음' },
 };
+
+const getInitialDates = () => {
+  const now = new Date();
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth() + 1).padStart(2, '0');
+  const dd = String(now.getDate()).padStart(2, '0');
+  const startDate = `${yyyy}-${mm}-${dd}`;
+
+  const end = new Date(now);
+  end.setFullYear(now.getFullYear() + 1);
+  end.setDate(now.getDate() - 1);
+  const endYyyy = end.getFullYear();
+  const endMm = String(end.getMonth() + 1).padStart(2, '0');
+  const endDd = String(end.getDate()).padStart(2, '0');
+  const endDate = `${endYyyy}-${endMm}-${endDd}`;
+
+  return { startDate, endDate };
+};
+
+const initialDates = getInitialDates();
 
 const initialStep2: Step2State = {
   wizSubStep: 1,
   maxUnlockedSubStep: 1,
 
-  wizStartDate: '2026-07-20',
-  wizEndDate: '2027-07-19',
+  wizStartDate: initialDates.startDate,
+  wizEndDate: initialDates.endDate,
   wizProbation: '3개월',
 
   wizWorkDaysType: '5days',
   wizScheduleApplied: false,
   wizDaysConfig: initialDaysConfig,
+  wizWeeklyHoliday: '일요일', // 기본 주휴일: 일요일
   selectedBatchDays: ['월요일', '화요일', '수요일', '목요일', '금요일'],
-  batchStartTime: '09:00',
-  batchEndTime: '18:00',
+  batchStartTime: '14:00',
+  batchEndTime: '22:00',
   batchBreakTime: '1시간',
   editingDay: null,
 
   wizSalaryType: 'monthly',
   wizSalaryApplied: true,
   wizSalaryDone: false,
-  wizSalaryAmount: 2500000,
+  wizSalaryAmount: 0,
   wizHourlyRate: 10320,
   wizCommissionRate: 20,
   wizMinGuaranteeAmount: 1883297,
@@ -146,10 +169,12 @@ const initialStep2: Step2State = {
   wizPositionAllowance: 0,
   wizOtherAllowance: 0,
   wizOtherAllowanceName: '',
-  wizHasNonCompete: false,
+  wizHasNonCompete: true,
   wizNonCompetePeriod: '6개월',
   wizNonCompeteRange: '반경 3km',
-  wizNonCompeteAmount: 240000,
+  wizNonCompeteAmount: 0,
+  wizNonCompeteCalcType: 'percent',
+  wizNonCompetePercent: 10,
 
   highlightedAdvisoryKey: null,
 };

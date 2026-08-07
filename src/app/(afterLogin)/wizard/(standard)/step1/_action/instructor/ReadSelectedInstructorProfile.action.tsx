@@ -4,7 +4,6 @@ import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
 import { formatPhoneNumber } from '@/app/_lib/formatPhoneNumber';
 import CustomDate from '@/app/_component/date/CustomDate';
-import ToggleButton from '@/app/_component/button/ToggleButton';
 
 export default function ReadSelectedInstructorProfileAction() {
   const { step1, setStep1 } = useWizardStore(
@@ -30,35 +29,6 @@ export default function ReadSelectedInstructorProfileAction() {
         <span className="text-text-main dark:text-slate-200 text-xs font-bold">
           {formatPhoneNumber(step1.instructorPhone) || '-'}
         </span>
-      </div>
-      <div>
-        <span className="text-text-side dark:text-slate-400 mb-1 block text-[10px] font-bold">
-          성별 {isInstructorSelected && <span className="text-red-500">*</span>}
-        </span>
-        {isInstructorSelected ? (
-          <div className="flex gap-2">
-            <ToggleButton
-              label="남"
-              isSelected={step1.instructorGender === 'MALE'}
-              onClick={() =>
-                setStep1({ instructorGender: step1.instructorGender === 'MALE' ? null : 'MALE' })
-              }
-              className="!py-1.5"
-            />
-            <ToggleButton
-              label="여"
-              isSelected={step1.instructorGender === 'FEMALE'}
-              onClick={() =>
-                setStep1({
-                  instructorGender: step1.instructorGender === 'FEMALE' ? null : 'FEMALE',
-                })
-              }
-              className="!py-1.5"
-            />
-          </div>
-        ) : (
-          <span className="text-text-main dark:text-slate-200 text-xs font-bold">-</span>
-        )}
       </div>
       <div>
         <span className="text-text-side dark:text-slate-400 mb-1 block text-[10px] font-bold">
@@ -97,7 +67,7 @@ export default function ReadSelectedInstructorProfileAction() {
           </span>
         )}
       </div>
-      <div>
+      <div className="col-span-2">
         <span className="text-text-side dark:text-slate-400 mb-1 block text-[10px] font-bold">
           주소 {isInstructorSelected && <span className="text-red-500">*</span>}
         </span>

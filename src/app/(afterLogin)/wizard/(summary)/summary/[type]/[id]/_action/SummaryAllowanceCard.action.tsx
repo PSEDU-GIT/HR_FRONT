@@ -96,17 +96,15 @@ export default function SummaryAllowanceCardAction() {
     ? `${step2.wizNonCompetePeriod || ''} / ${step2.wizNonCompeteRange || ''} (${formatCurrency(step2.wizNonCompeteAmount) || 0}원)`
     : '미적용';
 
-  const selectedPeriod =
-    PERIOD_OPTIONS.find((opt) => opt.id === draft.wizNonCompetePeriod) || {
-      id: draft.wizNonCompetePeriod || '6개월',
-      displayName: draft.wizNonCompetePeriod || '6개월',
-    };
+  const selectedPeriod = PERIOD_OPTIONS.find((opt) => opt.id === draft.wizNonCompetePeriod) || {
+    id: draft.wizNonCompetePeriod || '6개월',
+    displayName: draft.wizNonCompetePeriod || '6개월',
+  };
 
-  const selectedRange =
-    RANGE_OPTIONS.find((opt) => opt.id === draft.wizNonCompeteRange) || {
-      id: draft.wizNonCompeteRange || '반경 3km',
-      displayName: draft.wizNonCompeteRange || '반경 3km',
-    };
+  const selectedRange = RANGE_OPTIONS.find((opt) => opt.id === draft.wizNonCompeteRange) || {
+    id: draft.wizNonCompeteRange || '반경 3km',
+    displayName: draft.wizNonCompeteRange || '반경 3km',
+  };
 
   return (
     <SummaryCardComponent
@@ -137,7 +135,7 @@ export default function SummaryAllowanceCardAction() {
                   className={`rounded-xl border px-3 py-1.5 text-xs font-bold transition-all ${
                     !draft.wizHasExtraAllowance
                       ? 'border-custom-indigo bg-custom-indigo/10 text-custom-indigo'
-                      : 'border-custom-slate-border dark:border-slate-800 text-text-side dark:text-slate-400 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700'
+                      : 'border-custom-slate-border text-text-side bg-white hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700'
                   }`}
                 >
                   미적용
@@ -153,7 +151,7 @@ export default function SummaryAllowanceCardAction() {
                   className={`rounded-xl border px-3 py-1.5 text-xs font-bold transition-all ${
                     draft.wizHasExtraAllowance
                       ? 'border-custom-indigo bg-custom-indigo/10 text-custom-indigo'
-                      : 'border-custom-slate-border dark:border-slate-800 text-text-side dark:text-slate-400 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700'
+                      : 'border-custom-slate-border text-text-side bg-white hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700'
                   }`}
                 >
                   적용
@@ -178,7 +176,9 @@ export default function SummaryAllowanceCardAction() {
                       className="p-2.5 pr-8 text-xs font-semibold"
                       placeholder="0"
                     />
-                    <span className="absolute top-2.5 right-3 text-xs font-bold text-slate-400">원</span>
+                    <span className="absolute top-2.5 right-3 text-xs font-bold text-slate-400">
+                      원
+                    </span>
                   </div>
                 </div>
                 <div className="space-y-1">
@@ -196,7 +196,9 @@ export default function SummaryAllowanceCardAction() {
                       className="p-2.5 pr-8 text-xs font-semibold"
                       placeholder="0"
                     />
-                    <span className="absolute top-2.5 right-3 text-xs font-bold text-slate-400">원</span>
+                    <span className="absolute top-2.5 right-3 text-xs font-bold text-slate-400">
+                      원
+                    </span>
                   </div>
                 </div>
                 <div className="space-y-1">
@@ -224,7 +226,9 @@ export default function SummaryAllowanceCardAction() {
                         className="p-2.5 pr-8 text-xs font-semibold"
                         placeholder="0"
                       />
-                      <span className="absolute top-2.5 right-3 text-xs font-bold text-slate-400">원</span>
+                      <span className="absolute top-2.5 right-3 text-xs font-bold text-slate-400">
+                        원
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -233,7 +237,7 @@ export default function SummaryAllowanceCardAction() {
           </div>
 
           {/* 경업금지 약정 */}
-          <div className="border-t border-slate-100 pt-3 space-y-3">
+          <div className="space-y-3 border-t border-slate-100 pt-3">
             <div className="flex items-center justify-between">
               <label className="text-text-side text-xs font-bold">경업금지 약정</label>
               <div className="flex gap-2">
@@ -248,7 +252,7 @@ export default function SummaryAllowanceCardAction() {
                   className={`rounded-xl border px-3 py-1.5 text-xs font-bold transition-all ${
                     !draft.wizHasNonCompete
                       ? 'border-custom-indigo bg-custom-indigo/10 text-custom-indigo'
-                      : 'border-custom-slate-border dark:border-slate-800 text-text-side dark:text-slate-400 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700'
+                      : 'border-custom-slate-border text-text-side bg-white hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700'
                   }`}
                 >
                   미적용
@@ -264,7 +268,7 @@ export default function SummaryAllowanceCardAction() {
                   className={`rounded-xl border px-3 py-1.5 text-xs font-bold transition-all ${
                     draft.wizHasNonCompete
                       ? 'border-custom-indigo bg-custom-indigo/10 text-custom-indigo'
-                      : 'border-custom-slate-border dark:border-slate-800 text-text-side dark:text-slate-400 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700'
+                      : 'border-custom-slate-border text-text-side bg-white hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700'
                   }`}
                 >
                   적용
@@ -311,7 +315,9 @@ export default function SummaryAllowanceCardAction() {
                       className="p-2.5 pr-8 text-xs font-semibold"
                       placeholder="0"
                     />
-                    <span className="absolute top-2.5 right-3 text-xs font-bold text-slate-400">원</span>
+                    <span className="absolute top-2.5 right-3 text-xs font-bold text-slate-400">
+                      원
+                    </span>
                   </div>
                 </div>
               </div>

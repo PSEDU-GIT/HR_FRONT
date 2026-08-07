@@ -4,24 +4,76 @@ import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
 import AdvisoryModalCard from '@/app/(afterLogin)/wizard/(standard)/step2/_component/AdvisoryModalCard';
 import { useContractRiskRulesState } from '@/app/(afterLogin)/wizard/(standard)/step3/_state/getContractRiskRules.state';
+import { calculateDailyHours } from '@/app/(afterLogin)/wizard/(standard)/step2/_state/periodUtils';
+import { calculateWageEngine, calculateScheduleHours } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
 
 export default function ReadLegalAdvisorySub3Action() {
-  const { wizSalaryType, wizHourlyRate, highlightedAdvisoryKey, setHighlightAdvisory } =
-    useWizardStore(
-      useShallow((state) => ({
-        wizSalaryType: state.step2.wizSalaryType,
-        wizHourlyRate: state.step2.wizHourlyRate,
-        highlightedAdvisoryKey: state.step2.highlightedAdvisoryKey,
-        setHighlightAdvisory: state.setHighlightAdvisory,
-      })),
-    );
+  const {
+    wizDaysConfig,
+    wizSalaryType,
+    wizSalaryAmount,
+    wizHourlyRate,
+    wizCommissionRate,
+    wizMinGuaranteeAmount,
+    wizHasTaxFree,
+    wizNonTaxFood,
+    wizHasNonCompete,
+    wizNonCompeteAmount,
+    wizHasExtraAllowance,
+    wizOvertimeAllowance,
+    wizPositionAllowance,
+    wizOtherAllowance,
+    contractType,
+    highlightedAdvisoryKey,
+    setHighlightAdvisory,
+  } = useWizardStore(
+    useShallow((state) => ({
+      wizDaysConfig: state.step2.wizDaysConfig,
+      wizSalaryType: state.step2.wizSalaryType,
+      wizSalaryAmount: state.step2.wizSalaryAmount,
+      wizHourlyRate: state.step2.wizHourlyRate,
+      wizCommissionRate: state.step2.wizCommissionRate,
+      wizMinGuaranteeAmount: state.step2.wizMinGuaranteeAmount,
+      wizHasTaxFree: state.step2.wizHasTaxFree,
+      wizNonTaxFood: state.step2.wizNonTaxFood,
+      wizHasNonCompete: state.step2.wizHasNonCompete,
+      wizNonCompeteAmount: state.step2.wizNonCompeteAmount,
+      wizHasExtraAllowance: state.step2.wizHasExtraAllowance,
+      wizOvertimeAllowance: state.step2.wizOvertimeAllowance,
+      wizPositionAllowance: state.step2.wizPositionAllowance,
+      wizOtherAllowance: state.step2.wizOtherAllowance,
+      contractType: state.step1.contractType,
+      highlightedAdvisoryKey: state.step2.highlightedAdvisoryKey,
+      setHighlightAdvisory: state.setHighlightAdvisory,
+    })),
+  );
 
   const { riskRules } = useContractRiskRulesState('TEACHER');
   const minWageRule = riskRules?.find((r) => r.ruleType === 'MIN_WAGE');
   const mealRule = riskRules?.find((r) => r.ruleType === 'NON_TAXABLE_MEAL_ALLOWANCE_GUIDE');
 
-  const isHourlyBelowMinimum =
-    wizSalaryType === 'hourly' && wizHourlyRate > 0 && wizHourlyRate < 10320;
+  const { weeklyHours, weeklyOvertimeHours, weeklyNightHours } = calculateScheduleHours(wizDaysConfig);
+  const isUnder5 = contractType?.includes('5인 미만') || contractType?.includes('5인 이하');
+
+  const wageResult = calculateWageEngine({
+    salaryType: wizSalaryType,
+    salaryAmount: wizSalaryAmount,
+    hourlyRate: wizHourlyRate,
+    commissionRate: wizCommissionRate || 20,
+    minGuaranteeAmount: wizMinGuaranteeAmount || 1883297,
+    mealAllowance: wizHasTaxFree ? wizNonTaxFood : 0,
+    positionAllowance: wizHasExtraAllowance ? wizPositionAllowance : 0,
+    overtimeAllowance: wizHasExtraAllowance ? wizOvertimeAllowance : 0,
+    otherAllowance: wizHasExtraAllowance ? wizOtherAllowance : 0,
+    nonCompeteAmount: wizHasNonCompete ? wizNonCompeteAmount : 0,
+    weeklyHours,
+    weeklyOvertimeHours,
+    weeklyNightHours,
+    employeeCount: isUnder5 ? 4 : 5,
+  });
+
+  const hasSalaryEntered = wizSalaryType === 'hourly' ? wizHourlyRate >= 1 : wizSalaryAmount >= 1;
+  const isBelowMinimum = hasSalaryEntered && !wageResult.isMinWagePassed;
 
   const minWageTitle = minWageRule?.advisoryTitle;
   const minWageDescription = minWageRule?.advisoryDescriptionMarkdown;
@@ -30,10 +82,17 @@ export default function ReadLegalAdvisorySub3Action() {
   const mealDescription = mealRule?.advisoryDescriptionMarkdown;
 
   const minWageFailMessage = minWageRule?.messageFail;
+  const thresholdVal = (minWageRule?.ruleValueJson?.minHourlyWage || 10320).toLocaleString();
+
+  const formattedFailMessage = minWageFailMessage
+    ? minWageFailMessage
+        .replace('{value}', wageResult.comparedHourlyRate.toLocaleString())
+        .replace('{threshold}', thresholdVal)
+    : `[위험] 환산 시급 ${wageResult.comparedHourlyRate.toLocaleString()}원이 최저시급 ${thresholdVal}원 미만입니다 — 최저임금법 제6조 위반 시 3년 이하 징역 또는 2천만원 이하 벌금에 처해질 수 있습니다.`;
 
   return (
     <div className="space-y-3">
-      {minWageTitle && (
+      {hasSalaryEntered && minWageTitle && (
         <div className="border-custom-slate-border-side dark:border-slate-800 bg-white dark:bg-slate-900 space-y-2 rounded-2xl border p-4 transition-all">
           <div className="text-text-title dark:text-slate-100 text-xs font-extrabold">
             {minWageTitle}
@@ -58,7 +117,7 @@ export default function ReadLegalAdvisorySub3Action() {
         </AdvisoryModalCard>
       )}
 
-      {isHourlyBelowMinimum && minWageFailMessage && (
+      {isBelowMinimum && (
         <AdvisoryModalCard
           layoutId="advisory-card-hourlyBelowMinimum"
           title="[위험] 최저임금법 위반 소지"
@@ -66,7 +125,7 @@ export default function ReadLegalAdvisorySub3Action() {
           onClose={() => setHighlightAdvisory(null)}
           theme="danger"
         >
-          <p className="font-bold whitespace-pre-line">{minWageFailMessage}</p>
+          <p className="font-bold whitespace-pre-line">{formattedFailMessage}</p>
         </AdvisoryModalCard>
       )}
     </div>

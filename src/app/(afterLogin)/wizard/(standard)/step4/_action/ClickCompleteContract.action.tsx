@@ -25,6 +25,13 @@ const DAY_MAP: Record<string, string> = {
   금요일: 'FRI',
   토요일: 'SAT',
   일요일: 'SUN',
+  월: 'MON',
+  화: 'TUE',
+  수: 'WED',
+  목: 'THU',
+  금: 'FRI',
+  토: 'SAT',
+  일: 'SUN',
 };
 
 export default function ClickCompleteContractAction({
@@ -122,7 +129,6 @@ export default function ClickCompleteContractAction({
       pendingStaffSubject: step1.instructorSubject,
       pendingStaffBirthDate: step1.instructorBirth,
       pendingStaffAddress: step1.instructorAddress,
-      pendingStaffGender: step1.instructorGender || undefined,
     };
 
     const payload: TeacherContractPayload = {
@@ -132,6 +138,7 @@ export default function ClickCompleteContractAction({
       ratioPercent: step2.wizCommissionRate,
       hourlyRate: step2.wizHourlyRate,
       weeklyWorkHours: 20,
+      weeklyHolidayDay: DAY_MAP[step2.wizWeeklyHoliday] || step2.wizWeeklyHoliday || 'SUN',
       specialTerms: step3.customTerms ? step3.customTerms.split('\n').filter(Boolean) : [],
       schedule: schedulePayload,
       contractStartDate: step2.wizStartDate,

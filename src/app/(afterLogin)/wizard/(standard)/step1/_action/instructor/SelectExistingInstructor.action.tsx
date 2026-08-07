@@ -46,7 +46,6 @@ export default function SelectExistingInstructorAction() {
       setStep1({
         instructorName: instructor.name,
         instructorPhone: formatPhoneNumber(instructor.phone),
-        instructorGender: instructor.gender ?? null,
         instructorSubject: instructor.subject || '',
         instructorBirth: instructor.birthDate || instructor.birth || '',
         instructorAddress: instructor.address || '',
@@ -57,7 +56,6 @@ export default function SelectExistingInstructorAction() {
       setStep1({
         instructorName: '',
         instructorPhone: '',
-        instructorGender: null,
         instructorSubject: '',
         instructorBirth: '',
         instructorAddress: '',

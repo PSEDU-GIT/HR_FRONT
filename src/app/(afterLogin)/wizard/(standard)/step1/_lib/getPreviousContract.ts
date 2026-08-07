@@ -15,7 +15,6 @@ export interface PreviousContractResponse {
   pendingStaffSubject: string;
   pendingStaffBirthDate: string;
   pendingStaffAddress: string;
-  pendingStaffGender: string;
   contractType: string;
   status: string;
   templateVersion: number;

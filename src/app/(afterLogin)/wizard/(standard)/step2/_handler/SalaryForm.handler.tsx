@@ -17,26 +17,35 @@ import cx from 'classnames';
 const getSubLevelTitle = (subLevel: number, salaryType: SalaryType): string => {
   if (salaryType === 'hourly') {
     const hourlyTitles: Record<number, string> = {
-      1: '시간당 시급 수령액 설정',
+      1: '시간당 약정 시급 설정',
       2: '급여 지급일 설정',
       3: '급여 및 수당 최종 설정 요약',
     };
     return hourlyTitles[subLevel] || '';
   }
 
-  if (subLevel === 1) {
-    if (salaryType === 'commission') return '비율제 정산율 설정';
-    return '기본 월급 수령액 설정';
+  if (salaryType === 'commission') {
+    const commissionTitles: Record<number, string> = {
+      1: '비율제 정산율 설정',
+      2: '급여 지급일 설정',
+      3: '비과세 수당 적용 설정',
+      4: '경업금지 약정 설정',
+      5: '추가 고정수당 설정',
+      6: '급여 및 수당 최종 설정 요약',
+    };
+    return commissionTitles[subLevel] || '';
   }
 
-  const titles: Record<number, string> = {
-    2: '급여 지급일 설정',
-    3: '비과세 수당 적용 설정',
-    4: '경업금지 약정 설정',
-    5: '추가 고정수당 설정',
+  // monthly (고정급): 희망 총 급여 수령액 입력을 5단계(요약 전)로 배치
+  const monthlyTitles: Record<number, string> = {
+    1: '급여 지급일 설정',
+    2: '비과세 수당 적용 설정',
+    3: '경업금지 약정 설정',
+    4: '추가 고정수당 설정',
+    5: '강사 지급 희망 급여(월 총 지급액) 설정',
     6: '급여 및 수당 최종 설정 요약',
   };
-  return titles[subLevel] || '';
+  return monthlyTitles[subLevel] || '';
 };
 
 const SALARY_TYPE_LABELS: Record<SalaryType, string> = {
@@ -119,24 +128,41 @@ export default function SalaryFormHandler() {
       }
     }
 
+    if (wizSalaryType === 'commission') {
+      switch (subLevel) {
+        case 1:
+          return <Step2SalaryCommissionArea />;
+        case 2:
+          return <Step2SalaryPayDayArea />;
+        case 3:
+          return <Step2SalaryTaxFreeArea />;
+        case 4:
+          return <Step2NonCompeteArea />;
+        case 5:
+          return <Step2ExtraAllowanceArea />;
+        case 6:
+          return <Step2SalarySummaryArea />;
+        default:
+          return <Step2SalaryCommissionArea />;
+      }
+    }
+
+    // monthly (고정급): 수당/약정 설정 완료 후 5단계에서 총 급여액 입력
     switch (subLevel) {
       case 1:
-        if (wizSalaryType === 'commission') {
-          return <Step2SalaryCommissionArea />;
-        }
-        return <Step2SalaryMonthlyArea />;
-      case 2:
         return <Step2SalaryPayDayArea />;
-      case 3:
+      case 2:
         return <Step2SalaryTaxFreeArea />;
-      case 4:
+      case 3:
         return <Step2NonCompeteArea />;
-      case 5:
+      case 4:
         return <Step2ExtraAllowanceArea />;
+      case 5:
+        return <Step2SalaryMonthlyArea />;
       case 6:
         return <Step2SalarySummaryArea />;
       default:
-        return <Step2SalaryMonthlyArea />;
+        return <Step2SalaryPayDayArea />;
     }
   };
 

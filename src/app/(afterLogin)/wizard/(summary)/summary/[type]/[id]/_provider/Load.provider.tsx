@@ -62,7 +62,6 @@ export default function LoadProvider({ children }: { children: React.ReactNode }
       instructorSubject: targetData.pendingStaffSubject,
       instructorBirth: targetData.pendingStaffBirthDate,
       instructorAddress: targetData.pendingStaffAddress,
-      instructorGender: targetData.pendingStaffGender === 'FEMALE' ? 'FEMALE' : 'MALE',
       contractType:
         targetData.contractType === 'TEACHER' ? '강사근로계약서' : targetData.contractType,
     });
@@ -85,6 +84,9 @@ export default function LoadProvider({ children }: { children: React.ReactNode }
     const resolvedSalaryType = SALARY_TYPE_MAP[targetData.payType] || 'monthly';
     const maxSalarySubLevel = resolvedSalaryType === 'hourly' ? 3 : 6;
 
+    const rawHolidayDay = (targetData as any).weeklyHolidayDay || 'SUN';
+    const resolvedWeeklyHoliday = DAY_KEY_MAP[rawHolidayDay] || rawHolidayDay || '일요일';
+
     // 3. Populate Step 2
     setStep2({
       wizSubStep: 4,
@@ -100,6 +102,7 @@ export default function LoadProvider({ children }: { children: React.ReactNode }
         ? `${targetData.probationPeriodMonths}개월`
         : '',
       wizDaysConfig: daysConfig,
+      wizWeeklyHoliday: resolvedWeeklyHoliday,
       wizSalaryType: resolvedSalaryType,
       wizSalaryAmount: targetData.basePay,
       wizCommissionRate: targetData.ratioPercent,

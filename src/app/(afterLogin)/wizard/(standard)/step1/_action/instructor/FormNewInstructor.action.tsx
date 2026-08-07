@@ -3,7 +3,6 @@
 import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
 import CustomDate from '@/app/_component/date/CustomDate';
-import ToggleButton from '@/app/_component/button/ToggleButton';
 import { formatPhoneNumber } from '@/app/_lib/formatPhoneNumber';
 
 export default function FormNewInstructorAction() {
@@ -37,27 +36,6 @@ export default function FormNewInstructorAction() {
           maxLength={13}
           className="p-2.5 text-xs font-medium"
         />
-      </div>
-      <div>
-        <label className="text-text-main mb-1.5 block text-xs font-bold">
-          성별 <span className="text-red-500">*</span>
-        </label>
-        <div className="flex gap-2">
-          <ToggleButton
-            label="남"
-            isSelected={step1.instructorGender === 'MALE'}
-            onClick={() =>
-              setStep1({ instructorGender: step1.instructorGender === 'MALE' ? null : 'MALE' })
-            }
-          />
-          <ToggleButton
-            label="여"
-            isSelected={step1.instructorGender === 'FEMALE'}
-            onClick={() =>
-              setStep1({ instructorGender: step1.instructorGender === 'FEMALE' ? null : 'FEMALE' })
-            }
-          />
-        </div>
       </div>
       <div>
         <label className="text-text-main mb-1.5 block text-xs font-bold">

@@ -8,29 +8,33 @@ import { useContractRiskRulesState } from '@/app/(afterLogin)/wizard/(standard)/
 import cx from 'classnames';
 
 export default function ReadLegalAdvisorySub2Action() {
-  const { wizDaysConfig, highlightedAdvisoryKey, setHighlightAdvisory } = useWizardStore(
-    useShallow((state) => ({
-      wizDaysConfig: state.step2.wizDaysConfig,
-      highlightedAdvisoryKey: state.step2.highlightedAdvisoryKey,
-      setHighlightAdvisory: state.setHighlightAdvisory,
-    })),
-  );
+  const { wizDaysConfig = {}, wizWeeklyHoliday, highlightedAdvisoryKey, setHighlightAdvisory } =
+    useWizardStore(
+      useShallow((state) => ({
+        wizDaysConfig: state.step2.wizDaysConfig,
+        wizWeeklyHoliday: state.step2.wizWeeklyHoliday,
+        highlightedAdvisoryKey: state.step2.highlightedAdvisoryKey,
+        setHighlightAdvisory: state.setHighlightAdvisory,
+      })),
+    );
 
   const { riskRules } = useContractRiskRulesState('TEACHER');
   const shortTimeRule = riskRules?.find((r) => r.ruleType === 'SHORT_TIME_WORKER_RISK');
 
   const weeklyHours = parseFloat(
-    Object.values(wizDaysConfig)
+    Object.values(wizDaysConfig || {})
       .reduce(
         (sum, conf) =>
           sum +
-          (conf.enabled ? calculateDailyHours(conf.startTime, conf.endTime, conf.breakTime) : 0),
+          (conf?.enabled ? calculateDailyHours(conf.startTime, conf.endTime, conf.breakTime) : 0),
         0,
       )
       .toFixed(1),
   );
 
   const isUnder15Hours = weeklyHours < 15;
+  const hasNoWeeklyHoliday =
+    !wizWeeklyHoliday || wizDaysConfig[wizWeeklyHoliday]?.enabled === true;
 
   const advisoryTitle = shortTimeRule?.advisoryTitle;
   const advisoryDescription = shortTimeRule?.advisoryDescriptionMarkdown;
@@ -62,6 +66,21 @@ export default function ReadLegalAdvisorySub2Action() {
             </span>
           </div>
         </div>
+      )}
+
+      {/* 주휴일 미지정 법정 위험 자문 카드 */}
+      {hasNoWeeklyHoliday && (
+        <AdvisoryModalCard
+          layoutId="advisory-card-noWeeklyHoliday"
+          title="[위험] 유급주휴일 미지정 (근로기준법 위반)"
+          isHighlighted={highlightedAdvisoryKey === 'noWeeklyHoliday'}
+          onClose={() => setHighlightAdvisory(null)}
+          theme="danger"
+        >
+          <p className="leading-relaxed whitespace-pre-line font-medium text-xs">
+            근로기준법 제55조(휴일)에 따라 1주일에 평균 1회 이상의 유급주휴일을 반드시 부여해야 합니다. OFF 상태인 휴무일 카드 중 하나를 클릭하여 유급주휴일로 지정해 주세요.
+          </p>
+        </AdvisoryModalCard>
       )}
 
       {isUnder15Hours && warningMessage && (
