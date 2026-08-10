@@ -1,6 +1,7 @@
 'use client';
 
 import SelectStepNavAction from '@/app/(afterLogin)/wizard/_action/SelectStepNav.action';
+import LoadProvider from '@/app/(afterLogin)/wizard/_provider/Load.provider';
 
 export default function StandardWizardLayout({
   children,
@@ -8,7 +9,8 @@ export default function StandardWizardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
+    <div className="relative flex h-full flex-1 flex-col overflow-hidden pt-0">
+      <LoadProvider />
       <div className="flex min-h-16 items-center justify-between">
         <header className="flex flex-1 items-center justify-between gap-4">
           <div className="flex items-center gap-3">
@@ -21,6 +23,6 @@ export default function StandardWizardLayout({
       </div>
 
       {children}
-    </>
+    </div>
   );
 }

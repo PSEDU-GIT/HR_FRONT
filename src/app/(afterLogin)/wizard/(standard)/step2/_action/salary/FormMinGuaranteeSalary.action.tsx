@@ -2,20 +2,28 @@
 
 import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
+import { calculateScheduleHours, LEGAL_STANDARDS } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
 import {
   MAX_SALARY_AMOUNT,
   numberToKorean,
 } from '@/app/(afterLogin)/wizard/(standard)/step2/_state/salaryUtils';
 
-const DEFAULT_MIN_GUARANTEE = 1883297;
-
 export default function FormMinGuaranteeSalaryAction() {
-  const { wizMinGuaranteeAmount, setStep2 } = useWizardStore(
+  const { wizMinGuaranteeAmount, wizDaysConfig, setStep2 } = useWizardStore(
     useShallow((state) => ({
-      wizMinGuaranteeAmount: state.step2.wizMinGuaranteeAmount ?? DEFAULT_MIN_GUARANTEE,
+      wizMinGuaranteeAmount: state.step2.wizMinGuaranteeAmount,
+      wizDaysConfig: state.step2.wizDaysConfig,
       setStep2: state.setStep2,
     })),
   );
+
+  const { weeklyHours } = calculateScheduleHours(wizDaysConfig);
+  const weeklyHolidayHours = weeklyHours >= 15 ? Math.min(8, (weeklyHours / 40) * 8) : 0;
+  const totalPaidWeeklyHours = weeklyHours + weeklyHolidayHours;
+  const T = totalPaidWeeklyHours * LEGAL_STANDARDS.WEEKS_PER_MONTH;
+  const dynamicMinPay = Math.ceil(LEGAL_STANDARDS.MIN_HOURLY_WAGE * T);
+
+  const amount = wizMinGuaranteeAmount ?? dynamicMinPay;
 
   const handleMinGuaranteeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value.replace(/[^0-9]/g, '');
@@ -26,20 +34,16 @@ export default function FormMinGuaranteeSalaryAction() {
     setStep2({ wizMinGuaranteeAmount: num });
   };
 
-  const koreanText = numberToKorean(wizMinGuaranteeAmount);
+  const koreanText = numberToKorean(amount);
 
   return (
     <div className="space-y-1.5">
       <div className="relative">
         <input
           type="text"
-          value={
-            wizMinGuaranteeAmount === 0
-              ? ''
-              : wizMinGuaranteeAmount.toLocaleString()
-          }
+          value={amount === 0 ? '' : amount.toLocaleString()}
           onChange={handleMinGuaranteeChange}
-          placeholder="1,883,297"
+          placeholder={dynamicMinPay.toLocaleString()}
         />
         <span className="text-text-side absolute top-1/2 right-4 -translate-y-1/2 text-xs font-extrabold">
           원

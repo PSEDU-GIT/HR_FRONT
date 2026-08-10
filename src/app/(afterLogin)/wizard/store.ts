@@ -66,6 +66,8 @@ export interface Step2State {
   wizNonCompeteCalcType: 'percent' | 'manual';
   wizNonCompetePercent: number;
 
+  salaryEditingSection: 'amount' | 'payDay' | 'taxFree' | 'nonCompete' | 'extraAllowance' | null;
+
   highlightedAdvisoryKey: string | null;
 }
 
@@ -154,13 +156,13 @@ const initialStep2: Step2State = {
   wizSalaryType: 'monthly',
   wizSalaryApplied: true,
   wizSalaryDone: false,
-  wizSalaryAmount: 0,
+  wizSalaryAmount: 2500000,
   wizHourlyRate: 10320,
   wizCommissionRate: 20,
-  wizMinGuaranteeAmount: 1883297,
+  wizMinGuaranteeAmount: 2156880,
   wizIsCustomCommission: false,
-  wizSalarySubStep: 1,
-  maxUnlockedSalarySubStep: 1,
+  wizSalarySubStep: 6,
+  maxUnlockedSalarySubStep: 6,
   wizHasTaxFree: true,
   wizNonTaxFood: 200000,
   wizPayDay: '10일',
@@ -172,9 +174,10 @@ const initialStep2: Step2State = {
   wizHasNonCompete: true,
   wizNonCompetePeriod: '6개월',
   wizNonCompeteRange: '반경 3km',
-  wizNonCompeteAmount: 0,
+  wizNonCompeteAmount: 250000,
   wizNonCompeteCalcType: 'percent',
   wizNonCompetePercent: 10,
+  salaryEditingSection: null,
 
   highlightedAdvisoryKey: null,
 };

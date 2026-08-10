@@ -7,7 +7,7 @@ import {
   numberToKorean,
 } from '@/app/(afterLogin)/wizard/(standard)/step2/_state/salaryUtils';
 import { calculateDailyHours } from '@/app/(afterLogin)/wizard/(standard)/step2/_state/periodUtils';
-import { calculateMonthlyHours, LEGAL_STANDARDS } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
+import { calculateMonthlyHours, calculateScheduleHours, getEffectiveNonCompeteAmount, LEGAL_STANDARDS } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
 
 export default function FormMonthlySalaryAction() {
   const {
@@ -17,6 +17,9 @@ export default function FormMonthlySalaryAction() {
     wizNonTaxFood,
     wizHasNonCompete,
     wizNonCompeteAmount,
+    wizNonCompeteCalcType,
+    wizNonCompetePercent,
+    contractType,
     setStep2,
   } = useWizardStore(
     useShallow((state) => ({
@@ -26,28 +29,37 @@ export default function FormMonthlySalaryAction() {
       wizNonTaxFood: state.step2.wizNonTaxFood,
       wizHasNonCompete: state.step2.wizHasNonCompete,
       wizNonCompeteAmount: state.step2.wizNonCompeteAmount,
+      wizNonCompeteCalcType: state.step2.wizNonCompeteCalcType || 'percent',
+      wizNonCompetePercent: state.step2.wizNonCompetePercent ?? 10,
+      contractType: state.step1.contractType,
       setStep2: state.setStep2,
     })),
   );
 
-  const weeklyHours = parseFloat(
-    Object.values(wizDaysConfig)
-      .reduce(
-        (sum, conf) =>
-          sum +
-          (conf.enabled ? calculateDailyHours(conf.startTime, conf.endTime, conf.breakTime) : 0),
-        0,
-      )
-      .toFixed(1),
-  );
+  const isUnder5 = contractType?.includes('5인 미만') || contractType?.includes('5인 이하');
+  const overtimeRate = isUnder5 ? 1.0 : 1.5;
+  const nightRate = isUnder5 ? 0.0 : 0.5;
 
+  const { weeklyHours, weeklyOvertimeHours, weeklyNightHours } = calculateScheduleHours(wizDaysConfig);
   const { T } = calculateMonthlyHours(weeklyHours);
-  const mealAllowance = wizHasTaxFree ? wizNonTaxFood : 0;
-  const nonCompeteAmount = wizHasNonCompete ? wizNonCompeteAmount : 0;
 
-  // 최저임금 기준(10,320원/h)을 충족하기 위한 최소 월 총 지급액
+  const kot = weeklyOvertimeHours * overtimeRate * LEGAL_STANDARDS.WEEKS_PER_MONTH;
+  const kni = weeklyNightHours * nightRate * LEGAL_STANDARDS.WEEKS_PER_MONTH;
+  const effectiveT = T + kot + kni;
+
+  const mealAllowance = wizHasTaxFree ? wizNonTaxFood : 0;
+  const nonCompeteAmount = getEffectiveNonCompeteAmount({
+    hasNonCompete: wizHasNonCompete,
+    calcType: wizNonCompeteCalcType,
+    percent: wizNonCompetePercent,
+    manualAmount: wizNonCompeteAmount,
+    salaryType: 'monthly',
+    salaryAmount: wizSalaryAmount,
+  });
+
+  // 최저임금 기준(10,320원/h) 및 연장/야간 수당을 충족하기 위한 최소 월 총 지급액
   const minRequiredSalary = Math.ceil(
-    LEGAL_STANDARDS.MIN_HOURLY_WAGE * T + mealAllowance + nonCompeteAmount,
+    LEGAL_STANDARDS.MIN_HOURLY_WAGE * effectiveT + mealAllowance + nonCompeteAmount,
   );
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +68,18 @@ export default function FormMonthlySalaryAction() {
     if (num > MAX_SALARY_AMOUNT) {
       num = MAX_SALARY_AMOUNT;
     }
-    setStep2({ wizSalaryAmount: num });
+    const updatedNonCompete = getEffectiveNonCompeteAmount({
+      hasNonCompete: wizHasNonCompete,
+      calcType: wizNonCompeteCalcType,
+      percent: wizNonCompetePercent,
+      manualAmount: wizNonCompeteAmount,
+      salaryType: 'monthly',
+      salaryAmount: num,
+    });
+    setStep2({
+      wizSalaryAmount: num,
+      wizNonCompeteAmount: updatedNonCompete,
+    });
   };
 
   const koreanText = numberToKorean(wizSalaryAmount);

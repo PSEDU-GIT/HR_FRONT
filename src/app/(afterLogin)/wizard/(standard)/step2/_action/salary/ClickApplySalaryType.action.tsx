@@ -4,14 +4,18 @@ import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
 
 export default function ClickApplySalaryTypeAction() {
-  const { setStep2 } = useWizardStore(
+  const { wizSalaryType, setStep2 } = useWizardStore(
     useShallow((state) => ({
+      wizSalaryType: state.step2.wizSalaryType,
       setStep2: state.setStep2,
     })),
   );
 
   const handleApply = () => {
-    setStep2({ wizSalaryApplied: true });
+    setStep2({
+      wizSalaryApplied: true,
+      salaryEditingSection: null,
+    });
   };
 
   return (

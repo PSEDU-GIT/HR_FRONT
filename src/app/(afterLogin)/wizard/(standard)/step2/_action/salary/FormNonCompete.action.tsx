@@ -3,6 +3,7 @@
 import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
 import Select, { SelectDataTypes } from '@/app/_component/select/Select';
+import { getEffectiveNonCompeteAmount, LEGAL_STANDARDS } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
 import cx from 'classnames';
 
 const PERIOD_OPTIONS: SelectDataTypes[] = [
@@ -59,6 +60,10 @@ export default function FormNonCompeteAction() {
     wizNonCompeteAmount,
     wizNonCompeteCalcType,
     wizNonCompetePercent,
+    wizSalaryType,
+    wizSalaryAmount,
+    wizHourlyRate,
+    wizMinGuaranteeAmount,
     setStep2,
   } = useWizardStore(
     useShallow((state) => ({
@@ -68,26 +73,54 @@ export default function FormNonCompeteAction() {
       wizNonCompeteAmount: state.step2.wizNonCompeteAmount,
       wizNonCompeteCalcType: state.step2.wizNonCompeteCalcType || 'percent',
       wizNonCompetePercent: state.step2.wizNonCompetePercent ?? 10,
+      wizSalaryType: state.step2.wizSalaryType,
+      wizSalaryAmount: state.step2.wizSalaryAmount,
+      wizHourlyRate: state.step2.wizHourlyRate,
+      wizMinGuaranteeAmount: state.step2.wizMinGuaranteeAmount,
       setStep2: state.setStep2,
     })),
   );
+
+  const baseAmount =
+    wizSalaryType === 'commission'
+      ? wizMinGuaranteeAmount || 0
+      : wizSalaryType === 'hourly'
+        ? (wizHourlyRate || LEGAL_STANDARDS.MIN_HOURLY_WAGE) * 174
+        : wizSalaryAmount || 0;
+
+  const calculatedPercentAmount = Math.round(baseAmount * ((wizNonCompetePercent || 10) / 100));
+
+  const effectiveNonCompeteAmount = getEffectiveNonCompeteAmount({
+    hasNonCompete: wizHasNonCompete,
+    calcType: wizNonCompeteCalcType,
+    percent: wizNonCompetePercent,
+    manualAmount: wizNonCompeteAmount,
+    salaryType: wizSalaryType,
+    salaryAmount: wizSalaryAmount,
+    hourlyRate: wizHourlyRate,
+    minGuaranteeAmount: wizMinGuaranteeAmount,
+  });
 
   const handleSelectNo = () => {
     setStep2({ wizHasNonCompete: false });
   };
 
   const handleSelectYes = () => {
+    const calcAmount = Math.round(baseAmount * ((wizNonCompetePercent || 10) / 100));
     setStep2({
       wizHasNonCompete: true,
       wizNonCompetePeriod: wizNonCompetePeriod || '6개월',
       wizNonCompeteRange: wizNonCompeteRange || '반경 3km',
+      wizNonCompeteAmount: wizNonCompeteCalcType === 'percent' ? calcAmount : wizNonCompeteAmount,
     });
   };
 
   const handlePercentChange = (pct: number) => {
+    const calcAmount = Math.round(baseAmount * (pct / 100));
     setStep2({
       wizNonCompeteCalcType: 'percent',
       wizNonCompetePercent: pct,
+      wizNonCompeteAmount: calcAmount,
     });
   };
 
@@ -106,7 +139,9 @@ export default function FormNonCompeteAction() {
   const selectedRange =
     RANGE_OPTIONS.find((opt) => opt.id === wizNonCompeteRange) || RANGE_OPTIONS[1];
 
-  const koreanText = numberToKorean(wizNonCompeteAmount);
+  const koreanText = numberToKorean(
+    wizNonCompeteCalcType === 'percent' ? calculatedPercentAmount : wizNonCompeteAmount,
+  );
 
   return (
     <div className="space-y-3">
@@ -229,7 +264,7 @@ export default function FormNonCompeteAction() {
                   ))}
                 </div>
                 <p className="text-custom-indigo px-0.5 text-[11px] font-semibold dark:text-indigo-400">
-                  * 선택하신 비율({wizNonCompetePercent}%)은 5단계에서 약정 월급 입력 시 월 보상수당액으로 자동 반영됩니다.
+                  * 선택하신 비율({wizNonCompetePercent}%)은 약정 월급 입력 시 월 보상수당액으로 자동 반영됩니다.
                 </p>
               </div>
             ) : (

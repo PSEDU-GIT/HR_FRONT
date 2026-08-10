@@ -14,6 +14,7 @@ import {
 import { updateTeacherContract } from '@/app/(afterLogin)/wizard/_lib/updateTeacherContract';
 import { getContractArchiveQueryKey } from '@/app/(afterLogin)/cabinet/_state/getContractArchive.state';
 import { getContractDetailQueryKey } from '@/app/(afterLogin)/cabinet/_state/getContractDetail.state';
+import { getEffectiveNonCompeteAmount } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
 
 interface ClickSummaryCompleteActionProps {
   className?: string;
@@ -184,7 +185,16 @@ export default function ClickSummaryCompleteAction({
       nonCompeteAgreed: step2.wizHasNonCompete,
       nonCompetePeriodMonths: parseInt(step2.wizNonCompetePeriod) || 0,
       nonCompeteRadiusKm: parseInt(step2.wizNonCompeteRange?.replace(/[^0-9]/g, '')) || 0,
-      nonCompeteCompensationAmount: step2.wizNonCompeteAmount || 0,
+      nonCompeteCompensationAmount: getEffectiveNonCompeteAmount({
+        hasNonCompete: step2.wizHasNonCompete,
+        calcType: step2.wizNonCompeteCalcType,
+        percent: step2.wizNonCompetePercent,
+        manualAmount: step2.wizNonCompeteAmount,
+        salaryType: step2.wizSalaryType,
+        salaryAmount: step2.wizSalaryAmount,
+        hourlyRate: step2.wizHourlyRate,
+        minGuaranteeAmount: step2.wizMinGuaranteeAmount,
+      }),
       additionalAllowanceEnabled: step2.wizHasExtraAllowance,
       overtimeAllowance: step2.wizOvertimeAllowance || 0,
       positionAllowance: step2.wizPositionAllowance || 0,

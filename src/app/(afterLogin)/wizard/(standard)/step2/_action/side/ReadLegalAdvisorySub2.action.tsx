@@ -3,6 +3,7 @@
 import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
 import { calculateDailyHours } from '@/app/(afterLogin)/wizard/(standard)/step2/_state/periodUtils';
+import { calculateScheduleHours } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
 import AdvisoryModalCard from '@/app/(afterLogin)/wizard/(standard)/step2/_component/AdvisoryModalCard';
 import { useContractRiskRulesState } from '@/app/(afterLogin)/wizard/(standard)/step3/_state/getContractRiskRules.state';
 import cx from 'classnames';
@@ -21,16 +22,7 @@ export default function ReadLegalAdvisorySub2Action() {
   const { riskRules } = useContractRiskRulesState('TEACHER');
   const shortTimeRule = riskRules?.find((r) => r.ruleType === 'SHORT_TIME_WORKER_RISK');
 
-  const weeklyHours = parseFloat(
-    Object.values(wizDaysConfig || {})
-      .reduce(
-        (sum, conf) =>
-          sum +
-          (conf?.enabled ? calculateDailyHours(conf.startTime, conf.endTime, conf.breakTime) : 0),
-        0,
-      )
-      .toFixed(1),
-  );
+  const { weeklyHours, weeklyOvertimeHours } = calculateScheduleHours(wizDaysConfig);
 
   const isUnder15Hours = weeklyHours < 15;
   const hasNoWeeklyHoliday =
@@ -66,6 +58,22 @@ export default function ReadLegalAdvisorySub2Action() {
             </span>
           </div>
         </div>
+      )}
+
+      {/* 연장근로 발생 자문 카드 */}
+      {weeklyOvertimeHours > 0 && (
+        <AdvisoryModalCard
+          layoutId="advisory-card-overtimeHours"
+          title={`[안내] 주 연장근로 ${weeklyOvertimeHours}시간 발생 (연장근로수당 적용)`}
+          isHighlighted={highlightedAdvisoryKey === 'overtimeHours'}
+          onClose={() => setHighlightAdvisory(null)}
+          theme="default"
+        >
+          <p className="leading-relaxed whitespace-pre-line text-xs font-medium">
+            1일 8시간 또는 1주 40시간을 초과한 근무시간(주 {weeklyOvertimeHours}시간)은 법정 연장근로에 해당합니다.
+            급여 및 수당 설정 시 연장근로수당(포괄연장)으로 자동 반영됩니다.
+          </p>
+        </AdvisoryModalCard>
       )}
 
       {/* 주휴일 미지정 법정 위험 자문 카드 */}

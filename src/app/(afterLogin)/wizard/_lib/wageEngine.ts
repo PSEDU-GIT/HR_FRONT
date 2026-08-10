@@ -109,17 +109,17 @@ export function calculateScheduleHours(wizDaysConfig: Record<string, DailySchedu
 export function calculateWeeklyHolidayHours(weeklyHours: number): number {
   if (weeklyHours < LEGAL_STANDARDS.WEEKLY_HOLIDAY_THRESHOLD) return 0;
   const cappedHours = Math.min(weeklyHours, LEGAL_STANDARDS.MAX_WEEKLY_HOURS);
-  return Math.floor(((cappedHours / 40) * 8) * 100) / 100;
+  return Math.round((cappedHours / 40) * 8);
 }
 
 /**
  * 월 기준 시간 계산
  */
 export function calculateMonthlyHours(weeklyHours: number) {
-  const mo = Math.round(weeklyHours * LEGAL_STANDARDS.WEEKS_PER_MONTH * 100) / 100; // 월 소정시간
-  const holidayHours = calculateWeeklyHolidayHours(weeklyHours); // 주휴시간
-  const mh = Math.round(holidayHours * LEGAL_STANDARDS.WEEKS_PER_MONTH * 100) / 100; // 월 주휴시간
-  const T = Math.round((mo + mh) * 100) / 100; // 월 총 기준시간 (40시간인 경우 ~209시간)
+  const mo = Math.round(weeklyHours * LEGAL_STANDARDS.WEEKS_PER_MONTH); // 월 소정시간 (예: 174시간)
+  const holidayHours = calculateWeeklyHolidayHours(weeklyHours); // 주휴시간 (예: 8시간)
+  const mh = Math.round(holidayHours * LEGAL_STANDARDS.WEEKS_PER_MONTH); // 월 주휴시간 (예: 35시간)
+  const T = Math.round(mo + mh); // 월 총 기준시간 (예: 209시간)
   return { mo, mh, T, holidayHours };
 }
 
@@ -210,17 +210,17 @@ export function calculateWageEngine(input: WageEngineInput): WageEngineResult {
   } else if (salaryType === 'commission') {
     totalMonthlyPay = minGuaranteeAmount || 0;
     const ordinaryPool = Math.max(0, totalMonthlyPay - nonCompeteAmount);
-    ordinaryHourlyRate = T > 0 ? Math.round((ordinaryPool / T) * 100) / 100 : 0;
+    ordinaryHourlyRate = T > 0 ? Math.round(ordinaryPool / T) : 0;
     weeklyHolidayPay = T > 0 ? Math.round(ordinaryPool * (mh / T)) : 0;
     baseSalary = Math.max(0, totalMonthlyPay - weeklyHolidayPay - nonCompeteAmount);
-    comparedHourlyRate = T > 0 ? Math.round((totalMonthlyPay / T) * 100) / 100 : 0;
+    comparedHourlyRate = T > 0 ? Math.round(totalMonthlyPay / T) : 0;
   } else {
     // 월급제 (monthly) - 역산 닫힌 해
     totalMonthlyPay = salaryAmount || 0;
     
     // 포괄 연장/야간 수당 및 통상시급 역산 1차방정식: x = (totalPay - nonCompete) / (T + kot + kni)
     const effectiveT = T + kot + kni;
-    ordinaryHourlyRate = effectiveT > 0 ? Math.round(((totalMonthlyPay - nonCompeteAmount) / effectiveT) * 100) / 100 : 0;
+    ordinaryHourlyRate = effectiveT > 0 ? Math.round((totalMonthlyPay - nonCompeteAmount) / effectiveT) : 0;
 
     if (overtimeAllowance > 0) {
       calcOvertimeAllowance = overtimeAllowance;
@@ -243,7 +243,7 @@ export function calculateWageEngine(input: WageEngineInput): WageEngineResult {
     }
 
     // 최저임금 산입시급 비교 (식대/경업금지 제외)
-    comparedHourlyRate = T > 0 ? Math.round(((totalMonthlyPay - mealAllowance - nonCompeteAmount) / T) * 100) / 100 : 0;
+    comparedHourlyRate = T > 0 ? Math.round((totalMonthlyPay - mealAllowance - nonCompeteAmount) / T) : 0;
   }
 
   const isMinWagePassed = comparedHourlyRate >= LEGAL_STANDARDS.MIN_HOURLY_WAGE;
@@ -275,4 +275,33 @@ export function calculateWageEngine(input: WageEngineInput): WageEngineResult {
       ],
     },
   };
+}
+
+export interface NonCompeteInput {
+  hasNonCompete?: boolean;
+  calcType?: 'percent' | 'manual';
+  percent?: number;
+  manualAmount?: number;
+  salaryType?: 'monthly' | 'hourly' | 'commission';
+  salaryAmount?: number;
+  hourlyRate?: number;
+  minGuaranteeAmount?: number;
+}
+
+/**
+ * 경업금지 보상수당 실효 산출금액 (비율 지정 vs 직접 금액 입력 반영)
+ */
+export function getEffectiveNonCompeteAmount(input: NonCompeteInput): number {
+  if (!input.hasNonCompete) return 0;
+  if (input.calcType === 'manual' && input.manualAmount && input.manualAmount > 0) {
+    return input.manualAmount;
+  }
+  const percent = input.percent ?? 10;
+  const base =
+    input.salaryType === 'commission'
+      ? input.minGuaranteeAmount || 0
+      : input.salaryType === 'hourly'
+        ? (input.hourlyRate || LEGAL_STANDARDS.MIN_HOURLY_WAGE) * 174
+        : input.salaryAmount || 0;
+  return Math.round(base * (percent / 100));
 }

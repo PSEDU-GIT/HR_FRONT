@@ -3,7 +3,7 @@
 import React from 'react';
 import cx from 'classnames';
 import { calculateDailyHours } from '@/app/(afterLogin)/wizard/(standard)/step2/_state/periodUtils';
-import { calculateWageEngine, calculateScheduleHours } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
+import { calculateWageEngine, calculateScheduleHours, getEffectiveNonCompeteAmount } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
 
 export interface DaysConfig {
   [key: string]: {
@@ -96,7 +96,7 @@ export default function ContractDocumentTemplate({
   wizSalaryAmount = 2500000,
   wizHourlyRate = 10320,
   wizCommissionRate = 20,
-  wizMinGuaranteeAmount = 1883297,
+  wizMinGuaranteeAmount = 2156880,
   wizPayDay = '10일',
   wizHasTaxFree = true,
   wizNonTaxFood = 200000,
@@ -128,16 +128,16 @@ export default function ContractDocumentTemplate({
 
   const { weeklyHours, weeklyOvertimeHours, weeklyNightHours } = calculateScheduleHours(wizDaysConfig);
 
-  // 비율제/고정급 기준 경업금지 수당 정확한 산출 (최소보장액/기본급 기준 비율 계산)
-  const effectiveNonCompeteBase = isCommission
-    ? wizMinGuaranteeAmount
-    : isHourly
-      ? 1883297
-      : wizSalaryAmount;
-  const calculatedNonCompeteAmount =
-    wizNonCompeteAmount > 0
-      ? wizNonCompeteAmount
-      : Math.round(effectiveNonCompeteBase * ((wizNonCompetePercent || 10) / 100));
+  const calculatedNonCompeteAmount = getEffectiveNonCompeteAmount({
+    hasNonCompete: wizHasNonCompete,
+    calcType: wizNonCompeteCalcType,
+    percent: wizNonCompetePercent,
+    manualAmount: wizNonCompeteAmount,
+    salaryType: wizSalaryType,
+    salaryAmount: wizSalaryAmount,
+    hourlyRate: wizHourlyRate,
+    minGuaranteeAmount: wizMinGuaranteeAmount,
+  });
 
   const wageResult = calculateWageEngine({
     salaryType: wizSalaryType,
@@ -336,16 +336,18 @@ export default function ContractDocumentTemplate({
                     </tr>
                   )}
 
-                  {/* 연장수당 */}
-                  {wizHasExtraAllowance && wageResult.overtimeAllowance > 0 && (
-                    <tr className="bg-white">
-                      <td className="border-r border-slate-200 p-2.5 font-medium text-slate-700 pl-4">연장수당</td>
-                      <td className="border-r border-slate-200 p-2.5 text-right font-bold text-slate-800">
-                        {wageResult.overtimeAllowance.toLocaleString()}원
-                      </td>
-                      <td className="p-2.5 text-slate-500">고정 연장 근로 대가</td>
-                    </tr>
-                  )}
+                  {/* 연장근로수당 */}
+                  <tr className="bg-white">
+                    <td className="border-r border-slate-200 p-2.5 font-medium text-slate-700 pl-4">연장근로수당</td>
+                    <td className="border-r border-slate-200 p-2.5 text-right font-bold text-slate-800">
+                      {wageResult.overtimeAllowance.toLocaleString()}원
+                    </td>
+                    <td className="p-2.5 text-slate-500">
+                      {weeklyOvertimeHours > 0
+                        ? `포괄 연장근로 대가 (주 ${weeklyOvertimeHours}시간)`
+                        : '포괄 연장근로 대가'}
+                    </td>
+                  </tr>
 
                   {/* 3. 별도 및 약정 항목 구분 헤더 (경업금지 존재 시) */}
                   {wizHasNonCompete && (
@@ -494,18 +496,16 @@ export default function ContractDocumentTemplate({
               </p>
             </div>
 
-            {/* 제5조 (연장근로) */}
-            {wageResult.overtimeAllowance > 0 && (
-              <div className="space-y-1">
-                <h3 className="text-[13px] font-extrabold text-slate-900">제5조 (연장근로)</h3>
-                <p className="font-medium text-slate-700">
-                  ① 당사자 간 합의에 따라 1주 12시간 한도 내에서 연장근로를 실시할 수 있다.
-                </p>
-                <p className="font-medium text-slate-700">
-                  ② 연장근로 시 고정연장수당으로 매월 <strong className="text-slate-900">{wageResult.overtimeAllowance.toLocaleString()}원</strong>을 지급한다.
-                </p>
-              </div>
-            )}
+            {/* 제5조 (연장근로 및 연장근로수당) */}
+            <div className="space-y-1">
+              <h3 className="text-[13px] font-extrabold text-slate-900">제5조 (연장근로 및 연장근로수당)</h3>
+              <p className="font-medium text-slate-700">
+                ① 당사자 간 합의에 따라 1주 12시간 한도 내에서 연장근로를 실시할 수 있다.
+              </p>
+              <p className="font-medium text-slate-700">
+                ② 연장근로에 대하여 포괄연장근로수당으로 매월 <strong className="text-slate-900">{wageResult.overtimeAllowance.toLocaleString()}원</strong>을 지급한다.
+              </p>
+            </div>
 
             {/* 제6조 (휴게시간) */}
             <div className="space-y-1">

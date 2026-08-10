@@ -86,7 +86,7 @@ export default function SummarySalaryCardAction() {
       ? '약정 시급'
       : step2.wizSalaryType === 'commission'
         ? '비율제 수수료율'
-        : '기본 지급액';
+        : '월 총 지급액';
 
   const salaryValue =
     step2.wizSalaryType === 'monthly'

@@ -5,7 +5,7 @@ import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
 import AdvisoryModalCard from '@/app/(afterLogin)/wizard/(standard)/step2/_component/AdvisoryModalCard';
 import { useContractRiskRulesState } from '@/app/(afterLogin)/wizard/(standard)/step3/_state/getContractRiskRules.state';
 import { calculateDailyHours } from '@/app/(afterLogin)/wizard/(standard)/step2/_state/periodUtils';
-import { calculateWageEngine, calculateScheduleHours } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
+import { calculateWageEngine, calculateScheduleHours, getEffectiveNonCompeteAmount } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
 
 export default function ReadLegalAdvisorySub3Action() {
   const {
@@ -19,6 +19,8 @@ export default function ReadLegalAdvisorySub3Action() {
     wizNonTaxFood,
     wizHasNonCompete,
     wizNonCompeteAmount,
+    wizNonCompeteCalcType,
+    wizNonCompetePercent,
     wizHasExtraAllowance,
     wizOvertimeAllowance,
     wizPositionAllowance,
@@ -38,6 +40,8 @@ export default function ReadLegalAdvisorySub3Action() {
       wizNonTaxFood: state.step2.wizNonTaxFood,
       wizHasNonCompete: state.step2.wizHasNonCompete,
       wizNonCompeteAmount: state.step2.wizNonCompeteAmount,
+      wizNonCompeteCalcType: state.step2.wizNonCompeteCalcType || 'percent',
+      wizNonCompetePercent: state.step2.wizNonCompetePercent ?? 10,
       wizHasExtraAllowance: state.step2.wizHasExtraAllowance,
       wizOvertimeAllowance: state.step2.wizOvertimeAllowance,
       wizPositionAllowance: state.step2.wizPositionAllowance,
@@ -55,6 +59,17 @@ export default function ReadLegalAdvisorySub3Action() {
   const { weeklyHours, weeklyOvertimeHours, weeklyNightHours } = calculateScheduleHours(wizDaysConfig);
   const isUnder5 = contractType?.includes('5인 미만') || contractType?.includes('5인 이하');
 
+  const calculatedNonCompeteAmount = getEffectiveNonCompeteAmount({
+    hasNonCompete: wizHasNonCompete,
+    calcType: wizNonCompeteCalcType,
+    percent: wizNonCompetePercent,
+    manualAmount: wizNonCompeteAmount,
+    salaryType: wizSalaryType,
+    salaryAmount: wizSalaryAmount,
+    hourlyRate: wizHourlyRate,
+    minGuaranteeAmount: wizMinGuaranteeAmount,
+  });
+
   const wageResult = calculateWageEngine({
     salaryType: wizSalaryType,
     salaryAmount: wizSalaryAmount,
@@ -65,7 +80,7 @@ export default function ReadLegalAdvisorySub3Action() {
     positionAllowance: wizHasExtraAllowance ? wizPositionAllowance : 0,
     overtimeAllowance: wizHasExtraAllowance ? wizOvertimeAllowance : 0,
     otherAllowance: wizHasExtraAllowance ? wizOtherAllowance : 0,
-    nonCompeteAmount: wizHasNonCompete ? wizNonCompeteAmount : 0,
+    nonCompeteAmount: calculatedNonCompeteAmount,
     weeklyHours,
     weeklyOvertimeHours,
     weeklyNightHours,

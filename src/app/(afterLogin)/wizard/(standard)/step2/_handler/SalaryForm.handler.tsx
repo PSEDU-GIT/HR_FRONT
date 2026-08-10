@@ -11,42 +11,8 @@ import Step2NonCompeteArea from '@/app/(afterLogin)/wizard/(standard)/step2/_are
 import Step2ExtraAllowanceArea from '@/app/(afterLogin)/wizard/(standard)/step2/_area/level3/Step2ExtraAllowance.area';
 import Step2SalarySummaryArea from '@/app/(afterLogin)/wizard/(standard)/step2/_area/level3/Step2SalarySummary.area';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowRight, ArrowLeft, RotateCcw } from 'lucide-react';
+import { RotateCcw } from 'lucide-react';
 import cx from 'classnames';
-
-const getSubLevelTitle = (subLevel: number, salaryType: SalaryType): string => {
-  if (salaryType === 'hourly') {
-    const hourlyTitles: Record<number, string> = {
-      1: '시간당 약정 시급 설정',
-      2: '급여 지급일 설정',
-      3: '급여 및 수당 최종 설정 요약',
-    };
-    return hourlyTitles[subLevel] || '';
-  }
-
-  if (salaryType === 'commission') {
-    const commissionTitles: Record<number, string> = {
-      1: '비율제 정산율 설정',
-      2: '급여 지급일 설정',
-      3: '비과세 수당 적용 설정',
-      4: '경업금지 약정 설정',
-      5: '추가 고정수당 설정',
-      6: '급여 및 수당 최종 설정 요약',
-    };
-    return commissionTitles[subLevel] || '';
-  }
-
-  // monthly (고정급): 희망 총 급여 수령액 입력을 5단계(요약 전)로 배치
-  const monthlyTitles: Record<number, string> = {
-    1: '급여 지급일 설정',
-    2: '비과세 수당 적용 설정',
-    3: '경업금지 약정 설정',
-    4: '추가 고정수당 설정',
-    5: '강사 지급 희망 급여(월 총 지급액) 설정',
-    6: '급여 및 수당 최종 설정 요약',
-  };
-  return monthlyTitles[subLevel] || '';
-};
 
 const SALARY_TYPE_LABELS: Record<SalaryType, string> = {
   monthly: '고정급',
@@ -57,189 +23,104 @@ const SALARY_TYPE_LABELS: Record<SalaryType, string> = {
 export default function SalaryFormHandler() {
   const {
     wizSalaryType,
-    wizSalarySubStep,
-    maxUnlockedSalarySubStep,
-    wizSalaryDone,
+    salaryEditingSection,
     wizHourlyRate,
     setStep2,
   } = useWizardStore(
     useShallow((state) => ({
       wizSalaryType: state.step2.wizSalaryType,
-      wizSalarySubStep: state.step2.wizSalarySubStep || 1,
-      maxUnlockedSalarySubStep: state.step2.maxUnlockedSalarySubStep || 1,
-      wizSalaryDone: state.step2.wizSalaryDone,
+      salaryEditingSection: state.step2.salaryEditingSection || null,
       wizHourlyRate: state.step2.wizHourlyRate,
       setStep2: state.setStep2,
     })),
   );
 
-  const subLevel = wizSalarySubStep;
-  const maxSubLevel = wizSalaryType === 'hourly' ? 3 : 6;
-  const isSummaryUnlocked =
-    wizSalaryDone || (maxUnlockedSalarySubStep && maxUnlockedSalarySubStep >= maxSubLevel);
-
-  const isHourlyBelowMinimum =
-    wizSalaryType === 'hourly' && subLevel === 1 && wizHourlyRate < 10320;
-
   const handleChangeSalaryType = () => {
     setStep2({
       wizSalaryApplied: false,
-      wizSalarySubStep: 1,
+      salaryEditingSection: null,
     });
   };
 
-  const handlePrev = () => {
-    if (subLevel > 1) {
-      setStep2({
-        wizSalarySubStep: (subLevel - 1) as 1 | 2 | 3 | 4 | 5 | 6,
-      });
-    }
+  const handleFinishEdit = () => {
+    setStep2({ salaryEditingSection: null });
   };
 
-  const handleNext = () => {
-    if (isHourlyBelowMinimum) return;
-    if (isSummaryUnlocked && subLevel < maxSubLevel) {
-      setStep2({ wizSalarySubStep: maxSubLevel });
-      return;
-    }
-    if (subLevel < maxSubLevel) {
-      const nextLevel = (subLevel + 1) as 1 | 2 | 3 | 4 | 5 | 6;
-      setStep2((prev) => ({
-        wizSalarySubStep: nextLevel,
-        maxUnlockedSalarySubStep: Math.max(prev.maxUnlockedSalarySubStep || 1, nextLevel) as
-          1 | 2 | 3 | 4 | 5 | 6,
-      }));
-    } else {
-      setStep2({ wizSubStep: 4 });
-    }
-  };
+  const isHourlyBelowMinimum =
+    wizSalaryType === 'hourly' && salaryEditingSection === 'amount' && wizHourlyRate < 10320;
 
-  const renderSubLevelContent = () => {
-    if (wizSalaryType === 'hourly') {
-      switch (subLevel) {
-        case 1:
-          return <Step2SalaryHourlyArea />;
-        case 2:
-          return <Step2SalaryPayDayArea />;
-        case 3:
-          return <Step2SalarySummaryArea />;
-        default:
-          return <Step2SalaryHourlyArea />;
-      }
-    }
-
-    if (wizSalaryType === 'commission') {
-      switch (subLevel) {
-        case 1:
-          return <Step2SalaryCommissionArea />;
-        case 2:
-          return <Step2SalaryPayDayArea />;
-        case 3:
-          return <Step2SalaryTaxFreeArea />;
-        case 4:
-          return <Step2NonCompeteArea />;
-        case 5:
-          return <Step2ExtraAllowanceArea />;
-        case 6:
-          return <Step2SalarySummaryArea />;
-        default:
-          return <Step2SalaryCommissionArea />;
-      }
-    }
-
-    // monthly (고정급): 수당/약정 설정 완료 후 5단계에서 총 급여액 입력
-    switch (subLevel) {
-      case 1:
+  const renderEditingContent = () => {
+    switch (salaryEditingSection) {
+      case 'amount':
+        return wizSalaryType === 'hourly' ? (
+          <Step2SalaryHourlyArea />
+        ) : wizSalaryType === 'commission' ? (
+          <Step2SalaryCommissionArea />
+        ) : (
+          <Step2SalaryMonthlyArea />
+        );
+      case 'payDay':
         return <Step2SalaryPayDayArea />;
-      case 2:
+      case 'taxFree':
         return <Step2SalaryTaxFreeArea />;
-      case 3:
+      case 'nonCompete':
         return <Step2NonCompeteArea />;
-      case 4:
+      case 'extraAllowance':
         return <Step2ExtraAllowanceArea />;
-      case 5:
-        return <Step2SalaryMonthlyArea />;
-      case 6:
-        return <Step2SalarySummaryArea />;
       default:
-        return <Step2SalaryPayDayArea />;
+        return <Step2SalarySummaryArea />;
     }
   };
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-900 text-[11px] font-bold text-white dark:bg-slate-700">
-            {subLevel}
-          </span>
-          <h4 className="text-text-main text-xs font-extrabold dark:text-slate-100">
-            {getSubLevelTitle(subLevel, wizSalaryType)}
-          </h4>
+      {!salaryEditingSection && (
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="border-custom-indigo-border bg-custom-indigo-bg text-custom-indigo inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-xs font-extrabold dark:border-custom-indigo/40 dark:bg-slate-900 dark:text-custom-indigo">
+              {SALARY_TYPE_LABELS[wizSalaryType] || '고정급'}
+            </span>
+            <span className="text-text-main text-xs font-bold dark:text-slate-200">
+              급여 및 수당 설정
+            </span>
+          </div>
           <button
             type="button"
             onClick={handleChangeSalaryType}
-            title="급여 형태 변경"
-            className="border-custom-indigo-border bg-custom-indigo-bg text-custom-indigo hover:bg-custom-indigo-bg/80 inline-flex cursor-pointer items-center gap-1 rounded-md border px-2 py-0.5 text-[10px] font-bold transition-all active:scale-95 dark:border-custom-indigo/40 dark:bg-slate-900 dark:text-custom-indigo"
+            className="text-text-side hover:text-custom-indigo flex cursor-pointer items-center gap-1 text-xs font-semibold transition-colors dark:text-slate-400 dark:hover:text-custom-indigo"
           >
-            <span>{SALARY_TYPE_LABELS[wizSalaryType] || '고정급'}</span>
-            <RotateCcw className="h-2.5 w-2.5" />
+            <RotateCcw className="h-3 w-3" />
+            <span>급여 형태 변경</span>
           </button>
         </div>
-        <span className="text-text-side text-[11px] font-bold dark:text-slate-400">
-          {subLevel} / {maxSubLevel} 단계
-        </span>
-      </div>
+      )}
 
       <AnimatePresence mode="wait">
         <motion.div
-          key={subLevel}
+          key={salaryEditingSection || 'summary'}
           initial={{ opacity: 0, x: 8 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -8 }}
           transition={{ duration: 0.2 }}
         >
-          {renderSubLevelContent()}
+          {renderEditingContent()}
         </motion.div>
       </AnimatePresence>
 
-      {subLevel < maxSubLevel && (
-        <footer className="flex items-center gap-2 pt-1">
-          {subLevel > 1 && !isSummaryUnlocked && (
-            <button
-              type="button"
-              onClick={handlePrev}
-              className="border-custom-slate-border text-text-side hover:text-text-main flex shrink-0 cursor-pointer items-center justify-center gap-1 rounded-xl border bg-white px-3.5 py-2.5 text-xs font-bold whitespace-nowrap transition-all hover:bg-slate-50 active:scale-[0.99] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
-            >
-              <ArrowLeft className="h-3.5 w-3.5 shrink-0" />
-              <span>이전</span>
-            </button>
-          )}
-
+      {salaryEditingSection && (
+        <footer className="pt-1">
           <button
             type="button"
-            onClick={handleNext}
+            onClick={handleFinishEdit}
             disabled={isHourlyBelowMinimum}
             className={cx(
-              'border-custom-slate-border flex flex-1 items-center justify-center gap-1.5 rounded-xl border py-2.5 text-xs font-bold transition-all dark:border-slate-700',
+              'flex w-full items-center justify-center gap-1.5 rounded-xl border py-2.5 text-xs font-bold transition-all shadow-2xs',
               isHourlyBelowMinimum
-                ? 'cursor-not-allowed bg-slate-100 text-slate-400 opacity-60 dark:bg-slate-800 dark:text-slate-500'
-                : 'text-text-title cursor-pointer bg-white hover:bg-slate-50 active:scale-[0.99] dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700',
+                ? 'cursor-not-allowed border-rose-200 bg-rose-50 text-rose-500 opacity-80 dark:border-rose-950 dark:bg-rose-950/40 dark:text-rose-400'
+                : 'border-custom-indigo-border bg-custom-indigo text-white hover:bg-custom-indigo-hover active:scale-[0.99]',
             )}
           >
-            <span>
-              {isSummaryUnlocked
-                ? '수정 완료'
-                : subLevel === maxSubLevel - 1
-                  ? '다음 (최종 요약 확인)'
-                  : '다음'}
-            </span>
-            <ArrowRight
-              className={cx(
-                'h-3.5 w-3.5 shrink-0',
-                isHourlyBelowMinimum ? 'text-slate-400' : 'text-text-side dark:text-slate-400',
-              )}
-            />
+            <span>수정 완료</span>
           </button>
         </footer>
       )}

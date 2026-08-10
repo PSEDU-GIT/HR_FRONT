@@ -1,4 +1,5 @@
 import SelectSummaryStepNavAction from './_action/SelectSummaryStepNav.action';
+import LoadProvider from '@/app/(afterLogin)/wizard/_provider/Load.provider';
 
 const TYPE_TITLE_MAP: Record<string, string> = {
   edit: '계약서 수정',
@@ -19,7 +20,8 @@ export default async function SummaryWizardLayout({
   const title = TYPE_TITLE_MAP[type] || '계약서 요약 및 수정';
 
   return (
-    <>
+    <div className="relative flex h-full flex-1 flex-col overflow-hidden pt-0">
+      <LoadProvider />
       <div className="flex min-h-16 items-center justify-between">
         <header className="flex flex-1 items-center justify-between gap-4">
           <div className="flex items-center gap-3">
@@ -32,6 +34,6 @@ export default async function SummaryWizardLayout({
       </div>
 
       {children}
-    </>
+    </div>
   );
 }

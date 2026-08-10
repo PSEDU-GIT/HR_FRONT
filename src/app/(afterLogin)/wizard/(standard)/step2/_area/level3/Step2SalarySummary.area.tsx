@@ -4,7 +4,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
 import { Pencil, ArrowRight } from 'lucide-react';
 import { calculateDailyHours } from '@/app/(afterLogin)/wizard/(standard)/step2/_state/periodUtils';
-import { calculateWageEngine, calculateScheduleHours } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
+import { calculateWageEngine, calculateScheduleHours, getEffectiveNonCompeteAmount } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
 import cx from 'classnames';
 
 export default function Step2SalarySummaryArea() {
@@ -22,6 +22,8 @@ export default function Step2SalarySummaryArea() {
     wizNonCompetePeriod,
     wizNonCompeteRange,
     wizNonCompeteAmount,
+    wizNonCompeteCalcType,
+    wizNonCompetePercent,
     wizHasExtraAllowance,
     wizOvertimeAllowance,
     wizPositionAllowance,
@@ -44,6 +46,8 @@ export default function Step2SalarySummaryArea() {
       wizNonCompetePeriod: state.step2.wizNonCompetePeriod,
       wizNonCompeteRange: state.step2.wizNonCompeteRange,
       wizNonCompeteAmount: state.step2.wizNonCompeteAmount,
+      wizNonCompeteCalcType: state.step2.wizNonCompeteCalcType || 'percent',
+      wizNonCompetePercent: state.step2.wizNonCompetePercent ?? 10,
       wizHasExtraAllowance: state.step2.wizHasExtraAllowance,
       wizOvertimeAllowance: state.step2.wizOvertimeAllowance,
       wizPositionAllowance: state.step2.wizPositionAllowance,
@@ -58,6 +62,17 @@ export default function Step2SalarySummaryArea() {
 
   const isUnder5 = contractType?.includes('5인 미만') || contractType?.includes('5인 이하');
 
+  const calculatedNonCompeteAmount = getEffectiveNonCompeteAmount({
+    hasNonCompete: wizHasNonCompete,
+    calcType: wizNonCompeteCalcType,
+    percent: wizNonCompetePercent,
+    manualAmount: wizNonCompeteAmount,
+    salaryType: wizSalaryType,
+    salaryAmount: wizSalaryAmount,
+    hourlyRate: wizHourlyRate,
+    minGuaranteeAmount: wizMinGuaranteeAmount,
+  });
+
   const wageResult = calculateWageEngine({
     salaryType: wizSalaryType,
     salaryAmount: wizSalaryAmount,
@@ -68,54 +83,17 @@ export default function Step2SalarySummaryArea() {
     positionAllowance: wizHasExtraAllowance ? wizPositionAllowance : 0,
     overtimeAllowance: wizHasExtraAllowance ? wizOvertimeAllowance : 0,
     otherAllowance: wizHasExtraAllowance ? wizOtherAllowance : 0,
-    nonCompeteAmount: wizHasNonCompete ? wizNonCompeteAmount : 0,
+    nonCompeteAmount: calculatedNonCompeteAmount,
     weeklyHours,
     weeklyOvertimeHours,
     weeklyNightHours,
     employeeCount: isUnder5 ? 4 : 5,
   });
 
-  const getSubStepIndex = (
-    targetSection: 'amount' | 'payDay' | 'taxFree' | 'nonCompete' | 'extraAllowance',
-  ): 1 | 2 | 3 | 4 | 5 => {
-    if (wizSalaryType === 'hourly') {
-      if (targetSection === 'amount') return 1;
-      if (targetSection === 'payDay') return 2;
-      return 1;
-    }
-    if (wizSalaryType === 'commission') {
-      switch (targetSection) {
-        case 'amount':
-          return 1;
-        case 'payDay':
-          return 2;
-        case 'taxFree':
-          return 3;
-        case 'nonCompete':
-          return 4;
-        case 'extraAllowance':
-          return 5;
-      }
-    }
-    // monthly (고정급)
-    switch (targetSection) {
-      case 'payDay':
-        return 1;
-      case 'taxFree':
-        return 2;
-      case 'nonCompete':
-        return 3;
-      case 'extraAllowance':
-        return 4;
-      case 'amount':
-        return 5;
-    }
-  };
-
-  const goToSubStep = (
+  const goToSection = (
     targetSection: 'amount' | 'payDay' | 'taxFree' | 'nonCompete' | 'extraAllowance',
   ) => {
-    setStep2({ wizSalarySubStep: getSubStepIndex(targetSection) });
+    setStep2({ salaryEditingSection: targetSection });
   };
 
   const isMinWagePassed = wageResult.isMinWagePassed;
@@ -140,7 +118,7 @@ export default function Step2SalarySummaryArea() {
         <div className="flex items-center justify-between p-3.5 transition-colors hover:bg-slate-50/60 dark:hover:bg-slate-800/60">
           <div className="flex min-w-0 items-center gap-3 pr-2">
             <span className="text-text-side w-24 shrink-0 text-xs font-semibold dark:text-slate-400">
-              {isHourly ? '약정 시급' : isCommission ? '비율제 수수료율' : '기본 지급액'}
+              {isHourly ? '약정 시급' : isCommission ? '비율제 수수료율' : '월 총 지급액'}
             </span>
             <span className="text-text-main truncate text-xs font-bold dark:text-slate-100">
               {isHourly
@@ -152,7 +130,7 @@ export default function Step2SalarySummaryArea() {
           </div>
           <button
             type="button"
-            onClick={() => goToSubStep('amount')}
+            onClick={() => goToSection('amount')}
             className="text-text-side hover:text-custom-indigo hover:bg-custom-indigo-bg dark:hover:text-custom-indigo shrink-0 cursor-pointer rounded-lg p-1.5 transition-colors dark:text-slate-400 dark:hover:bg-slate-800"
             title="금액 수정"
           >
@@ -172,7 +150,7 @@ export default function Step2SalarySummaryArea() {
           </div>
           <button
             type="button"
-            onClick={() => goToSubStep('payDay')}
+            onClick={() => goToSection('payDay')}
             className="text-text-side hover:text-custom-indigo hover:bg-custom-indigo-bg dark:hover:text-custom-indigo shrink-0 cursor-pointer rounded-lg p-1.5 transition-colors dark:text-slate-400 dark:hover:bg-slate-800"
             title="급여일 수정"
           >
@@ -194,7 +172,7 @@ export default function Step2SalarySummaryArea() {
               </div>
               <button
                 type="button"
-                onClick={() => goToSubStep('taxFree')}
+                onClick={() => goToSection('taxFree')}
                 className="text-text-side hover:text-custom-indigo hover:bg-custom-indigo-bg dark:hover:text-custom-indigo shrink-0 cursor-pointer rounded-lg p-1.5 transition-colors dark:text-slate-400 dark:hover:bg-slate-800"
                 title="비과세 수당 수정"
               >
@@ -210,13 +188,13 @@ export default function Step2SalarySummaryArea() {
                 </span>
                 <span className="text-text-main truncate text-xs font-bold dark:text-slate-100">
                   {wizHasNonCompete
-                    ? `${wizNonCompetePeriod} / ${wizNonCompeteRange} (${wizNonCompeteAmount.toLocaleString()}원)`
+                    ? `${wizNonCompetePeriod} / ${wizNonCompeteRange} (${wizNonCompeteCalcType === 'percent' ? `${wizNonCompetePercent}%: ` : ''}${calculatedNonCompeteAmount.toLocaleString()}원)`
                     : '약정 없음'}
                 </span>
               </div>
               <button
                 type="button"
-                onClick={() => goToSubStep('nonCompete')}
+                onClick={() => goToSection('nonCompete')}
                 className="text-text-side hover:text-custom-indigo hover:bg-custom-indigo-bg dark:hover:text-custom-indigo shrink-0 cursor-pointer rounded-lg p-1.5 transition-colors dark:text-slate-400 dark:hover:bg-slate-800"
                 title="경업금지 약정 수정"
               >
@@ -247,7 +225,7 @@ export default function Step2SalarySummaryArea() {
               </div>
               <button
                 type="button"
-                onClick={() => goToSubStep('extraAllowance')}
+                onClick={() => goToSection('extraAllowance')}
                 className="text-text-side hover:text-custom-indigo hover:bg-custom-indigo-bg dark:hover:text-custom-indigo shrink-0 cursor-pointer rounded-lg p-1.5 transition-colors dark:text-slate-400 dark:hover:bg-slate-800"
                 title="추가 고정수당 수정"
               >
@@ -280,7 +258,7 @@ export default function Step2SalarySummaryArea() {
               {wageResult.baseSalary.toLocaleString()}원
             </div>
             <div className="text-text-side mt-1 text-[10px] dark:text-slate-400">
-              월소정 {wageResult.mo}h 대가
+              월소정 {Math.round(wageResult.mo)}h 대가
             </div>
           </div>
 
@@ -293,8 +271,20 @@ export default function Step2SalarySummaryArea() {
             </div>
             <div className="text-text-side mt-1 text-[10px] dark:text-slate-400">
               {wageResult.holidayHours > 0
-                ? `주 ${wageResult.holidayHours}h (월 ${wageResult.mh}h)`
+                ? `주 ${Math.round(wageResult.holidayHours)}h (월 ${Math.round(wageResult.mh)}h)`
                 : '주15h 미만 (0원)'}
+            </div>
+          </div>
+
+          <div className="border-custom-slate-border rounded-xl border bg-slate-50/50 p-2.5 dark:border-slate-800 dark:bg-slate-950/40">
+            <div className="text-text-side text-[11px] font-semibold dark:text-slate-400">
+              월 연장근로수당 (포괄연장)
+            </div>
+            <div className="text-custom-indigo mt-0.5 text-xs font-bold dark:text-indigo-400">
+              {wageResult.overtimeAllowance.toLocaleString()}원
+            </div>
+            <div className="text-text-side mt-1 text-[10px] dark:text-slate-400">
+              {weeklyOvertimeHours > 0 ? `주 ${Math.round(weeklyOvertimeHours)}h 연장` : '연장근로 없음 (0원)'}
             </div>
           </div>
 
@@ -303,14 +293,14 @@ export default function Step2SalarySummaryArea() {
               통상시급
             </div>
             <div className="text-text-main mt-0.5 text-xs font-bold dark:text-slate-100">
-              {wageResult.ordinaryHourlyRate.toLocaleString()}원 /h
+              {Math.round(wageResult.ordinaryHourlyRate).toLocaleString()}원 /h
             </div>
             <div className="text-text-side mt-1 text-[10px] dark:text-slate-400">
-              월기준시간 {wageResult.T}h
+              월기준시간 {Math.round(wageResult.T)}h
             </div>
           </div>
 
-          <div className="border-custom-slate-border rounded-xl border bg-slate-50/50 p-2.5 dark:border-slate-800 dark:bg-slate-950/40">
+          <div className="border-custom-slate-border col-span-2 rounded-xl border bg-slate-50/50 p-2.5 dark:border-slate-800 dark:bg-slate-950/40">
             <div className="text-text-side text-[11px] font-semibold dark:text-slate-400">
               최저임금 비교 시급
             </div>
@@ -319,10 +309,10 @@ export default function Step2SalarySummaryArea() {
                 isMinWagePassed ? 'text-text-main dark:text-slate-100' : 'text-custom-rose'
               }`}
             >
-              {wageResult.comparedHourlyRate.toLocaleString()}원 /h
+              {Math.round(wageResult.comparedHourlyRate).toLocaleString()}원 /h
             </div>
             <div className="text-text-side mt-1 text-[10px] dark:text-slate-400">
-              최저 10,320원 대비
+              최저 10,320원 대비 {isMinWagePassed ? '(법정 기준 준수)' : '(최저임금 미달)'}
             </div>
           </div>
         </div>
