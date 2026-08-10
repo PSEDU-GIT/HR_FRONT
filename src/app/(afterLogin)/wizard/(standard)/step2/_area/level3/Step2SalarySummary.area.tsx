@@ -284,7 +284,7 @@ export default function Step2SalarySummaryArea() {
               {wageResult.overtimeAllowance.toLocaleString()}원
             </div>
             <div className="text-text-side mt-1 text-[10px] dark:text-slate-400">
-              {weeklyOvertimeHours > 0 ? `주 ${Math.round(weeklyOvertimeHours)}h 연장` : '연장근로 없음 (0원)'}
+              {weeklyOvertimeHours > 0 ? `주 ${weeklyOvertimeHours}h 연장` : '연장근로 없음 (0원)'}
             </div>
           </div>
 
@@ -296,7 +296,7 @@ export default function Step2SalarySummaryArea() {
               {Math.round(wageResult.ordinaryHourlyRate).toLocaleString()}원 /h
             </div>
             <div className="text-text-side mt-1 text-[10px] dark:text-slate-400">
-              월기준시간 {Math.round(wageResult.T)}h
+              월기준시간 {wageResult.TExact ? `${parseFloat(wageResult.TExact.toFixed(2))}h` : `${wageResult.T}h`}
             </div>
           </div>
 
