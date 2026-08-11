@@ -55,7 +55,7 @@ export default function SalaryFormHandler() {
       wizPositionAllowance: 0,
       wizOtherAllowance: 0,
       wizOtherAllowanceName: '',
-      wizHasNonCompete: false,
+      wizHasNonCompete: true,
       wizNonCompetePeriod: '6개월',
       wizNonCompeteRange: '3km',
       wizNonCompeteAmount: 0,
