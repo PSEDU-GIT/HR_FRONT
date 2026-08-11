@@ -37,7 +37,30 @@ export default function SalaryFormHandler() {
 
   const handleChangeSalaryType = () => {
     setStep2({
+      wizSalaryType: 'monthly',
       wizSalaryApplied: false,
+      wizSalaryDone: false,
+      wizSalaryAmount: 2500000,
+      wizHourlyRate: 10320,
+      wizCommissionRate: 20,
+      wizMinGuaranteeAmount: undefined,
+      wizIsCustomCommission: false,
+      wizSalarySubStep: 1,
+      maxUnlockedSalarySubStep: 1,
+      wizHasTaxFree: true,
+      wizNonTaxFood: 200000,
+      wizPayDay: '10일',
+      wizHasExtraAllowance: false,
+      wizOvertimeAllowance: 0,
+      wizPositionAllowance: 0,
+      wizOtherAllowance: 0,
+      wizOtherAllowanceName: '',
+      wizHasNonCompete: false,
+      wizNonCompetePeriod: '6개월',
+      wizNonCompeteRange: '3km',
+      wizNonCompeteAmount: 0,
+      wizNonCompeteCalcType: 'percent',
+      wizNonCompetePercent: 10,
       salaryEditingSection: null,
     });
   };

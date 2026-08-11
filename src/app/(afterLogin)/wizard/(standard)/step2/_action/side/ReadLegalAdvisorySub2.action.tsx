@@ -3,7 +3,7 @@
 import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
 import { calculateDailyHours } from '@/app/(afterLogin)/wizard/(standard)/step2/_state/periodUtils';
-import { calculateScheduleHours } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
+import { calculateScheduleHours, checkBreakTimeViolations } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
 import AdvisoryModalCard from '@/app/(afterLogin)/wizard/(standard)/step2/_component/AdvisoryModalCard';
 import { useContractRiskRulesState } from '@/app/(afterLogin)/wizard/(standard)/step3/_state/getContractRiskRules.state';
 import cx from 'classnames';
@@ -23,6 +23,8 @@ export default function ReadLegalAdvisorySub2Action() {
   const shortTimeRule = riskRules?.find((r) => r.ruleType === 'SHORT_TIME_WORKER_RISK');
 
   const { weeklyHours, weeklyOvertimeHours } = calculateScheduleHours(wizDaysConfig);
+  const breakViolations = checkBreakTimeViolations(wizDaysConfig);
+  const hasBreakViolation = breakViolations.length > 0;
 
   const isUnder15Hours = weeklyHours < 15;
   const hasNoWeeklyHoliday =
@@ -73,6 +75,28 @@ export default function ReadLegalAdvisorySub2Action() {
             1일 8시간 또는 1주 40시간을 초과한 근무시간(주 {weeklyOvertimeHours}시간)은 법정 연장근로에 해당합니다.
             급여 및 수당 설정 시 연장근로수당(포괄연장)으로 자동 반영됩니다.
           </p>
+        </AdvisoryModalCard>
+      )}
+
+      {/* 법정 휴게시간 미달 위험 자문 카드 */}
+      {hasBreakViolation && (
+        <AdvisoryModalCard
+          layoutId="advisory-card-invalidBreakTime"
+          title="[위험] 법정 휴게시간 미달 (근로기준법 위반)"
+          isHighlighted={highlightedAdvisoryKey === 'invalidBreakTime'}
+          onClose={() => setHighlightAdvisory(null)}
+          theme="danger"
+        >
+          <div className="space-y-1.5 text-xs font-medium leading-relaxed">
+            <p className="whitespace-pre-line">
+              근로기준법 제54조(휴게)에 따라 근로시간이 4시간인 경우에는 30분 이상, 8시간인 경우에는 1시간 이상의 휴게시간을 근로시간 도중에 부여해야 합니다. 위반 시 2년 이하의 징역 또는 2천만원 이하의 벌금 대상이 됩니다.
+            </p>
+            <ul className="mt-1 list-disc space-y-0.5 pl-4 text-rose-600 dark:text-rose-400">
+              {breakViolations.map((v, i) => (
+                <li key={i}>{v.message}</li>
+              ))}
+            </ul>
+          </div>
         </AdvisoryModalCard>
       )}
 

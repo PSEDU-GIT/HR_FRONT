@@ -12,7 +12,7 @@ import {
   type TeacherContractPayload,
 } from '@/app/(afterLogin)/wizard/_lib/createTeacherContract';
 import { getContractArchiveQueryKey } from '@/app/(afterLogin)/cabinet/_state/getContractArchive.state';
-import { getEffectiveNonCompeteAmount } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
+import { getEffectiveNonCompeteAmount, calculateDynamicMinGuaranteeAmount } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
 
 interface ClickCompleteContractActionProps {
   className?: string;
@@ -124,6 +124,15 @@ export default function ClickCompleteContractAction({
         breakMinutes: parseInt(val.breakTime) || 0,
       }));
 
+    const isUnder5 = step1.contractType?.includes('5인 미만') || step1.contractType?.includes('5인 이하');
+    const dynamicMinPay = calculateDynamicMinGuaranteeAmount(step2.wizDaysConfig, isUnder5, {
+      hasNonCompete: step2.wizHasNonCompete,
+      calcType: step2.wizNonCompeteCalcType,
+      percent: step2.wizNonCompetePercent,
+      manualAmount: step2.wizNonCompeteAmount,
+    });
+    const effectiveMinGuaranteeAmount = step2.wizMinGuaranteeAmount ?? dynamicMinPay;
+
     const payloadInstructorInfo = {
       pendingStaffName: step1.instructorName,
       pendingStaffPhone: step1.instructorPhone?.replace(/-/g, ''),
@@ -145,7 +154,7 @@ export default function ClickCompleteContractAction({
       contractStartDate: step2.wizStartDate,
       contractEndDate: step2.wizEndDate,
       probationPeriodMonths: parseInt(step2.wizProbation) || 0,
-      minGuaranteedAmount: step2.wizMinGuaranteeAmount,
+      minGuaranteedAmount: effectiveMinGuaranteeAmount,
       paymentDay: parseInt(step2.wizPayDay) || 0,
       nonTaxableMealAllowance: step2.wizHasTaxFree ? step2.wizNonTaxFood : 0,
       nonTaxableCarAllowance: 0,
@@ -160,7 +169,7 @@ export default function ClickCompleteContractAction({
         salaryType: step2.wizSalaryType,
         salaryAmount: step2.wizSalaryAmount,
         hourlyRate: step2.wizHourlyRate,
-        minGuaranteeAmount: step2.wizMinGuaranteeAmount,
+        minGuaranteeAmount: effectiveMinGuaranteeAmount,
       }),
       additionalAllowanceEnabled: step2.wizHasExtraAllowance,
       overtimeAllowance: step2.wizOvertimeAllowance,

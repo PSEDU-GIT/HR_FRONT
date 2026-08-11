@@ -5,7 +5,12 @@ import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
 import AdvisoryModalCard from '@/app/(afterLogin)/wizard/(standard)/step2/_component/AdvisoryModalCard';
 import { useContractRiskRulesState } from '@/app/(afterLogin)/wizard/(standard)/step3/_state/getContractRiskRules.state';
 import { calculateDailyHours } from '@/app/(afterLogin)/wizard/(standard)/step2/_state/periodUtils';
-import { calculateWageEngine, calculateScheduleHours, getEffectiveNonCompeteAmount } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
+import {
+  calculateWageEngine,
+  calculateScheduleHours,
+  calculateDynamicMinGuaranteeAmount,
+  getEffectiveNonCompeteAmount,
+} from '@/app/(afterLogin)/wizard/_lib/wageEngine';
 
 export default function ReadLegalAdvisorySub3Action() {
   const {
@@ -56,8 +61,15 @@ export default function ReadLegalAdvisorySub3Action() {
   const minWageRule = riskRules?.find((r) => r.ruleType === 'MIN_WAGE');
   const mealRule = riskRules?.find((r) => r.ruleType === 'NON_TAXABLE_MEAL_ALLOWANCE_GUIDE');
 
-  const { weeklyHours, weeklyOvertimeHours, weeklyNightHours } = calculateScheduleHours(wizDaysConfig);
+  const { weeklyHours, weeklyOvertimeHours, weeklyNightHours } =
+    calculateScheduleHours(wizDaysConfig);
   const isUnder5 = contractType?.includes('5인 미만') || contractType?.includes('5인 이하');
+  const dynamicMinPay = calculateDynamicMinGuaranteeAmount(wizDaysConfig, isUnder5, {
+    hasNonCompete: wizHasNonCompete,
+    calcType: wizNonCompeteCalcType,
+    percent: wizNonCompetePercent,
+    manualAmount: wizNonCompeteAmount,
+  });
 
   const calculatedNonCompeteAmount = getEffectiveNonCompeteAmount({
     hasNonCompete: wizHasNonCompete,
@@ -67,7 +79,7 @@ export default function ReadLegalAdvisorySub3Action() {
     salaryType: wizSalaryType,
     salaryAmount: wizSalaryAmount,
     hourlyRate: wizHourlyRate,
-    minGuaranteeAmount: wizMinGuaranteeAmount,
+    minGuaranteeAmount: wizMinGuaranteeAmount || dynamicMinPay,
   });
 
   const wageResult = calculateWageEngine({
@@ -75,7 +87,7 @@ export default function ReadLegalAdvisorySub3Action() {
     salaryAmount: wizSalaryAmount,
     hourlyRate: wizHourlyRate,
     commissionRate: wizCommissionRate || 20,
-    minGuaranteeAmount: wizMinGuaranteeAmount || 1883297,
+    minGuaranteeAmount: wizMinGuaranteeAmount || dynamicMinPay,
     mealAllowance: wizHasTaxFree ? wizNonTaxFood : 0,
     positionAllowance: wizHasExtraAllowance ? wizPositionAllowance : 0,
     overtimeAllowance: wizHasExtraAllowance ? wizOvertimeAllowance : 0,
@@ -108,12 +120,12 @@ export default function ReadLegalAdvisorySub3Action() {
   return (
     <div className="space-y-3">
       {hasSalaryEntered && minWageTitle && (
-        <div className="border-custom-slate-border-side dark:border-slate-800 bg-white dark:bg-slate-900 space-y-2 rounded-2xl border p-4 transition-all">
-          <div className="text-text-title dark:text-slate-100 text-xs font-extrabold">
+        <div className="border-custom-slate-border-side space-y-2 rounded-2xl border bg-white p-4 transition-all dark:border-slate-800 dark:bg-slate-900">
+          <div className="text-text-title text-xs font-extrabold dark:text-slate-100">
             {minWageTitle}
           </div>
           {minWageDescription && (
-            <p className="text-text-sub dark:text-slate-300 text-xs leading-relaxed font-medium whitespace-pre-line">
+            <p className="text-text-sub text-xs leading-relaxed font-medium whitespace-pre-line dark:text-slate-300">
               {minWageDescription}
             </p>
           )}

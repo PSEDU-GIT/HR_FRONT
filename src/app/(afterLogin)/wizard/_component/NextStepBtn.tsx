@@ -5,7 +5,13 @@ import { ArrowRight, RotateCcw } from 'lucide-react';
 import cx from 'classnames';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
 import { useAlert } from '@/app/(afterLogin)/_state/useAlert';
-import { calculateScheduleHours, calculateWageEngine, getEffectiveNonCompeteAmount } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
+import {
+  calculateScheduleHours,
+  calculateWageEngine,
+  calculateDynamicMinGuaranteeAmount,
+  getEffectiveNonCompeteAmount,
+  checkBreakTimeViolations,
+} from '@/app/(afterLogin)/wizard/_lib/wageEngine';
 
 interface NextStepBtnProps {
   className?: string;
@@ -117,6 +123,18 @@ export default function NextStepBtn({ className, disabled }: NextStepBtnProps) {
       return false;
     }
 
+    // 0) 법정 휴게시간 미달 검사
+    const breakViolations = checkBreakTimeViolations(step2.wizDaysConfig);
+    if (breakViolations.length > 0) {
+      handleAlert({
+        type: 'warning',
+        title: '법정 휴게시간 미달 위험',
+        description:
+          '근로기준법 제54조에 따라 1일 실근로 4시간 이상 시 30분 이상, 8시간 이상 시 60분 이상의 휴게시간을 설정해 주세요.',
+      });
+      return false;
+    }
+
     // 1) 유급주휴일 미지정 위험 검사
     const hasNoWeeklyHoliday =
       !step2.wizWeeklyHoliday || step2.wizDaysConfig[step2.wizWeeklyHoliday]?.enabled === true;
@@ -132,6 +150,14 @@ export default function NextStepBtn({ className, disabled }: NextStepBtnProps) {
     // 2) 주 52시간 상한 초과 위험 검사 (5인 이상 사업장)
     const isUnder5 = step1.contractType?.includes('5인 미만') || step1.contractType?.includes('5인 이하');
     const { weeklyHours, weeklyOvertimeHours, weeklyNightHours } = calculateScheduleHours(step2.wizDaysConfig);
+    const dynamicMinPay = calculateDynamicMinGuaranteeAmount(step2.wizDaysConfig, isUnder5, {
+      hasNonCompete: step2.wizHasNonCompete,
+      calcType: step2.wizNonCompeteCalcType,
+      percent: step2.wizNonCompetePercent,
+      manualAmount: step2.wizNonCompeteAmount,
+    });
+    const effectiveMinGuaranteeAmount = step2.wizMinGuaranteeAmount ?? dynamicMinPay;
+
     if (!isUnder5 && weeklyHours > 52) {
       handleAlert({
         type: 'warning',
@@ -150,7 +176,7 @@ export default function NextStepBtn({ className, disabled }: NextStepBtnProps) {
       salaryType: step2.wizSalaryType,
       salaryAmount: step2.wizSalaryAmount,
       hourlyRate: step2.wizHourlyRate,
-      minGuaranteeAmount: step2.wizMinGuaranteeAmount,
+      minGuaranteeAmount: effectiveMinGuaranteeAmount,
     });
 
     const wageResult = calculateWageEngine({
@@ -158,7 +184,7 @@ export default function NextStepBtn({ className, disabled }: NextStepBtnProps) {
       salaryAmount: step2.wizSalaryAmount,
       hourlyRate: step2.wizHourlyRate,
       commissionRate: step2.wizCommissionRate,
-      minGuaranteeAmount: step2.wizMinGuaranteeAmount,
+      minGuaranteeAmount: effectiveMinGuaranteeAmount,
       mealAllowance: step2.wizHasTaxFree ? step2.wizNonTaxFood : 0,
       positionAllowance: step2.wizHasExtraAllowance ? step2.wizPositionAllowance : 0,
       overtimeAllowance: step2.wizHasExtraAllowance ? step2.wizOvertimeAllowance : 0,

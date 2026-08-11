@@ -14,7 +14,7 @@ export const LEGAL_STANDARDS = {
   NIGHT_RATE: 0.5, // 5인 이상 (22시~06시)
   NO_PREMIUM_RATE: 1.0, // 5인 미만
   FIVE_EMPLOYEE_THRESHOLD: 5,
-  WEEKS_PER_MONTH: 365 / (7 * 12), // 4.345238095238095 (365일 / 7일 / 12개월)
+  WEEKS_PER_MONTH: 4.345238, // 월 환산 상수 (4.345238)
 } as const;
 
 export interface DailyScheduleInput {
@@ -62,6 +62,82 @@ export function calculateDailyTime(start: string, end: string, breakStr: string)
   const nightHours = Math.floor((nightMinutes / 60) * 100) / 100;
 
   return { grossMinutes, actualHours, standardHours, overtimeHours, nightHours };
+}
+
+export interface BreakTimeViolation {
+  day: string;
+  actualHours: number;
+  breakMinutes: number;
+  requiredBreakMinutes: number;
+  message: string;
+}
+
+/**
+ * 근로기준법 제54조 휴게시간 법정 준수 여부 검사
+ * - 실근로시간 8시간 이상 → 휴게시간 60분 미만 시 위반
+ * - 실근로시간 4시간 이상 8시간 미만 → 휴게시간 30분 미만 시 위반
+ */
+export function checkBreakTimeViolations(
+  wizDaysConfig?: Record<string, DailyScheduleInput | undefined>,
+): BreakTimeViolation[] {
+  const violations: BreakTimeViolation[] = [];
+  if (!wizDaysConfig) return violations;
+
+  Object.entries(wizDaysConfig).forEach(([day, conf]) => {
+    if (!conf || !conf.enabled) return;
+    const { grossMinutes } = calculateDailyTime(conf.startTime, conf.endTime, conf.breakTime);
+    const breakMinutes = parseBreakMinutes(conf.breakTime);
+    const actualMinutes = Math.max(0, grossMinutes - breakMinutes);
+    const actualHours = Math.round((actualMinutes / 60) * 100) / 100;
+
+    if (actualHours >= 8 && breakMinutes < 60) {
+      violations.push({
+        day,
+        actualHours,
+        breakMinutes,
+        requiredBreakMinutes: 60,
+        message: `${day} 실근로 ${actualHours}시간(8h 이상)에 대해 휴게시간이 ${breakMinutes}분으로 법정 기준(60분 이상)에 미달합니다.`,
+      });
+    } else if (actualHours >= 4 && actualHours < 8 && breakMinutes < 30) {
+      violations.push({
+        day,
+        actualHours,
+        breakMinutes,
+        requiredBreakMinutes: 30,
+        message: `${day} 실근로 ${actualHours}시간(4h 이상)에 대해 휴게시간이 ${breakMinutes}분으로 법정 기준(30분 이상)에 미달합니다.`,
+      });
+    }
+  });
+
+  return violations;
+}
+
+/**
+ * 근무 시작/종료시간 및 현재 휴게시간에 따른 법정 최소 휴게시간 자동 계산 유틸
+ * - 실근로시간(구속시간 - 휴게시간)이 8시간 이상이 되거나 구속시간 8.5시간 이상 시 -> 최소 1시간 (60분) 자동 세팅
+ * - 실근로시간 4.5시간 이상 8시간 미만 시 -> 최소 30분 자동 세팅
+ */
+export function getAutoBreakTime(start: string, end: string, currentBreak?: string): string {
+  if (!start || !end) return '30분';
+  const [sH, sM] = start.split(':').map(Number);
+  const [eH, eM] = end.split(':').map(Number);
+  let startMin = sH * 60 + sM;
+  let endMin = eH * 60 + eM;
+  if (endMin < startMin) endMin += 24 * 60;
+  const grossMinutes = endMin - startMin;
+  const currBreakMin = parseBreakMinutes(currentBreak || '0분');
+
+  // 구속시간이 8시간 초과 (8.5시간 이상, 예: 10:00~18:30 등) 인 경우만 1시간 필수
+  if (grossMinutes > 480) {
+    return currBreakMin >= 60 && currentBreak ? currentBreak : '1시간';
+  }
+
+  // 구속시간이 4.5시간 이상 8시간 이하 (14:00~22:00, 10:00~18:00 등 포함) 시 30분 세팅 (소정 7.5시간)
+  if (grossMinutes >= 270) {
+    return currBreakMin >= 30 && currentBreak ? currentBreak : '30분';
+  }
+
+  return currentBreak || '없음';
 }
 
 /**
@@ -123,6 +199,48 @@ export function calculateMonthlyHours(weeklyHours: number) {
   const mh = Math.round(mhExact);
   const T = Math.round(TExact);
   return { mo, mh, T, holidayHours, moExact, mhExact, TExact };
+}
+
+/**
+ * 법정 최저 보장 금액 산출 (소정근로 + 주휴 + 연장·야간 가산 포함, 경업금지 수당 가산 옵션)
+ */
+export function calculateDynamicMinGuaranteeAmount(
+  wizDaysConfig?: Record<string, DailyScheduleInput | undefined>,
+  isUnder5?: boolean,
+  nonCompeteOptions?: {
+    hasNonCompete?: boolean;
+    calcType?: 'percent' | 'manual';
+    percent?: number;
+    manualAmount?: number;
+  },
+): number {
+  if (!wizDaysConfig) return LEGAL_STANDARDS.MIN_MONTHLY_WAGE;
+  const { weeklyHours, weeklyOvertimeHours, weeklyNightHours } = calculateScheduleHours(wizDaysConfig);
+  const cappedWeeklyHours = Math.min(weeklyHours, LEGAL_STANDARDS.MAX_WEEKLY_HOURS);
+  const weeklyHolidayHours = calculateWeeklyHolidayHours(cappedWeeklyHours);
+  const overtimeRate = isUnder5 ? 1.0 : 1.5;
+  const nightRate = isUnder5 ? 0.0 : 0.5;
+
+  const totalPaidWeeklyHours =
+    cappedWeeklyHours +
+    weeklyHolidayHours +
+    weeklyOvertimeHours * overtimeRate +
+    weeklyNightHours * nightRate;
+
+  const TExact = totalPaidWeeklyHours * LEGAL_STANDARDS.WEEKS_PER_MONTH;
+  const baseMinRequired = Math.ceil(LEGAL_STANDARDS.MIN_HOURLY_WAGE * TExact);
+
+  if (nonCompeteOptions?.hasNonCompete) {
+    if (nonCompeteOptions.calcType === 'manual' && nonCompeteOptions.manualAmount && nonCompeteOptions.manualAmount > 0) {
+      return baseMinRequired + nonCompeteOptions.manualAmount;
+    }
+    const percent = nonCompeteOptions.percent ?? 10;
+    if (percent > 0 && percent < 100) {
+      return Math.ceil(baseMinRequired / (1 - percent / 100));
+    }
+  }
+
+  return baseMinRequired;
 }
 
 export interface WageEngineInput {
@@ -206,20 +324,51 @@ export function calculateWageEngine(input: WageEngineInput): WageEngineResult {
   if (salaryType === 'hourly') {
     const rate = hourlyRate || LEGAL_STANDARDS.MIN_HOURLY_WAGE;
     ordinaryHourlyRate = rate;
-    totalMonthlyPay = Math.round(rate * TExact);
+    if (overtimeAllowance > 0) {
+      calcOvertimeAllowance = overtimeAllowance;
+    } else if (kotExact > 0) {
+      calcOvertimeAllowance = Math.round(rate * kotExact);
+    }
     baseSalary = Math.round(rate * moExact);
     weeklyHolidayPay = Math.round(rate * mhExact);
+    totalMonthlyPay =
+      baseSalary +
+      weeklyHolidayPay +
+      calcOvertimeAllowance +
+      mealAllowance +
+      positionAllowance +
+      otherAllowance;
     comparedHourlyRate = rate;
   } else if (salaryType === 'commission') {
     totalMonthlyPay = minGuaranteeAmount || 0;
-    const ordinaryPool = Math.max(0, totalMonthlyPay - nonCompeteAmount);
-    ordinaryHourlyRate = TExact > 0 ? Math.round(ordinaryPool / TExact) : 0;
-    weeklyHolidayPay = TExact > 0 ? Math.round(ordinaryHourlyRate * mhExact) : 0;
-    baseSalary = Math.max(
-      0,
-      ordinaryPool - weeklyHolidayPay - mealAllowance - positionAllowance - otherAllowance,
-    );
-    comparedHourlyRate = TExact > 0 ? Math.round(ordinaryPool / TExact) : 0;
+    const effectiveT = TExact + kotExact + kniExact;
+    const ordinaryHourlyRateRaw =
+      effectiveT > 0 ? (totalMonthlyPay - nonCompeteAmount) / effectiveT : 0;
+    ordinaryHourlyRate = Math.round(ordinaryHourlyRateRaw);
+
+    if (overtimeAllowance > 0) {
+      calcOvertimeAllowance = overtimeAllowance;
+    } else if (kotExact > 0) {
+      calcOvertimeAllowance = Math.round(ordinaryHourlyRateRaw * kotExact);
+    }
+
+    const ordinaryPool = Math.max(0, totalMonthlyPay - calcOvertimeAllowance - nonCompeteAmount);
+
+    if (TExact > 0) {
+      weeklyHolidayPay = Math.round(ordinaryHourlyRateRaw * mhExact);
+      baseSalary = Math.max(
+        0,
+        ordinaryPool - weeklyHolidayPay - mealAllowance - positionAllowance - otherAllowance,
+      );
+      comparedHourlyRate = Math.round((totalMonthlyPay - calcOvertimeAllowance - nonCompeteAmount) / TExact);
+    } else {
+      weeklyHolidayPay = 0;
+      baseSalary = Math.max(
+        0,
+        totalMonthlyPay - mealAllowance - positionAllowance - otherAllowance - calcOvertimeAllowance - nonCompeteAmount,
+      );
+      comparedHourlyRate = 0;
+    }
   } else {
     // 월급제 (monthly) - 학온 엑셀 엔진 포괄 역산
     totalMonthlyPay = salaryAmount || 0;

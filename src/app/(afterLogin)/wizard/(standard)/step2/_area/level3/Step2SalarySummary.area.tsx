@@ -4,7 +4,12 @@ import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
 import { Pencil, ArrowRight } from 'lucide-react';
 import { calculateDailyHours } from '@/app/(afterLogin)/wizard/(standard)/step2/_state/periodUtils';
-import { calculateWageEngine, calculateScheduleHours, getEffectiveNonCompeteAmount } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
+import {
+  calculateWageEngine,
+  calculateScheduleHours,
+  calculateDynamicMinGuaranteeAmount,
+  getEffectiveNonCompeteAmount,
+} from '@/app/(afterLogin)/wizard/_lib/wageEngine';
 import cx from 'classnames';
 
 export default function Step2SalarySummaryArea() {
@@ -14,7 +19,7 @@ export default function Step2SalarySummaryArea() {
     wizSalaryAmount,
     wizHourlyRate,
     wizCommissionRate,
-    wizMinGuaranteeAmount,
+    wizMinGuaranteeAmountRaw,
     wizPayDay,
     wizHasTaxFree,
     wizNonTaxFood,
@@ -38,7 +43,7 @@ export default function Step2SalarySummaryArea() {
       wizSalaryAmount: state.step2.wizSalaryAmount,
       wizHourlyRate: state.step2.wizHourlyRate,
       wizCommissionRate: state.step2.wizCommissionRate ?? 20,
-      wizMinGuaranteeAmount: state.step2.wizMinGuaranteeAmount ?? 1883297,
+      wizMinGuaranteeAmountRaw: state.step2.wizMinGuaranteeAmount,
       wizPayDay: state.step2.wizPayDay,
       wizHasTaxFree: state.step2.wizHasTaxFree,
       wizNonTaxFood: state.step2.wizNonTaxFood,
@@ -58,9 +63,17 @@ export default function Step2SalarySummaryArea() {
     })),
   );
 
-  const { weeklyHours, weeklyOvertimeHours, weeklyNightHours } = calculateScheduleHours(wizDaysConfig);
+  const { weeklyHours, weeklyOvertimeHours, weeklyNightHours } =
+    calculateScheduleHours(wizDaysConfig);
 
   const isUnder5 = contractType?.includes('5인 미만') || contractType?.includes('5인 이하');
+  const dynamicMinPay = calculateDynamicMinGuaranteeAmount(wizDaysConfig, isUnder5, {
+    hasNonCompete: wizHasNonCompete,
+    calcType: wizNonCompeteCalcType,
+    percent: wizNonCompetePercent,
+    manualAmount: wizNonCompeteAmount,
+  });
+  const wizMinGuaranteeAmount = wizMinGuaranteeAmountRaw ?? dynamicMinPay;
 
   const calculatedNonCompeteAmount = getEffectiveNonCompeteAmount({
     hasNonCompete: wizHasNonCompete,
@@ -296,7 +309,10 @@ export default function Step2SalarySummaryArea() {
               {Math.round(wageResult.ordinaryHourlyRate).toLocaleString()}원 /h
             </div>
             <div className="text-text-side mt-1 text-[10px] dark:text-slate-400">
-              월기준시간 {wageResult.TExact ? `${parseFloat(wageResult.TExact.toFixed(2))}h` : `${wageResult.T}h`}
+              월기준시간{' '}
+              {wageResult.TExact
+                ? `${parseFloat(wageResult.TExact.toFixed(2))}h`
+                : `${wageResult.T}h`}
             </div>
           </div>
 

@@ -3,6 +3,7 @@
 import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
 import { calculateDailyHours } from '@/app/(afterLogin)/wizard/(standard)/step2/_state/periodUtils';
+import { checkBreakTimeViolations } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
 import { ArrowRight } from 'lucide-react';
 import cx from 'classnames';
 
@@ -32,8 +33,13 @@ export default function ClickNextSubStepAction({ nextSubStep }: ClickNextSubStep
       .toFixed(1),
   );
 
+  const breakViolations = checkBreakTimeViolations(wizDaysConfig);
+  const hasBreakViolation = nextSubStep === 3 && breakViolations.length > 0;
+
   const isOver52Hours = nextSubStep === 3 && weeklyHours > 52;
-  const isBlocked = isOver52Hours && !isUnder5;
+  const isOver52Blocked = isOver52Hours && !isUnder5;
+
+  const isBlocked = isOver52Blocked || hasBreakViolation;
 
   const handleClick = () => {
     if (isBlocked) return;
@@ -46,9 +52,11 @@ export default function ClickNextSubStepAction({ nextSubStep }: ClickNextSubStep
   const label =
     nextSubStep === 2
       ? '다음 (근무 요일 및 시간 설정)'
-      : isBlocked
-        ? '주 52시간 상한 초과로 진행 불가 (5인 이상 사업장)'
-        : '다음 (급여 형태 및 금액 설정)';
+      : hasBreakViolation
+        ? '휴게시간 법정 기준 미달로 진행 불가 (근로기준법 제54조 위반)'
+        : isOver52Blocked
+          ? '주 52시간 상한 초과로 진행 불가 (5인 이상 사업장)'
+          : '다음 (급여 형태 및 금액 설정)';
 
   return (
     <button

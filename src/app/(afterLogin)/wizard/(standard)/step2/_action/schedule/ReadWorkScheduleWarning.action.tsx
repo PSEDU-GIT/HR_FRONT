@@ -3,6 +3,7 @@
 import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
 import { calculateDailyHours } from '@/app/(afterLogin)/wizard/(standard)/step2/_state/periodUtils';
+import { checkBreakTimeViolations } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
 import { AlertTriangle, ShieldAlert } from 'lucide-react';
 
 export default function ReadWorkScheduleWarningAction() {
@@ -21,6 +22,8 @@ export default function ReadWorkScheduleWarningAction() {
   );
 
   const isUnder5 = contractType?.includes('5인 미만') || contractType?.includes('5인 이하');
+  const breakViolations = checkBreakTimeViolations(wizDaysConfig);
+  const hasBreakViolation = breakViolations.length > 0;
 
   const weeklyHours = parseFloat(
     Object.values(wizDaysConfig || {})
@@ -44,6 +47,20 @@ export default function ReadWorkScheduleWarningAction() {
 
   // 주휴일은 지정된 요일이 존재하고 해당 요일이 OFF(enabled !== true) 상태여야 유효함
   const hasNoWeeklyHoliday = !wizWeeklyHoliday || wizDaysConfig[wizWeeklyHoliday]?.enabled === true;
+
+  if (hasBreakViolation) {
+    return (
+      <button
+        type="button"
+        onClick={() => setHighlightAdvisory?.('invalidBreakTime')}
+        title="클릭하여 오른쪽 자문 내용 확인"
+        className="text-custom-rose group inline-flex cursor-pointer items-center gap-1 text-xs font-bold transition-transform active:scale-95"
+      >
+        <ShieldAlert className="text-custom-rose h-3.5 w-3.5 shrink-0 transition-transform group-hover:scale-110" />
+        <span className="underline-offset-2 group-hover:underline">법정 휴게시간 미달 (위반)</span>
+      </button>
+    );
+  }
 
   if (!isUnder15Hours && !isOver52Hours && !hasNoWeeklyHoliday) return null;
 

@@ -5,6 +5,7 @@ import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
 import TimePicker from '@/app/_component/time/TimePicker';
 import Select, { SelectDataTypes } from '@/app/_component/select/Select';
 import { calculateDailyHours } from '@/app/(afterLogin)/wizard/(standard)/step2/_state/periodUtils';
+import { getAutoBreakTime } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
 import { X, Trash2 } from 'lucide-react';
 
 const BREAK_OPTIONS = ['없음', '30분', '1시간', '1.5시간', '2시간'];
@@ -37,6 +38,42 @@ export default function FormEditingDayTimeAction() {
     }));
   };
 
+  const handleStartTimeChange = (t: string) => {
+    setStep2((prev) => {
+      const dayConf = prev.wizDaysConfig[editingDay];
+      if (!dayConf) return prev;
+      const nextBreak = getAutoBreakTime(t, dayConf.endTime, dayConf.breakTime);
+      return {
+        wizDaysConfig: {
+          ...prev.wizDaysConfig,
+          [editingDay]: {
+            ...dayConf,
+            startTime: t,
+            breakTime: nextBreak,
+          },
+        },
+      };
+    });
+  };
+
+  const handleEndTimeChange = (t: string) => {
+    setStep2((prev) => {
+      const dayConf = prev.wizDaysConfig[editingDay];
+      if (!dayConf) return prev;
+      const nextBreak = getAutoBreakTime(dayConf.startTime, t, dayConf.breakTime);
+      return {
+        wizDaysConfig: {
+          ...prev.wizDaysConfig,
+          [editingDay]: {
+            ...dayConf,
+            endTime: t,
+            breakTime: nextBreak,
+          },
+        },
+      };
+    });
+  };
+
   return (
     <div className="border-custom-indigo-border/50 bg-custom-indigo-bg/20 flex flex-wrap items-center justify-between gap-3 rounded-2xl border p-3.5 shadow-2xs transition-all dark:border-custom-indigo/50 dark:bg-slate-950/80">
       <div className="flex items-center gap-1.5">
@@ -65,17 +102,7 @@ export default function FormEditingDayTimeAction() {
           <div className="flex items-center gap-1.5">
             <TimePicker
               value={currentDayConfig.startTime || '14:00'}
-              onChange={(t) =>
-                setStep2((prev) => ({
-                  wizDaysConfig: {
-                    ...prev.wizDaysConfig,
-                    [editingDay]: {
-                      ...prev.wizDaysConfig[editingDay],
-                      startTime: t,
-                    },
-                  },
-                }))
-              }
+              onChange={handleStartTimeChange}
               buttonClassName="h-[34px]"
             />
             <span className="text-text-side font-mono text-xs font-bold dark:text-slate-400">
@@ -83,17 +110,7 @@ export default function FormEditingDayTimeAction() {
             </span>
             <TimePicker
               value={currentDayConfig.endTime || '22:00'}
-              onChange={(t) =>
-                setStep2((prev) => ({
-                  wizDaysConfig: {
-                    ...prev.wizDaysConfig,
-                    [editingDay]: {
-                      ...prev.wizDaysConfig[editingDay],
-                      endTime: t,
-                    },
-                  },
-                }))
-              }
+              onChange={handleEndTimeChange}
               buttonClassName="h-[34px]"
             />
           </div>

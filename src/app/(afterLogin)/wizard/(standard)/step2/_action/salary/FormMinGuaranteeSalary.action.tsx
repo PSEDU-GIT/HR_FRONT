@@ -2,26 +2,42 @@
 
 import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
-import { calculateScheduleHours, LEGAL_STANDARDS } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
+import { calculateDynamicMinGuaranteeAmount } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
 import {
   MAX_SALARY_AMOUNT,
   numberToKorean,
 } from '@/app/(afterLogin)/wizard/(standard)/step2/_state/salaryUtils';
 
 export default function FormMinGuaranteeSalaryAction() {
-  const { wizMinGuaranteeAmount, wizDaysConfig, setStep2 } = useWizardStore(
+  const {
+    wizMinGuaranteeAmount,
+    wizDaysConfig,
+    contractType,
+    wizHasNonCompete,
+    wizNonCompeteCalcType,
+    wizNonCompetePercent,
+    wizNonCompeteAmount,
+    setStep2,
+  } = useWizardStore(
     useShallow((state) => ({
       wizMinGuaranteeAmount: state.step2.wizMinGuaranteeAmount,
       wizDaysConfig: state.step2.wizDaysConfig,
+      contractType: state.step1.contractType,
+      wizHasNonCompete: state.step2.wizHasNonCompete,
+      wizNonCompeteCalcType: state.step2.wizNonCompeteCalcType,
+      wizNonCompetePercent: state.step2.wizNonCompetePercent,
+      wizNonCompeteAmount: state.step2.wizNonCompeteAmount,
       setStep2: state.setStep2,
     })),
   );
 
-  const { weeklyHours } = calculateScheduleHours(wizDaysConfig);
-  const weeklyHolidayHours = weeklyHours >= 15 ? Math.min(8, (weeklyHours / 40) * 8) : 0;
-  const totalPaidWeeklyHours = weeklyHours + weeklyHolidayHours;
-  const T = totalPaidWeeklyHours * LEGAL_STANDARDS.WEEKS_PER_MONTH;
-  const dynamicMinPay = Math.ceil(LEGAL_STANDARDS.MIN_HOURLY_WAGE * T);
+  const isUnder5 = contractType?.includes('5인 미만') || contractType?.includes('5인 이하');
+  const dynamicMinPay = calculateDynamicMinGuaranteeAmount(wizDaysConfig, isUnder5, {
+    hasNonCompete: wizHasNonCompete,
+    calcType: wizNonCompeteCalcType,
+    percent: wizNonCompetePercent,
+    manualAmount: wizNonCompeteAmount,
+  });
 
   const amount = wizMinGuaranteeAmount ?? dynamicMinPay;
 

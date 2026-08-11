@@ -7,8 +7,12 @@ import { motion } from 'framer-motion';
 
 import Step2SalaryTypeArea from '@/app/(afterLogin)/wizard/(standard)/step2/_area/level3/Step2SalaryType.area';
 import SalaryFormHandler from '@/app/(afterLogin)/wizard/(standard)/step2/_handler/SalaryForm.handler';
-import { calculateDailyHours } from '@/app/(afterLogin)/wizard/(standard)/step2/_state/periodUtils';
-import { calculateWageEngine } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
+import {
+  calculateWageEngine,
+  calculateScheduleHours,
+  calculateDynamicMinGuaranteeAmount,
+  getEffectiveNonCompeteAmount,
+} from '@/app/(afterLogin)/wizard/_lib/wageEngine';
 
 export default function Step2SalaryInfoArea() {
   const {
@@ -22,6 +26,8 @@ export default function Step2SalaryInfoArea() {
     wizNonTaxFood,
     wizHasNonCompete,
     wizNonCompeteAmount,
+    wizNonCompeteCalcType,
+    wizNonCompetePercent,
     wizHasExtraAllowance,
     wizOvertimeAllowance,
     wizPositionAllowance,
@@ -31,6 +37,7 @@ export default function Step2SalaryInfoArea() {
     wizSalaryDone,
     maxUnlockedSubStep,
     wizSalaryApplied,
+    contractType,
     setStep2,
   } = useWizardStore(
     useShallow((state) => ({
@@ -44,6 +51,8 @@ export default function Step2SalaryInfoArea() {
       wizNonTaxFood: state.step2.wizNonTaxFood,
       wizHasNonCompete: state.step2.wizHasNonCompete,
       wizNonCompeteAmount: state.step2.wizNonCompeteAmount,
+      wizNonCompeteCalcType: state.step2.wizNonCompeteCalcType || 'percent',
+      wizNonCompetePercent: state.step2.wizNonCompetePercent ?? 10,
       wizHasExtraAllowance: state.step2.wizHasExtraAllowance,
       wizOvertimeAllowance: state.step2.wizOvertimeAllowance,
       wizPositionAllowance: state.step2.wizPositionAllowance,
@@ -53,38 +62,58 @@ export default function Step2SalaryInfoArea() {
       wizSalaryDone: state.step2.wizSalaryDone,
       maxUnlockedSubStep: state.step2.maxUnlockedSubStep,
       wizSalaryApplied: state.step2.wizSalaryApplied,
+      contractType: state.step1.contractType,
       setStep2: state.setStep2,
     })),
   );
 
   if (maxUnlockedSubStep < 3) return null;
 
-  const weeklyHours = parseFloat(
-    Object.values(wizDaysConfig)
-      .reduce(
-        (sum, conf) =>
-          sum +
-          (conf.enabled ? calculateDailyHours(conf.startTime, conf.endTime, conf.breakTime) : 0),
-        0,
-      )
-      .toFixed(1),
-  );
+  const { weeklyHours, weeklyOvertimeHours, weeklyNightHours } =
+    calculateScheduleHours(wizDaysConfig);
+  const isUnder5 = contractType?.includes('5인 미만') || contractType?.includes('5인 이하');
+
+  const dynamicMinPay = calculateDynamicMinGuaranteeAmount(wizDaysConfig, isUnder5, {
+    hasNonCompete: wizHasNonCompete,
+    calcType: wizNonCompeteCalcType,
+    percent: wizNonCompetePercent,
+    manualAmount: wizNonCompeteAmount,
+  });
+
+  const calculatedNonCompeteAmount = getEffectiveNonCompeteAmount({
+    hasNonCompete: wizHasNonCompete,
+    calcType: wizNonCompeteCalcType,
+    percent: wizNonCompetePercent,
+    manualAmount: wizNonCompeteAmount,
+    salaryType: wizSalaryType,
+    salaryAmount: wizSalaryAmount,
+    hourlyRate: wizHourlyRate,
+    minGuaranteeAmount: wizMinGuaranteeAmount || dynamicMinPay,
+  });
 
   const wageResult = calculateWageEngine({
     salaryType: wizSalaryType,
     salaryAmount: wizSalaryAmount,
     hourlyRate: wizHourlyRate,
     commissionRate: wizCommissionRate || 20,
-    minGuaranteeAmount: wizMinGuaranteeAmount || 1883297,
+    minGuaranteeAmount: wizMinGuaranteeAmount || dynamicMinPay,
     mealAllowance: wizHasTaxFree ? wizNonTaxFood : 0,
     positionAllowance: wizHasExtraAllowance ? wizPositionAllowance : 0,
     overtimeAllowance: wizHasExtraAllowance ? wizOvertimeAllowance : 0,
     otherAllowance: wizHasExtraAllowance ? wizOtherAllowance : 0,
-    nonCompeteAmount: wizHasNonCompete ? wizNonCompeteAmount : 0,
+    nonCompeteAmount: calculatedNonCompeteAmount,
     weeklyHours,
+    weeklyOvertimeHours,
+    weeklyNightHours,
+    employeeCount: isUnder5 ? 4 : 5,
   });
 
-  const isBelowMinimum = (wizSalaryAmount > 0 || wizHourlyRate > 0) && !wageResult.isMinWagePassed;
+  const isBelowMinimum =
+    (wizSalaryType === 'hourly'
+      ? wizHourlyRate >= 1
+      : wizSalaryType === 'commission'
+        ? false
+        : wizSalaryAmount >= 1) && !wageResult.isMinWagePassed;
 
   const handleSubStepChange = (subStep: 1 | 2 | 3) => {
     setStep2({ wizSubStep: subStep });

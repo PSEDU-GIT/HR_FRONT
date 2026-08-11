@@ -2,6 +2,7 @@
 
 import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
+import { getAutoBreakTime } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
 import { Check, CalendarHeart } from 'lucide-react';
 import cx from 'classnames';
 
@@ -51,14 +52,25 @@ export default function SelectDayScheduleToggleAction() {
     } else {
       // OFF -> ON: 근무일 ON 전환
       setStep2((prev) => {
+        const defaultStart = day === '토요일' || day === '일요일' ? '10:00' : batchStartTime || '14:00';
+        const defaultEnd = day === '토요일' || day === '일요일' ? '18:00' : batchEndTime || '22:00';
+        const startTime = prev.wizDaysConfig?.[day]?.startTime || defaultStart;
+        const endTime = prev.wizDaysConfig?.[day]?.endTime || defaultEnd;
+        const rawBreak = prev.wizDaysConfig?.[day]?.breakTime;
+        const breakTime = getAutoBreakTime(
+          startTime,
+          endTime,
+          rawBreak && rawBreak !== '없음' ? rawBreak : undefined,
+        );
+
         const nextConfig = {
           ...prev.wizDaysConfig,
           [day]: {
             ...(prev.wizDaysConfig?.[day] || {}),
             enabled: true,
-            startTime: prev.wizDaysConfig?.[day]?.startTime || batchStartTime || '14:00',
-            endTime: prev.wizDaysConfig?.[day]?.endTime || batchEndTime || '22:00',
-            breakTime: prev.wizDaysConfig?.[day]?.breakTime || batchBreakTime || '1시간',
+            startTime,
+            endTime,
+            breakTime,
           },
         };
         // 켜지는 요일이 현재 주휴일로 지정되어 있었다면 남아있는 OFF 요일 중 하나로 자동 변경

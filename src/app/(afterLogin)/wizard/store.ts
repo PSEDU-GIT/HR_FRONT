@@ -47,7 +47,7 @@ export interface Step2State {
   wizSalaryAmount: number;
   wizHourlyRate: number;
   wizCommissionRate: number;
-  wizMinGuaranteeAmount: number;
+  wizMinGuaranteeAmount?: number;
   wizIsCustomCommission: boolean;
   wizSalarySubStep: 1 | 2 | 3 | 4 | 5 | 6;
   maxUnlockedSalarySubStep: 1 | 2 | 3 | 4 | 5 | 6;
@@ -106,13 +106,13 @@ const initialStep1: Step1State = {
 
 // 학원 현장 맞춤 기본 근로시간 설정 (평일 14:00~22:00, 토 10:00~15:00)
 const initialDaysConfig: DaysConfig = {
-  월요일: { enabled: true, startTime: '14:00', endTime: '22:00', breakTime: '1시간' },
-  화요일: { enabled: true, startTime: '14:00', endTime: '22:00', breakTime: '1시간' },
-  수요일: { enabled: true, startTime: '14:00', endTime: '22:00', breakTime: '1시간' },
-  목요일: { enabled: true, startTime: '14:00', endTime: '22:00', breakTime: '1시간' },
-  금요일: { enabled: true, startTime: '14:00', endTime: '22:00', breakTime: '1시간' },
-  토요일: { enabled: false, startTime: '10:00', endTime: '15:00', breakTime: '없음' },
-  일요일: { enabled: false, startTime: '10:00', endTime: '15:00', breakTime: '없음' },
+  월요일: { enabled: true, startTime: '14:00', endTime: '22:00', breakTime: '30분' },
+  화요일: { enabled: true, startTime: '14:00', endTime: '22:00', breakTime: '30분' },
+  수요일: { enabled: true, startTime: '14:00', endTime: '22:00', breakTime: '30분' },
+  목요일: { enabled: true, startTime: '14:00', endTime: '22:00', breakTime: '30분' },
+  금요일: { enabled: true, startTime: '14:00', endTime: '22:00', breakTime: '30분' },
+  토요일: { enabled: false, startTime: '10:00', endTime: '18:00', breakTime: '30분' },
+  일요일: { enabled: false, startTime: '10:00', endTime: '18:00', breakTime: '30분' },
 };
 
 const getInitialDates = () => {
@@ -150,16 +150,16 @@ const initialStep2: Step2State = {
   selectedBatchDays: ['월요일', '화요일', '수요일', '목요일', '금요일'],
   batchStartTime: '14:00',
   batchEndTime: '22:00',
-  batchBreakTime: '1시간',
+  batchBreakTime: '30분',
   editingDay: null,
 
   wizSalaryType: 'monthly',
-  wizSalaryApplied: true,
+  wizSalaryApplied: false,
   wizSalaryDone: false,
   wizSalaryAmount: 2500000,
   wizHourlyRate: 10320,
   wizCommissionRate: 20,
-  wizMinGuaranteeAmount: 2156880,
+  wizMinGuaranteeAmount: undefined,
   wizIsCustomCommission: false,
   wizSalarySubStep: 6,
   maxUnlockedSalarySubStep: 6,
