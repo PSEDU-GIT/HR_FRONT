@@ -111,8 +111,8 @@ const initialDaysConfig: DaysConfig = {
   수요일: { enabled: true, startTime: '14:00', endTime: '22:00', breakTime: '30분' },
   목요일: { enabled: true, startTime: '14:00', endTime: '22:00', breakTime: '30분' },
   금요일: { enabled: true, startTime: '14:00', endTime: '22:00', breakTime: '30분' },
-  토요일: { enabled: false, startTime: '10:00', endTime: '18:00', breakTime: '30분' },
-  일요일: { enabled: false, startTime: '10:00', endTime: '18:00', breakTime: '30분' },
+  토요일: { enabled: false, startTime: '10:00', endTime: '15:00', breakTime: '30분' },
+  일요일: { enabled: false, startTime: '10:00', endTime: '15:00', breakTime: '30분' },
 };
 
 const getInitialDates = () => {

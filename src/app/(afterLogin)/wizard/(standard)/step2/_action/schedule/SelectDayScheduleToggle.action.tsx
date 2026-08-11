@@ -53,7 +53,7 @@ export default function SelectDayScheduleToggleAction() {
       // OFF -> ON: 근무일 ON 전환
       setStep2((prev) => {
         const defaultStart = day === '토요일' || day === '일요일' ? '10:00' : batchStartTime || '14:00';
-        const defaultEnd = day === '토요일' || day === '일요일' ? '18:00' : batchEndTime || '22:00';
+        const defaultEnd = day === '토요일' || day === '일요일' ? '15:00' : batchEndTime || '22:00';
         const startTime = prev.wizDaysConfig?.[day]?.startTime || defaultStart;
         const endTime = prev.wizDaysConfig?.[day]?.endTime || defaultEnd;
         const rawBreak = prev.wizDaysConfig?.[day]?.breakTime;
