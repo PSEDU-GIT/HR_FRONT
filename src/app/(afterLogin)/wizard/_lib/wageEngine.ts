@@ -336,23 +336,17 @@ export function calculateWageEngine(input: WageEngineInput): WageEngineResult {
     const cappedWeeklyHours = Math.min(weeklyHours, LEGAL_STANDARDS.MAX_WEEKLY_HOURS);
     const weeklyHolidayHours = calculateWeeklyHolidayHours(cappedWeeklyHours);
 
-    // 1) 기본급 + 주휴수당 + 식대 = 입력한 월 지급액/최소보장액 (100% 일치)
-    const meal = mealAllowance;
-    // 1) 기본급 + 주휴수당 + 식대 = 입력한 월 지급액/최소보장액 (100% 일치)
-    // 주휴수당은 전체 월 약정액 중 주휴시간 비중으로 정밀 계산하여 법정 주휴수당(358,724원)이 왜곡되지 않도록 보장
-    if (TExact > 0 && totalMonthlyPay > 0) {
-      weeklyHolidayPay = Math.ceil((mhExact / TExact) * totalMonthlyPay);
-      const remainingPool = Math.max(0, totalMonthlyPay - weeklyHolidayPay);
-      baseSalary = Math.max(0, remainingPool - meal);
-    } else {
-      weeklyHolidayPay = 0;
-      baseSalary = 0;
-    }
-
-    // 2) 현재 실질 통상시급 (10,320원/h 이상)
-    const comparedPool = baseSalary + weeklyHolidayPay + meal;
-    comparedHourlyRate = TExact > 0 ? Math.round(comparedPool / TExact) : 0;
+    // 1) 통상시급 산출 (월 약정액 / 월 기준시간)
+    comparedHourlyRate = TExact > 0 ? Math.round(totalMonthlyPay / TExact) : 0;
     ordinaryHourlyRate = comparedHourlyRate;
+
+    // 2) 월 주휴수당 = 주휴시간(mhExact) * 통상시급 (1원 오차 없이 100% 일치)
+    weeklyHolidayPay = Math.ceil(mhExact * ordinaryHourlyRate);
+
+    // 3) 월 소정근로 기본급 = 월 약정액 - 주휴수당 - 비과세 식대
+    const meal = mealAllowance;
+    const remainingPool = Math.max(0, totalMonthlyPay - weeklyHolidayPay);
+    baseSalary = Math.max(0, remainingPool - meal);
 
     // 3) 월 포괄 연장근로수당 = (주 연장시간 * 가산율 * 4.345) * 통상시급
     if (weeklyOvertimeHours > 0) {
