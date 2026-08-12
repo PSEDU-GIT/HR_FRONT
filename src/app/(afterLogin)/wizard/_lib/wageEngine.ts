@@ -14,7 +14,7 @@ export const LEGAL_STANDARDS = {
   NIGHT_RATE: 0.5, // 5인 이상 (22시~06시)
   NO_PREMIUM_RATE: 1.0, // 5인 미만
   FIVE_EMPLOYEE_THRESHOLD: 5,
-  WEEKS_PER_MONTH: 4.345238, // 월 환산 상수 (4.345238)
+  WEEKS_PER_MONTH: 4.345, // 월 환산 상수 (4.345)
 } as const;
 
 export interface DailyScheduleInput {
@@ -143,7 +143,9 @@ export function getAutoBreakTime(start: string, end: string, currentBreak?: stri
 /**
  * 근무 스케줄 설정(wizDaysConfig)에 따른 주 소정시간, 주 연장시간, 주 야간시간 산출
  */
-export function calculateScheduleHours(wizDaysConfig: Record<string, DailyScheduleInput | undefined>) {
+export function calculateScheduleHours(
+  wizDaysConfig: Record<string, DailyScheduleInput | undefined>,
+) {
   let weeklyHours = 0;
   let dailyOvertimeHoursSum = 0;
   let dailyStandardHoursSum = 0;
@@ -167,8 +169,12 @@ export function calculateScheduleHours(wizDaysConfig: Record<string, DailySchedu
   dailyStandardHoursSum = Math.round(dailyStandardHoursSum * 100) / 100;
   weeklyNightHours = Math.round(weeklyNightHours * 100) / 100;
 
-  const weeklyExceedOvertime = Math.max(0, dailyStandardHoursSum - LEGAL_STANDARDS.STANDARD_WEEKLY_HOURS);
-  const weeklyOvertimeHours = Math.round((dailyOvertimeHoursSum + weeklyExceedOvertime) * 100) / 100;
+  const weeklyExceedOvertime = Math.max(
+    0,
+    dailyStandardHoursSum - LEGAL_STANDARDS.STANDARD_WEEKLY_HOURS,
+  );
+  const weeklyOvertimeHours =
+    Math.round((dailyOvertimeHoursSum + weeklyExceedOvertime) * 100) / 100;
 
   return {
     weeklyHours,
@@ -202,45 +208,27 @@ export function calculateMonthlyHours(weeklyHours: number) {
 }
 
 /**
- * 법정 최저 보장 금액 산출 (소정근로 + 주휴 + 연장·야간 가산 포함, 경업금지 수당 가산 옵션)
+ * 법정 최저 보장 금액 산출 (소정근로시간 + 주휴시간 기준 최저임금 가이드액 - 40h 시 2,152,344원 고정)
  */
 export function calculateDynamicMinGuaranteeAmount(
   wizDaysConfig?: Record<string, DailyScheduleInput | undefined>,
-  isUnder5?: boolean,
-  nonCompeteOptions?: {
-    hasNonCompete?: boolean;
-    calcType?: 'percent' | 'manual';
-    percent?: number;
-    manualAmount?: number;
-  },
 ): number {
   if (!wizDaysConfig) return LEGAL_STANDARDS.MIN_MONTHLY_WAGE;
-  const { weeklyHours, weeklyOvertimeHours, weeklyNightHours } = calculateScheduleHours(wizDaysConfig);
+  const { weeklyHours } = calculateScheduleHours(wizDaysConfig);
   const cappedWeeklyHours = Math.min(weeklyHours, LEGAL_STANDARDS.MAX_WEEKLY_HOURS);
   const weeklyHolidayHours = calculateWeeklyHolidayHours(cappedWeeklyHours);
-  const overtimeRate = isUnder5 ? 1.0 : 1.5;
-  const nightRate = isUnder5 ? 0.0 : 0.5;
 
-  const totalPaidWeeklyHours =
-    cappedWeeklyHours +
-    weeklyHolidayHours +
-    weeklyOvertimeHours * overtimeRate +
-    weeklyNightHours * nightRate;
+  const moExact = cappedWeeklyHours * LEGAL_STANDARDS.WEEKS_PER_MONTH;
+  const mhExact = weeklyHolidayHours * LEGAL_STANDARDS.WEEKS_PER_MONTH;
 
-  const TExact = totalPaidWeeklyHours * LEGAL_STANDARDS.WEEKS_PER_MONTH;
-  const baseMinRequired = Math.ceil(LEGAL_STANDARDS.MIN_HOURLY_WAGE * TExact);
+  // 1) 기본급 (10원 단위 올림: 40시간 시 1,793,620원)
+  const basePayMin = Math.ceil((moExact * LEGAL_STANDARDS.MIN_HOURLY_WAGE) / 10) * 10;
 
-  if (nonCompeteOptions?.hasNonCompete) {
-    if (nonCompeteOptions.calcType === 'manual' && nonCompeteOptions.manualAmount && nonCompeteOptions.manualAmount > 0) {
-      return baseMinRequired + nonCompeteOptions.manualAmount;
-    }
-    const percent = nonCompeteOptions.percent ?? 10;
-    if (percent > 0 && percent < 100) {
-      return Math.ceil(baseMinRequired / (1 - percent / 100));
-    }
-  }
+  // 2) 주휴수당 (원 단위 올림: 40시간 시 358,724원)
+  const holidayPayMin = Math.ceil(mhExact * LEGAL_STANDARDS.MIN_HOURLY_WAGE);
 
-  return baseMinRequired;
+  // 주 40시간 기준 1,793,620원 + 358,724원 = 2,152,344원 정확히 산출
+  return basePayMin + holidayPayMin;
 }
 
 export interface WageEngineInput {
@@ -274,6 +262,8 @@ export interface WageEngineResult {
   isMinWagePassed: boolean;
   mo: number;
   mh: number;
+  moExact: number;
+  mhExact: number;
   T: number;
   TExact: number;
   holidayHours: number;
@@ -339,68 +329,40 @@ export function calculateWageEngine(input: WageEngineInput): WageEngineResult {
       positionAllowance +
       otherAllowance;
     comparedHourlyRate = rate;
-  } else if (salaryType === 'commission') {
-    totalMonthlyPay = minGuaranteeAmount || 0;
-    const effectiveT = TExact + kotExact + kniExact;
-    const ordinaryHourlyRateRaw =
-      effectiveT > 0 ? (totalMonthlyPay - nonCompeteAmount) / effectiveT : 0;
-    ordinaryHourlyRate = Math.round(ordinaryHourlyRateRaw);
-
-    if (overtimeAllowance > 0) {
-      calcOvertimeAllowance = overtimeAllowance;
-    } else if (kotExact > 0) {
-      calcOvertimeAllowance = Math.round(ordinaryHourlyRateRaw * kotExact);
-    }
-
-    const ordinaryPool = Math.max(0, totalMonthlyPay - calcOvertimeAllowance - nonCompeteAmount);
-
-    if (TExact > 0) {
-      weeklyHolidayPay = Math.round(ordinaryHourlyRateRaw * mhExact);
-      baseSalary = Math.max(
-        0,
-        ordinaryPool - weeklyHolidayPay - mealAllowance - positionAllowance - otherAllowance,
-      );
-      comparedHourlyRate = Math.round((totalMonthlyPay - calcOvertimeAllowance - nonCompeteAmount) / TExact);
-    } else {
-      weeklyHolidayPay = 0;
-      baseSalary = Math.max(
-        0,
-        totalMonthlyPay - mealAllowance - positionAllowance - otherAllowance - calcOvertimeAllowance - nonCompeteAmount,
-      );
-      comparedHourlyRate = 0;
-    }
   } else {
-    // 월급제 (monthly) - 학온 엑셀 엔진 포괄 역산
-    totalMonthlyPay = salaryAmount || 0;
+    // 월급제 (monthly) 및 비율제 (commission) - 약정월급/최소보장월급 기준 기본급+주휴+식대+포괄연장수당 100% 유동 정밀 분할
+    totalMonthlyPay = salaryType === 'commission' ? (minGuaranteeAmount || 0) : (salaryAmount || 0);
 
-    // 포괄 연장/야간 수당 및 통상시급 역산 1차방정식
-    const effectiveT = TExact + kotExact + kniExact;
-    const ordinaryHourlyRateRaw =
-      effectiveT > 0 ? (totalMonthlyPay - nonCompeteAmount) / effectiveT : 0;
-    ordinaryHourlyRate = Math.round(ordinaryHourlyRateRaw);
+    const cappedWeeklyHours = Math.min(weeklyHours, LEGAL_STANDARDS.MAX_WEEKLY_HOURS);
+    const weeklyHolidayHours = calculateWeeklyHolidayHours(cappedWeeklyHours);
 
-    if (overtimeAllowance > 0) {
-      calcOvertimeAllowance = overtimeAllowance;
-    } else if (kotExact > 0) {
-      calcOvertimeAllowance = Math.round(ordinaryHourlyRateRaw * kotExact);
-    }
+    const meal = mealAllowance;
+    const timePoolForBaseHoliday = Math.max(0, totalMonthlyPay - meal);
 
-    const ordinaryPool = Math.max(0, totalMonthlyPay - calcOvertimeAllowance - nonCompeteAmount);
-
-    if (TExact > 0) {
-      weeklyHolidayPay = Math.round(ordinaryHourlyRateRaw * mhExact);
-      baseSalary = Math.max(
-        0,
-        ordinaryPool - weeklyHolidayPay - mealAllowance - positionAllowance - otherAllowance,
-      );
-      comparedHourlyRate = Math.round((totalMonthlyPay - calcOvertimeAllowance - nonCompeteAmount) / TExact);
+    // 1) 기본급 + 주휴수당 + 식대 = 입력한 월 지급액/최소보장액 (100% 일치)
+    if (TExact > 0 && timePoolForBaseHoliday > 0) {
+      weeklyHolidayPay = Math.ceil((mhExact / TExact) * timePoolForBaseHoliday);
+      baseSalary = Math.max(0, timePoolForBaseHoliday - weeklyHolidayPay);
     } else {
       weeklyHolidayPay = 0;
-      baseSalary = Math.max(
-        0,
-        totalMonthlyPay - mealAllowance - positionAllowance - otherAllowance - calcOvertimeAllowance - nonCompeteAmount,
-      );
-      comparedHourlyRate = 0;
+      baseSalary = 0;
+    }
+
+    // 2) 현재 실질 통상시급 (10,320원/h 이상)
+    const comparedPool = baseSalary + weeklyHolidayPay + meal;
+    comparedHourlyRate = TExact > 0 ? Math.round(comparedPool / TExact) : 0;
+    ordinaryHourlyRate = comparedHourlyRate;
+
+    // 3) 월 포괄 연장근로수당 = (주 연장시간 * 가산율 * 4.345) * 통상시급
+    if (weeklyOvertimeHours > 0) {
+      const isUnder5 = employeeCount < 5;
+      const overtimeRateFinal = isUnder5 ? 1.0 : 1.5;
+      const monthlyOvertimeHours = weeklyOvertimeHours * overtimeRateFinal * LEGAL_STANDARDS.WEEKS_PER_MONTH;
+      calcOvertimeAllowance = Math.round(monthlyOvertimeHours * ordinaryHourlyRate);
+    } else if (overtimeAllowance > 0) {
+      calcOvertimeAllowance = overtimeAllowance;
+    } else {
+      calcOvertimeAllowance = 0;
     }
   }
 
@@ -420,6 +382,8 @@ export function calculateWageEngine(input: WageEngineInput): WageEngineResult {
     isMinWagePassed,
     mo,
     mh,
+    moExact,
+    mhExact,
     T,
     TExact,
     holidayHours,

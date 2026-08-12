@@ -2,7 +2,11 @@
 
 import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
-import { calculateDynamicMinGuaranteeAmount } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
+import {
+  calculateDynamicMinGuaranteeAmount,
+  calculateScheduleHours,
+  LEGAL_STANDARDS,
+} from '@/app/(afterLogin)/wizard/_lib/wageEngine';
 import {
   MAX_SALARY_AMOUNT,
   numberToKorean,
@@ -32,12 +36,10 @@ export default function FormMinGuaranteeSalaryAction() {
   );
 
   const isUnder5 = contractType?.includes('5인 미만') || contractType?.includes('5인 이하');
-  const dynamicMinPay = calculateDynamicMinGuaranteeAmount(wizDaysConfig, isUnder5, {
-    hasNonCompete: wizHasNonCompete,
-    calcType: wizNonCompeteCalcType,
-    percent: wizNonCompetePercent,
-    manualAmount: wizNonCompeteAmount,
-  });
+  const dynamicMinPay = calculateDynamicMinGuaranteeAmount(wizDaysConfig);
+
+  const { weeklyHours } = calculateScheduleHours(wizDaysConfig);
+  const cappedWeeklyHours = Math.min(weeklyHours, LEGAL_STANDARDS.MAX_WEEKLY_HOURS);
 
   const amount = wizMinGuaranteeAmount ?? dynamicMinPay;
 
@@ -53,19 +55,29 @@ export default function FormMinGuaranteeSalaryAction() {
   const koreanText = numberToKorean(amount);
 
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-2 pt-4">
       <div className="relative">
+        {koreanText && (
+          <span className="text-text-side absolute -top-5 right-1 text-[11px] font-bold dark:text-slate-300">
+            {koreanText}
+          </span>
+        )}
         <input
           type="text"
           value={amount === 0 ? '' : amount.toLocaleString()}
           onChange={handleMinGuaranteeChange}
           placeholder={dynamicMinPay.toLocaleString()}
         />
-        <span className="text-text-side absolute top-1/2 right-4 -translate-y-1/2 text-xs font-extrabold">
+        <span className="text-text-side absolute top-1/2 right-4 -translate-y-1/2 text-xs font-extrabold dark:text-slate-400">
           원
         </span>
       </div>
-      {koreanText && <p className="text-text-side px-1 text-xs font-bold">{koreanText}</p>}
+
+      <p className="text-custom-indigo px-1 text-[11px] leading-relaxed font-semibold dark:text-indigo-400">
+        * 설정하신 소정근로시간(주 {cappedWeeklyHours}시간) 기준, 최소{' '}
+        <strong className="font-bold underline">{dynamicMinPay.toLocaleString()}원</strong> 이상
+        입력해야 최저임금법(10,320원/h) 미달에 걸리지 않습니다.
+      </p>
     </div>
   );
 }

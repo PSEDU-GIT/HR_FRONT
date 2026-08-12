@@ -40,12 +40,22 @@ export default function FormMonthlySalaryAction() {
   const overtimeRate = isUnder5 ? 1.0 : 1.5;
   const nightRate = isUnder5 ? 0.0 : 0.5;
 
-  const { weeklyHours, weeklyOvertimeHours, weeklyNightHours } = calculateScheduleHours(wizDaysConfig);
-  const { T } = calculateMonthlyHours(weeklyHours);
+  const { weeklyHours } = calculateScheduleHours(wizDaysConfig);
+  const cappedWeeklyHours = Math.min(weeklyHours, LEGAL_STANDARDS.MAX_WEEKLY_HOURS);
+  const weeklyHolidayHours = Math.min(
+    LEGAL_STANDARDS.STANDARD_DAILY_HOURS,
+    cappedWeeklyHours >= LEGAL_STANDARDS.WEEKLY_HOLIDAY_THRESHOLD ? (cappedWeeklyHours / LEGAL_STANDARDS.STANDARD_WEEKLY_HOURS) * LEGAL_STANDARDS.STANDARD_DAILY_HOURS : 0,
+  );
+  const monthlyWorkHours = cappedWeeklyHours * LEGAL_STANDARDS.WEEKS_PER_MONTH;
+  const monthlyHolidayHours = weeklyHolidayHours * LEGAL_STANDARDS.WEEKS_PER_MONTH;
 
-  const kot = weeklyOvertimeHours * overtimeRate * LEGAL_STANDARDS.WEEKS_PER_MONTH;
-  const kni = weeklyNightHours * nightRate * LEGAL_STANDARDS.WEEKS_PER_MONTH;
-  const effectiveT = T + kot + kni;
+  // 1) 기본급 (소정시간 * 10,320원) -> 10원 단위 올림 (1,793,616원 -> 1,793,620원)
+  const baseSalaryPayRaw = monthlyWorkHours * LEGAL_STANDARDS.MIN_HOURLY_WAGE;
+  const baseSalaryPay = Math.ceil(baseSalaryPayRaw / 10) * 10;
+
+  // 2) 주휴수당 (주휴시간 * 10,320원) -> 원 단위 올림 (358,723.2원 -> 358,724원)
+  const weeklyHolidayPayRaw = monthlyHolidayHours * LEGAL_STANDARDS.MIN_HOURLY_WAGE;
+  const weeklyHolidayPay = Math.ceil(weeklyHolidayPayRaw);
 
   const mealAllowance = wizHasTaxFree ? wizNonTaxFood : 0;
   const nonCompeteAmount = getEffectiveNonCompeteAmount({
@@ -57,10 +67,8 @@ export default function FormMonthlySalaryAction() {
     salaryAmount: wizSalaryAmount,
   });
 
-  // 최저임금 기준(10,320원/h) 및 연장/야간 수당을 충족하기 위한 최소 월 총 지급액
-  const minRequiredSalary = Math.ceil(
-    LEGAL_STANDARDS.MIN_HOURLY_WAGE * effectiveT + mealAllowance + nonCompeteAmount,
-  );
+  // 소정근로시간(연장 및 부가수당 제외) 최저 월 지급액
+  const minRequiredStandardSalary = baseSalaryPay + weeklyHolidayPay;
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value.replace(/[^0-9]/g, '');
@@ -104,8 +112,8 @@ export default function FormMonthlySalaryAction() {
       </div>
 
       <p className="text-custom-indigo px-1 text-[11px] leading-relaxed font-semibold dark:text-indigo-400">
-        * 설정하신 근무시간(주 {weeklyHours}시간) 기준, 최소{' '}
-        <strong className="font-bold underline">{minRequiredSalary.toLocaleString()}원</strong> 이상
+        * 설정하신 소정근로시간(주 {cappedWeeklyHours}시간, 연장 제외) 기준, 최소{' '}
+        <strong className="font-bold underline">{minRequiredStandardSalary.toLocaleString()}원</strong> 이상
         입력해야 최저임금법(10,320원/h) 미달에 걸리지 않습니다.
       </p>
     </div>

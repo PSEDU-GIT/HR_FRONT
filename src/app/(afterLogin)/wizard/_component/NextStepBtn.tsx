@@ -150,12 +150,7 @@ export default function NextStepBtn({ className, disabled }: NextStepBtnProps) {
     // 2) 주 52시간 상한 초과 위험 검사 (5인 이상 사업장)
     const isUnder5 = step1.contractType?.includes('5인 미만') || step1.contractType?.includes('5인 이하');
     const { weeklyHours, weeklyOvertimeHours, weeklyNightHours } = calculateScheduleHours(step2.wizDaysConfig);
-    const dynamicMinPay = calculateDynamicMinGuaranteeAmount(step2.wizDaysConfig, isUnder5, {
-      hasNonCompete: step2.wizHasNonCompete,
-      calcType: step2.wizNonCompeteCalcType,
-      percent: step2.wizNonCompetePercent,
-      manualAmount: step2.wizNonCompeteAmount,
-    });
+    const dynamicMinPay = calculateDynamicMinGuaranteeAmount(step2.wizDaysConfig);
     const effectiveMinGuaranteeAmount = step2.wizMinGuaranteeAmount ?? dynamicMinPay;
 
     if (!isUnder5 && weeklyHours > 52) {

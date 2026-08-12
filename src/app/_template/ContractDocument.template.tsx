@@ -282,7 +282,7 @@ export default function ContractDocumentTemplate({
                         ? `매출의 ${wizCommissionRate}%`
                         : isHourly
                           ? `시급 ${wizHourlyRate.toLocaleString()}원`
-                          : `월 약정 총액`}
+                          : `월 약정 지급액`}
                     </td>
                     <td className="p-2.5 font-medium text-slate-500">
                       {isCommission ? '담당 수강료 기준' : isHourly ? '약정 시급 기준' : '월 고정급 기준'}
@@ -344,7 +344,7 @@ export default function ContractDocumentTemplate({
                     </td>
                     <td className="p-2.5 text-slate-500">
                       {weeklyOvertimeHours > 0
-                        ? `포괄 연장근로 대가 (주 ${weeklyOvertimeHours}시간)`
+                        ? `포괄 연장근로 대가 (${isUnder5 ? `연장 ${weeklyOvertimeHours}h × 4.345` : `연장 ${weeklyOvertimeHours}h × 1.5배 × 4.345`})`
                         : '포괄 연장근로 대가'}
                     </td>
                   </tr>
@@ -372,19 +372,31 @@ export default function ContractDocumentTemplate({
                   )}
 
                   {/* 4. 월 급여 (세전) 하이라이트 행 */}
-                  <tr className="border-t-2 border-sky-300 bg-sky-50/90 text-sky-950 font-black">
-                    <td className="border-r border-sky-200 p-3 text-xs font-black">월 급여 (세전)</td>
-                    <td className="border-r border-sky-200 p-3 text-right text-sm font-black text-sky-700">
-                      {wageResult.totalMonthlyPay.toLocaleString()}원
-                    </td>
-                    <td className="p-3 text-[10.5px] font-extrabold text-sky-800">
-                      {isCommission
-                        ? `매출 기준과 최소 보장 중 큰 금액 + 별도 대가 (${calculatedNonCompeteAmount.toLocaleString()}원)`
-                        : isHourly
-                          ? `월 소정근로 산정 총액 (${wageResult.mo + wageResult.mh}시간 분)`
-                          : `월 약정 총 지급액 (${numberToKoreanWon(wageResult.totalMonthlyPay)})`}
-                    </td>
-                  </tr>
+                  {(() => {
+                    const contractTotalPay =
+                      wageResult.baseSalary +
+                      wageResult.weeklyHolidayPay +
+                      (wizHasTaxFree ? wizNonTaxFood : 0) +
+                      wageResult.overtimeAllowance +
+                      (wizHasExtraAllowance ? wizPositionAllowance + wizOtherAllowance : 0) +
+                      (wizHasNonCompete ? calculatedNonCompeteAmount : 0);
+
+                    return (
+                      <tr className="border-t-2 border-sky-300 bg-sky-50/90 text-sky-950 font-black">
+                        <td className="border-r border-sky-200 p-3 text-xs font-black">월 급여 (세전)</td>
+                        <td className="border-r border-sky-200 p-3 text-right text-sm font-black text-sky-700">
+                          {contractTotalPay.toLocaleString()}원
+                        </td>
+                        <td className="p-3 text-[10.5px] font-extrabold text-sky-800">
+                          {isCommission
+                            ? `매출 기준과 최소 보장 중 큰 금액 + 별도 대가 (${calculatedNonCompeteAmount.toLocaleString()}원)`
+                            : isHourly
+                              ? `월 소정근로 산정 총액 (${wageResult.mo + wageResult.mh}시간 분)`
+                              : `월 약정 지급액 (${numberToKoreanWon(contractTotalPay)})`}
+                        </td>
+                      </tr>
+                    );
+                  })()}
                 </tbody>
               </table>
             </div>
@@ -522,7 +534,14 @@ export default function ContractDocumentTemplate({
             <div className="space-y-2">
               <h3 className="text-[13px] font-extrabold text-slate-900">제7조 (임금 명세)</h3>
               <p className="font-bold text-slate-900">
-                월 지급 총액: {numberToKoreanWon(wageResult.totalMonthlyPay)}
+                월 약정 지급액: {numberToKoreanWon(
+                  wageResult.baseSalary +
+                  wageResult.weeklyHolidayPay +
+                  (wizHasTaxFree ? wizNonTaxFood : 0) +
+                  wageResult.overtimeAllowance +
+                  (wizHasExtraAllowance ? wizPositionAllowance + wizOtherAllowance : 0) +
+                  (wizHasNonCompete ? calculatedNonCompeteAmount : 0)
+                )}
               </p>
               <p className="font-medium text-slate-700">① 임금 지급일: 매월 <strong className="text-slate-900">{wizPayDay}</strong> (지급일이 휴일인 경우 그 전일에 지급한다)</p>
               <p className="font-medium text-slate-700">
@@ -531,6 +550,11 @@ export default function ContractDocumentTemplate({
               <p className="font-medium text-slate-700">
                 ③ 기본급, 주휴수당, 비과세 식대, 고정수당 등 상세 임금산정 내역은 별지 제2호에 따른다.
               </p>
+              {isCommission && (
+                <p className="font-medium text-slate-700">
+                  ④ 비율제(수수료 <strong className="text-slate-900">{wizCommissionRate || 20}%</strong>) 정산 시: 당월 담당 수강료 매출 비율 정산액과 별지 제2호의 약정 최소보장액 중 더 큰 금액을 최종 지급한다.
+                </p>
+              )}
             </div>
 
             {/* 제8조 (휴일 및 휴가) */}

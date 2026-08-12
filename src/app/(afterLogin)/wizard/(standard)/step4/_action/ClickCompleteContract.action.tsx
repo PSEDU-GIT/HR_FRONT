@@ -125,12 +125,7 @@ export default function ClickCompleteContractAction({
       }));
 
     const isUnder5 = step1.contractType?.includes('5인 미만') || step1.contractType?.includes('5인 이하');
-    const dynamicMinPay = calculateDynamicMinGuaranteeAmount(step2.wizDaysConfig, isUnder5, {
-      hasNonCompete: step2.wizHasNonCompete,
-      calcType: step2.wizNonCompeteCalcType,
-      percent: step2.wizNonCompetePercent,
-      manualAmount: step2.wizNonCompeteAmount,
-    });
+    const dynamicMinPay = calculateDynamicMinGuaranteeAmount(step2.wizDaysConfig);
     const effectiveMinGuaranteeAmount = step2.wizMinGuaranteeAmount ?? dynamicMinPay;
 
     const payloadInstructorInfo = {

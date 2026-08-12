@@ -86,11 +86,18 @@ export default function SummarySalaryCardAction() {
       ? '약정 시급'
       : step2.wizSalaryType === 'commission'
         ? '비율제 수수료율'
-        : '월 총 지급액';
+        : '월 약정 지급액';
+
+  const nonTaxFoodAmount = step2.wizNonTaxFood || 0;
+  const hasTaxFree = step2.wizHasTaxFree ?? true;
 
   const salaryValue =
     step2.wizSalaryType === 'monthly'
-      ? `월 ${formatCurrency(step2.wizSalaryAmount) || 0}원`
+      ? `월 ${formatCurrency(step2.wizSalaryAmount) || 0}원${
+          hasTaxFree && nonTaxFoodAmount > 0
+            ? ` (식대 ${nonTaxFoodAmount >= 10000 ? `${Math.round(nonTaxFoodAmount / 10000)}만원` : `${formatCurrency(nonTaxFoodAmount)}원`} 포함)`
+            : ''
+        }`
       : step2.wizSalaryType === 'commission'
         ? `${step2.wizCommissionRate || 0}% (최소보장 ${formatCurrency(step2.wizMinGuaranteeAmount) || 0}원)`
         : `시간당 ${formatCurrency(step2.wizHourlyRate) || 0}원`;
@@ -239,7 +246,6 @@ export default function SummarySalaryCardAction() {
           items={[
             { label: salaryLabel, value: salaryValue },
             { label: '급여 지급일', value: `매월 ${step2.wizPayDay || '-'}` },
-            { label: '비과세 수당', value: nonTaxValue },
           ]}
         />
       )}

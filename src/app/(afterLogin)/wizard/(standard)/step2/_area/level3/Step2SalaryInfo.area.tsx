@@ -73,12 +73,7 @@ export default function Step2SalaryInfoArea() {
     calculateScheduleHours(wizDaysConfig);
   const isUnder5 = contractType?.includes('5인 미만') || contractType?.includes('5인 이하');
 
-  const dynamicMinPay = calculateDynamicMinGuaranteeAmount(wizDaysConfig, isUnder5, {
-    hasNonCompete: wizHasNonCompete,
-    calcType: wizNonCompeteCalcType,
-    percent: wizNonCompetePercent,
-    manualAmount: wizNonCompeteAmount,
-  });
+  const dynamicMinPay = calculateDynamicMinGuaranteeAmount(wizDaysConfig);
 
   const calculatedNonCompeteAmount = getEffectiveNonCompeteAmount({
     hasNonCompete: wizHasNonCompete,
@@ -121,15 +116,24 @@ export default function Step2SalaryInfoArea() {
 
   const isCurrentOpen = wizSubStep === 3;
 
+  const totalCalculatedPay =
+    wageResult.baseSalary +
+    wageResult.weeklyHolidayPay +
+    (wizHasTaxFree ? wizNonTaxFood : 0) +
+    wageResult.overtimeAllowance +
+    (wizHasExtraAllowance ? wizPositionAllowance + wizOtherAllowance : 0) +
+    (wizHasNonCompete ? calculatedNonCompeteAmount : 0);
+
   const getSummaryText = () => {
     if (!wizSalaryDone) return undefined;
+
     if (wizSalaryType === 'hourly') {
       return `시급 ${wizHourlyRate ? wizHourlyRate.toLocaleString() : 10320}원 · 매월 ${wizPayDay}`;
     }
     if (wizSalaryType === 'commission') {
       return `비율제 ${wizCommissionRate || 20}% · 매월 ${wizPayDay}`;
     }
-    return `월급 ${wizSalaryAmount ? wizSalaryAmount.toLocaleString() : 0}원 · 매월 ${wizPayDay}`;
+    return `월 약정 지급액 ${wizSalaryAmount ? wizSalaryAmount.toLocaleString() : 0}원 · 매월 ${wizPayDay}`;
   };
 
   return (

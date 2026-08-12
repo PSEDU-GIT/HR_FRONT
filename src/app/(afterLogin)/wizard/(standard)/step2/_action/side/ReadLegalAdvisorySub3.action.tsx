@@ -64,12 +64,7 @@ export default function ReadLegalAdvisorySub3Action() {
   const { weeklyHours, weeklyOvertimeHours, weeklyNightHours } =
     calculateScheduleHours(wizDaysConfig);
   const isUnder5 = contractType?.includes('5인 미만') || contractType?.includes('5인 이하');
-  const dynamicMinPay = calculateDynamicMinGuaranteeAmount(wizDaysConfig, isUnder5, {
-    hasNonCompete: wizHasNonCompete,
-    calcType: wizNonCompeteCalcType,
-    percent: wizNonCompetePercent,
-    manualAmount: wizNonCompeteAmount,
-  });
+  const dynamicMinPay = calculateDynamicMinGuaranteeAmount(wizDaysConfig);
 
   const calculatedNonCompeteAmount = getEffectiveNonCompeteAmount({
     hasNonCompete: wizHasNonCompete,

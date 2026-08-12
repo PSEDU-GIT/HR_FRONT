@@ -26,12 +26,7 @@ export default function Step2SalaryCommissionArea() {
   );
 
   const isUnder5 = contractType?.includes('5인 미만') || contractType?.includes('5인 이하');
-  const dynamicMinPay = calculateDynamicMinGuaranteeAmount(wizDaysConfig, isUnder5, {
-    hasNonCompete: wizHasNonCompete,
-    calcType: wizNonCompeteCalcType,
-    percent: wizNonCompetePercent,
-    manualAmount: wizNonCompeteAmount,
-  });
+  const dynamicMinPay = calculateDynamicMinGuaranteeAmount(wizDaysConfig);
 
   return (
     <div className="space-y-4 pt-2">
@@ -55,9 +50,13 @@ export default function Step2SalaryCommissionArea() {
 
         <FormMinGuaranteeSalaryAction />
 
-        <p className="text-text-sub mt-1 text-[11px] leading-relaxed font-medium">
-          * 2026년 법정 최저 보장 가이드액: {dynamicMinPay.toLocaleString()}원
-        </p>
+        <div className="mt-2.5 rounded-xl border border-custom-indigo-border/80 bg-custom-indigo-bg/60 p-2.5 text-[11px] text-custom-indigo dark:border-indigo-900/60 dark:bg-indigo-950/40 dark:text-indigo-200">
+          <p className="font-bold leading-relaxed">
+            * 매월 <strong className="underline underline-offset-2">수강료 매출 비율 정산액</strong>과{' '}
+            <strong className="underline underline-offset-2">최소 보장 약정액</strong> 중{' '}
+            <strong className="font-black underline">더 높은 금액</strong>이 실지급됩니다.
+          </p>
+        </div>
       </div>
     </div>
   );
