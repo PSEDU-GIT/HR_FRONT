@@ -336,13 +336,14 @@ export function calculateWageEngine(input: WageEngineInput): WageEngineResult {
     const cappedWeeklyHours = Math.min(weeklyHours, LEGAL_STANDARDS.MAX_WEEKLY_HOURS);
     const weeklyHolidayHours = calculateWeeklyHolidayHours(cappedWeeklyHours);
 
-    const meal = mealAllowance;
-    const timePoolForBaseHoliday = Math.max(0, totalMonthlyPay - meal);
-
     // 1) 기본급 + 주휴수당 + 식대 = 입력한 월 지급액/최소보장액 (100% 일치)
-    if (TExact > 0 && timePoolForBaseHoliday > 0) {
-      weeklyHolidayPay = Math.ceil((mhExact / TExact) * timePoolForBaseHoliday);
-      baseSalary = Math.max(0, timePoolForBaseHoliday - weeklyHolidayPay);
+    const meal = mealAllowance;
+    // 1) 기본급 + 주휴수당 + 식대 = 입력한 월 지급액/최소보장액 (100% 일치)
+    // 주휴수당은 전체 월 약정액 중 주휴시간 비중으로 정밀 계산하여 법정 주휴수당(358,724원)이 왜곡되지 않도록 보장
+    if (TExact > 0 && totalMonthlyPay > 0) {
+      weeklyHolidayPay = Math.ceil((mhExact / TExact) * totalMonthlyPay);
+      const remainingPool = Math.max(0, totalMonthlyPay - weeklyHolidayPay);
+      baseSalary = Math.max(0, remainingPool - meal);
     } else {
       weeklyHolidayPay = 0;
       baseSalary = 0;
