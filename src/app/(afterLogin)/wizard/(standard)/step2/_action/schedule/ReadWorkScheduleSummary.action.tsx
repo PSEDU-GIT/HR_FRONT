@@ -11,7 +11,7 @@ export default function ReadWorkScheduleSummaryAction() {
     })),
   );
 
-  const { weeklyHours, weeklyOvertimeHours } = calculateScheduleHours(wizDaysConfig);
+  const { weeklyHours, weeklyGrossHours, weeklyOvertimeHours } = calculateScheduleHours(wizDaysConfig);
 
   const weeklyTotals = Object.values(wizDaysConfig || {}).reduce(
     (acc, conf) => {
@@ -35,7 +35,7 @@ export default function ReadWorkScheduleSummaryAction() {
   return (
     <>
       주{' '}
-      <span className="text-text-title font-bold dark:text-slate-200">{weeklyHours}시간</span>{' '}
+      <span className="text-text-title font-bold dark:text-slate-200">{weeklyGrossHours}시간</span>{' '}
       · 휴게{' '}
       <span className="text-text-title font-bold dark:text-slate-200">{totalBreakHours}시간</span> ·
       소정{' '}

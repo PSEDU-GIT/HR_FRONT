@@ -282,7 +282,7 @@ export default function ContractDocumentTemplate({
                         ? `매출의 ${wizCommissionRate}%`
                         : isHourly
                           ? `시급 ${wizHourlyRate.toLocaleString()}원`
-                          : `월 약정 지급액`}
+                          : `총 지급 희망금액`}
                     </td>
                     <td className="p-2.5 font-medium text-slate-500">
                       {isCommission ? '담당 수강료 기준' : isHourly ? '약정 시급 기준' : '월 고정급 기준'}
@@ -392,7 +392,7 @@ export default function ContractDocumentTemplate({
                             ? `매출 기준과 최소 보장 중 큰 금액 + 별도 대가 (${calculatedNonCompeteAmount.toLocaleString()}원)`
                             : isHourly
                               ? `월 소정근로 산정 총액 (${wageResult.mo + wageResult.mh}시간 분)`
-                              : `월 약정 지급액 (${numberToKoreanWon(contractTotalPay)})`}
+                              : `총 지급 희망금액 (${numberToKoreanWon(contractTotalPay)})`}
                         </td>
                       </tr>
                     );
@@ -534,7 +534,7 @@ export default function ContractDocumentTemplate({
             <div className="space-y-2">
               <h3 className="text-[13px] font-extrabold text-slate-900">제7조 (임금 명세)</h3>
               <p className="font-bold text-slate-900">
-                월 약정 지급액: {numberToKoreanWon(
+                총 지급 희망금액: {numberToKoreanWon(
                   wageResult.baseSalary +
                   wageResult.weeklyHolidayPay +
                   (wizHasTaxFree ? wizNonTaxFood : 0) +

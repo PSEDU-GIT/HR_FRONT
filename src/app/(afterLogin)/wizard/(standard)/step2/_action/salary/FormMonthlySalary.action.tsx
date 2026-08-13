@@ -53,9 +53,9 @@ export default function FormMonthlySalaryAction() {
   const baseSalaryPayRaw = monthlyWorkHours * LEGAL_STANDARDS.MIN_HOURLY_WAGE;
   const baseSalaryPay = Math.ceil(baseSalaryPayRaw / 10) * 10;
 
-  // 2) 주휴수당 (주휴시간 * 10,320원) -> 원 단위 올림 (358,723.2원 -> 358,724원)
+  // 2) 주휴수당 (주휴시간 * 10,320원) -> 10원 단위 올림
   const weeklyHolidayPayRaw = monthlyHolidayHours * LEGAL_STANDARDS.MIN_HOURLY_WAGE;
-  const weeklyHolidayPay = Math.ceil(weeklyHolidayPayRaw);
+  const weeklyHolidayPay = Math.ceil(weeklyHolidayPayRaw / 10) * 10;
 
   const mealAllowance = wizHasTaxFree ? wizNonTaxFood : 0;
   const nonCompeteAmount = getEffectiveNonCompeteAmount({

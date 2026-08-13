@@ -86,7 +86,7 @@ export default function SummarySalaryCardAction() {
       ? '약정 시급'
       : step2.wizSalaryType === 'commission'
         ? '비율제 수수료율'
-        : '월 약정 지급액';
+        : '총 지급 희망금액';
 
   const nonTaxFoodAmount = step2.wizNonTaxFood || 0;
   const hasTaxFree = step2.wizHasTaxFree ?? true;

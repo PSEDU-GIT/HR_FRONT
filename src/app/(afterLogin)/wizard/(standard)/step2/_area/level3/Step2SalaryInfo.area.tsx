@@ -133,7 +133,7 @@ export default function Step2SalaryInfoArea() {
     if (wizSalaryType === 'commission') {
       return `비율제 ${wizCommissionRate || 20}% · 매월 ${wizPayDay}`;
     }
-    return `월 약정 지급액 ${wizSalaryAmount ? wizSalaryAmount.toLocaleString() : 0}원 · 매월 ${wizPayDay}`;
+    return `총 지급 희망금액 ${wizSalaryAmount ? wizSalaryAmount.toLocaleString() : 0}원 · 매월 ${wizPayDay}`;
   };
 
   return (
