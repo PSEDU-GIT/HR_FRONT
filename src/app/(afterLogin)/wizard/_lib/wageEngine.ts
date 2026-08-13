@@ -335,14 +335,28 @@ export function calculateWageEngine(input: WageEngineInput): WageEngineResult {
     // 1) 고정급 (monthly) - 총 지급 희망금액 기준 역산 분할
     totalMonthlyPay = salaryAmount || 0;
 
-    const cappedWeeklyHours = Math.min(weeklyHours, LEGAL_STANDARDS.MAX_WEEKLY_HOURS);
-    const weeklyHolidayHours = calculateWeeklyHolidayHours(cappedWeeklyHours);
+    const isUnder5 = employeeCount < 5;
+    const overtimeRateFinal = isUnder5 ? 1.0 : 1.5;
+    const monthlyOvertimeHours =
+      weeklyOvertimeHours > 0
+        ? weeklyOvertimeHours * overtimeRateFinal * LEGAL_STANDARDS.WEEKS_PER_MONTH
+        : 0;
 
-    // 통상시급 산출 (총 지급 희망금액에서 경업금지대가 및 기타 수당 제외 금액 / 월 기준시간)
-    const ordinaryPool = Math.max(
-      0,
-      totalMonthlyPay - nonCompeteAmount - positionAllowance - otherAllowance,
-    );
+    // 포괄 연장근로수당 비율 계수 (kotRatio = 월연장시간 / TExact)
+    const kotRatio = TExact > 0 && monthlyOvertimeHours > 0 ? monthlyOvertimeHours / TExact : 0;
+
+    // 직책수당, 기타수당, 경업금지대가, 지정 고정연장수당 공제 (식대는 통상임금 산정에 포함)
+    const fixedAllowanceDeductions =
+      nonCompeteAmount +
+      positionAllowance +
+      otherAllowance +
+      (weeklyOvertimeHours <= 0 ? overtimeAllowance : 0);
+
+    const netPayPool = Math.max(0, totalMonthlyPay - fixedAllowanceDeductions);
+
+    // 연장근로시간이 설정되어 있는 경우: netPayPool = ordinaryPool * (1 + kotRatio)
+    // 따라서 ordinaryPool = netPayPool / (1 + kotRatio)
+    const ordinaryPool = kotRatio > 0 ? netPayPool / (1 + kotRatio) : netPayPool;
 
     comparedHourlyRate = TExact > 0 ? Math.round(ordinaryPool / TExact) : 0;
     ordinaryHourlyRate = comparedHourlyRate;
@@ -351,11 +365,7 @@ export function calculateWageEngine(input: WageEngineInput): WageEngineResult {
     weeklyHolidayPay = Math.ceil((mhExact * ordinaryHourlyRate) / 100) * 100;
 
     // 월 포괄 연장근로수당 (올림 처리)
-    if (weeklyOvertimeHours > 0) {
-      const isUnder5 = employeeCount < 5;
-      const overtimeRateFinal = isUnder5 ? 1.0 : 1.5;
-      const monthlyOvertimeHours =
-        weeklyOvertimeHours * overtimeRateFinal * LEGAL_STANDARDS.WEEKS_PER_MONTH;
+    if (monthlyOvertimeHours > 0) {
       calcOvertimeAllowance = Math.ceil(monthlyOvertimeHours * ordinaryHourlyRate);
     } else if (overtimeAllowance > 0) {
       calcOvertimeAllowance = overtimeAllowance;
