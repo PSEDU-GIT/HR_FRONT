@@ -121,14 +121,14 @@ export default function Step2SalarySummaryArea() {
   return (
     <div className="space-y-4">
       {/* 1. 설정 정보 라인 리스트 카드 */}
-      <div className="border-custom-slate-border divide-custom-slate-border divide-y overflow-hidden rounded-2xl border bg-background shadow-2xs">
+      <div className="border-custom-slate-border divide-custom-slate-border bg-background divide-y overflow-hidden rounded-2xl border shadow-2xs">
         {/* 기본 급여 / 비율 / 시급 */}
         <div className="flex items-center justify-between p-3.5 transition-colors hover:bg-slate-50/60 dark:hover:bg-slate-800/60">
           <div className="flex min-w-0 items-center gap-3 pr-2">
             <span className="text-text-side w-24 shrink-0 text-xs font-semibold">
               {isHourly ? '약정 시급' : isCommission ? '비율제 수수료율' : '총 지급 희망금액'}
             </span>
-            <div className="flex flex-wrap items-center gap-1.5 min-w-0">
+            <div className="flex min-w-0 flex-wrap items-center gap-1.5">
               <span className="text-text-main truncate text-xs font-bold">
                 {isHourly
                   ? `시간당 ${wizHourlyRate ? wizHourlyRate.toLocaleString() : 10320}원`
@@ -141,7 +141,7 @@ export default function Step2SalarySummaryArea() {
                   type="button"
                   onClick={() => goToSection('taxFree')}
                   title="비과세 식대 설정 수정"
-                  className="border-custom-slate-border hover:border-custom-indigo-border hover:bg-custom-indigo-bg hover:text-custom-indigo bg-custom-slate-bg text-text-sub inline-flex cursor-pointer items-center gap-1 rounded-md border px-2 py-0.5 text-11 font-bold transition-all"
+                  className="border-custom-slate-border hover:border-custom-indigo-border hover:bg-custom-indigo-bg hover:text-custom-indigo bg-custom-slate-bg text-text-sub text-11 inline-flex cursor-pointer items-center gap-1 rounded-md border px-2 py-0.5 font-bold transition-all"
                 >
                   <span>
                     {wizHasTaxFree && wizNonTaxFood > 0
@@ -166,12 +166,8 @@ export default function Step2SalarySummaryArea() {
         {/* 급여 지급일 */}
         <div className="flex items-center justify-between p-3.5 transition-colors hover:bg-slate-50/60 dark:hover:bg-slate-800/60">
           <div className="flex min-w-0 items-center gap-3 pr-2">
-            <span className="text-text-side w-24 shrink-0 text-xs font-semibold">
-              급여 지급일
-            </span>
-            <span className="text-text-main truncate text-xs font-bold">
-              매월 {wizPayDay}
-            </span>
+            <span className="text-text-side w-24 shrink-0 text-xs font-semibold">급여 지급일</span>
+            <span className="text-text-main truncate text-xs font-bold">매월 {wizPayDay}</span>
           </div>
           <button
             type="button"
@@ -214,10 +210,8 @@ export default function Step2SalarySummaryArea() {
             <span className="text-text-main truncate text-xs font-bold">
               {wizHasExtraAllowance
                 ? [
-                    wizPositionAllowance > 0 &&
-                      `직책: ${wizPositionAllowance.toLocaleString()}원`,
-                    wizOvertimeAllowance > 0 &&
-                      `연장: ${wizOvertimeAllowance.toLocaleString()}원`,
+                    wizPositionAllowance > 0 && `직책: ${wizPositionAllowance.toLocaleString()}원`,
+                    wizOvertimeAllowance > 0 && `연장: ${wizOvertimeAllowance.toLocaleString()}원`,
                     wizOtherAllowance > 0 &&
                       `${wizOtherAllowanceName || '기타'}: ${wizOtherAllowance.toLocaleString()}원`,
                   ]
@@ -239,23 +233,23 @@ export default function Step2SalarySummaryArea() {
 
       {/* 2. 법정 노무 임금 계산 명세 (Breakdown Card) */}
       {/* 2. 세로 명세형 한 줄 한 줄 설명 + 금액 산출 수식 */}
-      <div className="border-custom-slate-border space-y-2.5 rounded-2xl border bg-background p-4 shadow-2xs transition-all">
+      <div className="border-custom-slate-border bg-background space-y-2.5 rounded-2xl border p-4 shadow-2xs transition-all">
         <div className="border-custom-slate-border flex items-center justify-between border-b pb-2">
           <span className="text-text-title text-xs font-extrabold">
             월 급여 수당 세부 산출 명세
           </span>
           <div className="flex items-center gap-1.5">
             <span className="text-text-sub text-11 font-bold">
-              현재 시급 <strong className="text-custom-indigo font-black">{Math.round(wageResult.ordinaryHourlyRate).toLocaleString()}원</strong>/h
+              현재 시급{' '}
+              <strong className="text-custom-indigo font-black">
+                {Math.round(wageResult.ordinaryHourlyRate).toLocaleString()}원
+              </strong>
+              /h
             </span>
             {!isMinWagePassed ? (
-              <span className="text-custom-rose text-11 font-bold">
-                (최저 미달)
-              </span>
+              <span className="text-custom-rose text-11 font-bold">(최저 미달)</span>
             ) : (
-              <span className="text-custom-emerald text-11 font-bold">
-                (최저 충족)
-              </span>
+              <span className="text-custom-emerald text-11 font-bold">(최저 충족)</span>
             )}
           </div>
         </div>
@@ -264,12 +258,11 @@ export default function Step2SalarySummaryArea() {
         <div className="space-y-1.5 pt-0.5 text-xs">
           {/* ① 월 소정근로 기본급 */}
           <div className="flex items-center justify-between py-1">
-            <div className="flex items-center gap-1.5 min-w-0">
-              <span className="text-text-main font-bold truncate">
-                월 소정근로 기본급
-              </span>
+            <div className="flex min-w-0 items-center gap-1.5">
+              <span className="text-text-main truncate font-bold">월 소정근로 기본급</span>
               <span className="text-text-side text-11 shrink-0">
-                (주 {cappedWeeklyHours}시간 × 4.345 = {wageResult.moExact ? Number(wageResult.moExact.toFixed(1)) : 173.8}시간)
+                (주 {cappedWeeklyHours}시간 × 4.345 ={' '}
+                {wageResult.moExact ? Number(wageResult.moExact.toFixed(1)) : 173.8}시간)
               </span>
             </div>
             <span className="text-text-title shrink-0 font-bold">
@@ -279,15 +272,15 @@ export default function Step2SalarySummaryArea() {
 
           {/* ② 월 주휴수당 */}
           <div className="flex items-center justify-between py-1">
-            <div className="flex items-center gap-1.5 min-w-0">
-              <span className="text-text-side font-bold shrink-0">+</span>
-              <span className="text-text-main font-bold truncate">
-                월 주휴수당
-              </span>
+            <div className="flex min-w-0 items-center gap-1.5">
+              <span className="text-text-side shrink-0 font-bold">+</span>
+              <span className="text-text-main truncate font-bold">월 주휴수당</span>
               <span className="text-text-side text-11 shrink-0">
-                ({wageResult.holidayHours > 0
-                  ? `주휴 ${Math.round(wageResult.holidayHours)}시간 × 4.345 = ${wageResult.mhExact ? Number(wageResult.mhExact.toFixed(2)) : 34.76}시간`
-                  : '주15h 미만 0원'})
+                (
+                {wageResult.holidayHours > 0
+                  ? `주휴 ${wageResult.holidayHours}시간 × 4.345 = ${wageResult.mhExact ? Number(wageResult.mhExact.toFixed(2)) : 34.76}시간`
+                  : '주15h 미만 0원'}
+                )
               </span>
             </div>
             <span className="text-text-title shrink-0 font-bold">
@@ -298,14 +291,10 @@ export default function Step2SalarySummaryArea() {
           {/* ③ 비과세 식대 수당 (적용 시) */}
           {wizHasTaxFree && wizNonTaxFood > 0 && (
             <div className="flex items-center justify-between py-1">
-              <div className="flex items-center gap-1.5 min-w-0">
-                <span className="text-text-side font-bold shrink-0">+</span>
-                <span className="text-text-main font-bold truncate">
-                  비과세 식대 수당
-                </span>
-                <span className="text-text-side text-11 shrink-0">
-                  (월 비과세 식대)
-                </span>
+              <div className="flex min-w-0 items-center gap-1.5">
+                <span className="text-text-side shrink-0 font-bold">+</span>
+                <span className="text-text-main truncate font-bold">비과세 식대 수당</span>
+                <span className="text-text-side text-11 shrink-0">(월 비과세 식대)</span>
               </div>
               <span className="text-text-title shrink-0 font-bold">
                 {wizNonTaxFood.toLocaleString()}원
@@ -319,22 +308,22 @@ export default function Step2SalarySummaryArea() {
             (wizHasExtraAllowance && (wizPositionAllowance > 0 || wizOtherAllowance > 0)) ||
             (wizHasNonCompete && calculatedNonCompeteAmount > 0)) && (
             <div className="border-custom-slate-border mt-2.5 space-y-1.5 border-t border-dashed pt-2.5">
-              <div className="text-text-side text-10 font-extrabold uppercase tracking-wider">
+              <div className="text-text-side text-10 font-extrabold tracking-wider uppercase">
                 추가 약정 수당 및 특수 대가
               </div>
 
               {/* 월 포괄 연장근로수당 */}
               {(weeklyOvertimeHours > 0 || wageResult.overtimeAllowance > 0) && (
                 <div className="flex items-center justify-between py-1">
-                  <div className="flex items-center gap-1.5 min-w-0">
-                    <span className="text-text-side font-bold shrink-0">+</span>
-                    <span className="text-text-main font-bold truncate">
-                      월 포괄 연장근로수당
-                    </span>
+                  <div className="flex min-w-0 items-center gap-1.5">
+                    <span className="text-text-side shrink-0 font-bold">+</span>
+                    <span className="text-text-main truncate font-bold">월 포괄 연장근로수당</span>
                     <span className="text-text-side text-11 shrink-0">
-                      ({isUnder5
+                      (
+                      {isUnder5
                         ? `연장 ${weeklyOvertimeHours}시간 × 4.345 = ${Number((weeklyOvertimeHours * 4.345).toFixed(2))}시간`
-                        : `연장 ${weeklyOvertimeHours}시간 × 1.5배 × 4.345 = ${Number((weeklyOvertimeHours * 1.5 * 4.345).toFixed(2))}시간`})
+                        : `연장 ${weeklyOvertimeHours}시간 × 1.5배 × 4.345 = ${Number((weeklyOvertimeHours * 1.5 * 4.345).toFixed(2))}시간`}
+                      )
                     </span>
                   </div>
                   <span className="text-text-title shrink-0 font-bold">
@@ -346,14 +335,10 @@ export default function Step2SalarySummaryArea() {
               {/* 추가 고정 수당 (직책) */}
               {wizHasExtraAllowance && wizPositionAllowance > 0 && (
                 <div className="flex items-center justify-between py-1">
-                  <div className="flex items-center gap-1.5 min-w-0">
-                    <span className="text-text-side font-bold shrink-0">+</span>
-                    <span className="text-text-main font-bold truncate">
-                      추가 고정수당 (직책)
-                    </span>
-                    <span className="text-text-side text-11 shrink-0">
-                      (고정 직책 수당)
-                    </span>
+                  <div className="flex min-w-0 items-center gap-1.5">
+                    <span className="text-text-side shrink-0 font-bold">+</span>
+                    <span className="text-text-main truncate font-bold">추가 고정수당 (직책)</span>
+                    <span className="text-text-side text-11 shrink-0">(고정 직책 수당)</span>
                   </div>
                   <span className="text-text-title shrink-0 font-bold">
                     {wizPositionAllowance.toLocaleString()}원
@@ -364,14 +349,10 @@ export default function Step2SalarySummaryArea() {
               {/* 추가 고정 수당 (기타) */}
               {wizHasExtraAllowance && wizOtherAllowance > 0 && (
                 <div className="flex items-center justify-between py-1">
-                  <div className="flex items-center gap-1.5 min-w-0">
-                    <span className="text-text-side font-bold shrink-0">+</span>
-                    <span className="text-text-main font-bold truncate">
-                      추가 고정수당 (기타)
-                    </span>
-                    <span className="text-text-side text-11 shrink-0">
-                      (기타 별도 수당)
-                    </span>
+                  <div className="flex min-w-0 items-center gap-1.5">
+                    <span className="text-text-side shrink-0 font-bold">+</span>
+                    <span className="text-text-main truncate font-bold">추가 고정수당 (기타)</span>
+                    <span className="text-text-side text-11 shrink-0">(기타 별도 수당)</span>
                   </div>
                   <span className="text-text-title shrink-0 font-bold">
                     {wizOtherAllowance.toLocaleString()}원
@@ -382,11 +363,9 @@ export default function Step2SalarySummaryArea() {
               {/* 경업금지 약정 대가 */}
               {wizHasNonCompete && calculatedNonCompeteAmount > 0 && (
                 <div className="flex items-center justify-between py-1">
-                  <div className="flex items-center gap-1.5 min-w-0">
-                    <span className="text-text-side font-bold shrink-0">+</span>
-                    <span className="text-text-main font-bold truncate">
-                      경업금지 약정 대가
-                    </span>
+                  <div className="flex min-w-0 items-center gap-1.5">
+                    <span className="text-text-side shrink-0 font-bold">+</span>
+                    <span className="text-text-main truncate font-bold">경업금지 약정 대가</span>
                     <span className="text-text-side text-11 shrink-0">
                       ({wizNonCompetePeriod} / {wizNonCompeteRange})
                     </span>
@@ -403,9 +382,7 @@ export default function Step2SalarySummaryArea() {
           <div className="border-custom-slate-border mt-2.5 flex items-center justify-between border-t pt-2.5">
             <div className="flex items-center gap-1.5">
               <span className="text-custom-indigo text-sm font-black">=</span>
-              <span className="text-text-title text-xs font-extrabold">
-                최종 월 약정 총 지급액
-              </span>
+              <span className="text-text-title text-xs font-extrabold">최종 월 약정 총 지급액</span>
             </div>
             <span className="text-custom-indigo text-sm font-black">
               {(
@@ -415,14 +392,15 @@ export default function Step2SalarySummaryArea() {
                 wageResult.overtimeAllowance +
                 (wizHasExtraAllowance ? wizPositionAllowance + wizOtherAllowance : 0) +
                 (wizHasNonCompete ? calculatedNonCompeteAmount : 0)
-              ).toLocaleString()}원
+              ).toLocaleString()}
+              원
             </span>
           </div>
 
           {/* 비율제(commission) 시 비교 지급 강조 안내 뱃지 */}
           {isCommission && (
-            <div className="mt-2.5 rounded-xl border border-custom-indigo-border/80 bg-custom-indigo-bg/60 p-2.5 text-11 text-custom-indigo">
-              <p className="font-bold leading-relaxed">
+            <div className="border-custom-indigo-border/80 bg-custom-indigo-bg/60 text-11 text-custom-indigo mt-2.5 rounded-xl border p-2.5">
+              <p className="leading-relaxed font-bold">
                 * <strong>비율제(수수료 {wizCommissionRate || 20}%)</strong> 정산 시: 매월{' '}
                 <span className="underline underline-offset-2">
                   수강료 매출의 {wizCommissionRate || 20}% 비율 정산액
@@ -443,16 +421,14 @@ export default function Step2SalarySummaryArea() {
           className={cx(
             'flex w-full items-center justify-center gap-1.5 rounded-xl border py-2.5 text-xs font-bold transition-all',
             !isMinWagePassed
-              ? 'cursor-not-allowed border-custom-rose-border bg-custom-rose-bg text-custom-rose opacity-80'
+              ? 'border-custom-rose-border bg-custom-rose-bg text-custom-rose cursor-not-allowed opacity-80'
               : 'border-custom-slate-border text-text-title bg-background hover:bg-custom-slate-bg cursor-pointer active:scale-[0.99]',
           )}
         >
           <span>
             {!isMinWagePassed ? '최저임금 미달로 설정 완료 불가' : '급여 및 수당 설정 완료'}
           </span>
-          {isMinWagePassed && (
-            <ArrowRight className="text-text-side h-3.5 w-3.5" />
-          )}
+          {isMinWagePassed && <ArrowRight className="text-text-side h-3.5 w-3.5" />}
         </button>
       </footer>
     </div>
