@@ -41,9 +41,7 @@ export default function ClickConfirmOtpAction({
       );
     },
     onError: (err: any) => {
-      console.error('OTP 인증 실패:', err);
-      handleAlert({
-        type: 'error',
+      console.error('OTP 인증 실패:', err); handleAlert({ type:'error',
         title: 'OTP 인증 오류',
         description: err.message || '인증번호 확인 중 오류가 발생했습니다.',
       });
@@ -65,7 +63,7 @@ export default function ClickConfirmOtpAction({
   const isDisabled = disabled || isPending;
 
   return (
-    <div className="border-custom-slate-border fixed inset-x-0 bottom-0 z-50 border-t bg-white p-4 dark:border-slate-800 dark:bg-slate-950">
+    <div className="border-custom-slate-border bg-background fixed inset-x-0 bottom-0 z-50 border-t p-4">
       <div className="mx-auto max-w-md">
         <button
           type="button"
@@ -75,7 +73,7 @@ export default function ClickConfirmOtpAction({
             'flex h-12 w-full cursor-pointer items-center justify-center rounded-lg text-sm font-semibold transition-colors',
             isValidOtp && !isDisabled
               ? 'bg-custom-indigo hover:bg-custom-indigo-hover text-white'
-              : 'bg-custom-slate-bg text-text-side border-custom-slate-border cursor-not-allowed border dark:bg-slate-800 dark:text-slate-600',
+              : 'bg-custom-slate-bg text-text-side border-custom-slate-border cursor-not-allowed border',
           )}
         >
           {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <span>다음</span>}

@@ -1,7 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
 import cx from 'classnames';
 
 interface RoundedTabProps {
@@ -31,15 +30,8 @@ export default function RoundedTab({
   activeTextClassName,
   activeColor,
 }: RoundedTabProps) {
-  const [activeIndex, setActiveIndex] = useState(() => {
-    const index = data.findIndex((s) => s.id === selectedData);
-    return index >= 0 ? index : 0;
-  });
-
-  useEffect(() => {
-    const index = data.findIndex((s) => s.id === selectedData);
-    if (index >= 0) setActiveIndex(index);
-  }, [selectedData, data]);
+  const currentIndex = data.findIndex((s) => s.id === selectedData);
+  const activeIndex = currentIndex >= 0 ? currentIndex : 0;
 
   const color = activeColor ?? '!text-custom-indigo';
 

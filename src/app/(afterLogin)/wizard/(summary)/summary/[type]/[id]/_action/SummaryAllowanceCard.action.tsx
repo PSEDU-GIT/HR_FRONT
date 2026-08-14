@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
+import cx from 'classnames';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
 import Select, { SelectDataTypes } from '@/app/_component/select/Select';
 import { formatCurrency, parseCurrencyNumber } from '@/app/util/formatCurrency.util';
@@ -132,11 +133,12 @@ export default function SummaryAllowanceCardAction() {
                       wizOtherAllowanceName: '',
                     }))
                   }
-                  className={`rounded-xl border px-3 py-1.5 text-xs font-bold transition-all ${
+                  className={cx(
+                    'rounded-xl border px-3 py-1.5 text-xs font-bold transition-all',
                     !draft.wizHasExtraAllowance
                       ? 'border-custom-indigo bg-custom-indigo/10 text-custom-indigo'
-                      : 'border-custom-slate-border text-text-side bg-white hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700'
-                  }`}
+                      : 'border-custom-slate-border text-text-side bg-background hover:bg-custom-slate-bg',
+                  )}
                 >
                   미적용
                 </button>
@@ -148,11 +150,12 @@ export default function SummaryAllowanceCardAction() {
                       wizHasExtraAllowance: true,
                     }))
                   }
-                  className={`rounded-xl border px-3 py-1.5 text-xs font-bold transition-all ${
+                  className={cx(
+                    'rounded-xl border px-3 py-1.5 text-xs font-bold transition-all',
                     draft.wizHasExtraAllowance
                       ? 'border-custom-indigo bg-custom-indigo/10 text-custom-indigo'
-                      : 'border-custom-slate-border text-text-side bg-white hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700'
-                  }`}
+                      : 'border-custom-slate-border text-text-side bg-background hover:bg-custom-slate-bg',
+                  )}
                 >
                   적용
                 </button>
@@ -249,11 +252,12 @@ export default function SummaryAllowanceCardAction() {
                       wizHasNonCompete: false,
                     }))
                   }
-                  className={`rounded-xl border px-3 py-1.5 text-xs font-bold transition-all ${
+                  className={cx(
+                    'rounded-xl border px-3 py-1.5 text-xs font-bold transition-all',
                     !draft.wizHasNonCompete
                       ? 'border-custom-indigo bg-custom-indigo/10 text-custom-indigo'
-                      : 'border-custom-slate-border text-text-side bg-white hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700'
-                  }`}
+                      : 'border-custom-slate-border text-text-side bg-background hover:bg-custom-slate-bg',
+                  )}
                 >
                   미적용
                 </button>
@@ -265,11 +269,12 @@ export default function SummaryAllowanceCardAction() {
                       wizHasNonCompete: true,
                     }))
                   }
-                  className={`rounded-xl border px-3 py-1.5 text-xs font-bold transition-all ${
+                  className={cx(
+                    'rounded-xl border px-3 py-1.5 text-xs font-bold transition-all',
                     draft.wizHasNonCompete
                       ? 'border-custom-indigo bg-custom-indigo/10 text-custom-indigo'
-                      : 'border-custom-slate-border text-text-side bg-white hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700'
-                  }`}
+                      : 'border-custom-slate-border text-text-side bg-background hover:bg-custom-slate-bg',
+                  )}
                 >
                   적용
                 </button>
@@ -286,7 +291,7 @@ export default function SummaryAllowanceCardAction() {
                     onChangeAction={(item) =>
                       setDraft((prev) => ({ ...prev, wizNonCompetePeriod: String(item.id) }))
                     }
-                    buttonClassName="h-[40px] rounded-xl"
+                    buttonClassName="h-10 rounded-xl"
                   />
                 </div>
                 <div className="space-y-1">
@@ -297,7 +302,7 @@ export default function SummaryAllowanceCardAction() {
                     onChangeAction={(item) =>
                       setDraft((prev) => ({ ...prev, wizNonCompeteRange: String(item.id) }))
                     }
-                    buttonClassName="h-[40px] rounded-xl"
+                    buttonClassName="h-10 rounded-xl"
                   />
                 </div>
                 <div className="space-y-1">

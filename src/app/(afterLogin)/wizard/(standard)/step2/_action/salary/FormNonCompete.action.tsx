@@ -143,11 +143,11 @@ export default function FormNonCompeteAction() {
             'flex cursor-pointer flex-col items-center justify-center rounded-2xl border px-4 py-3 text-center transition-all duration-200',
             !wizHasNonCompete
               ? 'border-custom-indigo-border ring-custom-indigo-border dark:border-custom-indigo/60 dark:ring-custom-indigo/40 bg-white ring-2 dark:bg-slate-900'
-              : 'border-custom-slate-border bg-white hover:border-slate-300 hover:bg-slate-50/60 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:bg-slate-800',
+              : 'border-custom-slate-border bg-white hover:border-slate-300 hover:bg-slate-50/60 dark:bg-slate-900/60 dark:hover:bg-slate-800',
           )}
         >
           <span className="text-sm font-extrabold text-slate-900 dark:text-slate-100">아니오</span>
-          <span className="text-text-side mt-0.5 text-[11px] font-medium dark:text-slate-400">
+          <span className="text-text-side mt-0.5 text-11 font-medium">
             경업금지 약정 없음
           </span>
         </button>
@@ -159,11 +159,11 @@ export default function FormNonCompeteAction() {
             'flex cursor-pointer flex-col items-center justify-center rounded-2xl border px-4 py-3 text-center transition-all duration-200',
             wizHasNonCompete
               ? 'border-custom-indigo-border ring-custom-indigo-border dark:border-custom-indigo/60 dark:ring-custom-indigo/40 bg-white ring-2 dark:bg-slate-900'
-              : 'border-custom-slate-border bg-white hover:border-slate-300 hover:bg-slate-50/60 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:bg-slate-800',
+              : 'border-custom-slate-border bg-white hover:border-slate-300 hover:bg-slate-50/60 dark:bg-slate-900/60 dark:hover:bg-slate-800',
           )}
         >
           <span className="text-sm font-extrabold text-slate-900 dark:text-slate-100">예</span>
-          <span className="text-text-side mt-0.5 text-[11px] font-medium dark:text-slate-400">
+          <span className="text-text-side mt-0.5 text-11 font-medium">
             경업금지 약정 및 보상 설정
           </span>
         </button>
@@ -171,10 +171,10 @@ export default function FormNonCompeteAction() {
 
       {/* "예" 선택 시 하단에 펼쳐지는 추가 입력 박스 */}
       {wizHasNonCompete && (
-        <div className="border-custom-slate-border bg-custom-slate-bg/60 space-y-4 rounded-2xl border p-4 dark:border-slate-800 dark:bg-slate-950/80">
+        <div className="border-custom-slate-border bg-custom-slate-bg/60 space-y-4 rounded-2xl border p-4">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-text-side mb-1 block text-xs font-bold dark:text-slate-400">
+              <label className="text-text-side mb-1 block text-xs font-bold">
                 제한 기간
               </label>
               <Select
@@ -183,26 +183,26 @@ export default function FormNonCompeteAction() {
                 onChangeAction={(selected) =>
                   setStep2({ wizNonCompetePeriod: String(selected.id) })
                 }
-                buttonClassName="h-[40px] rounded-xl text-xs"
+                buttonClassName="h-10 rounded-xl text-xs"
               />
             </div>
 
             <div>
-              <label className="text-text-side mb-1 block text-xs font-bold dark:text-slate-400">
+              <label className="text-text-side mb-1 block text-xs font-bold">
                 제한 범위
               </label>
               <Select
                 data={RANGE_OPTIONS}
                 selectData={selectedRange}
                 onChangeAction={(selected) => setStep2({ wizNonCompeteRange: String(selected.id) })}
-                buttonClassName="h-[40px] rounded-xl text-xs"
+                buttonClassName="h-10 rounded-xl text-xs"
               />
             </div>
           </div>
 
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label className="text-text-side text-xs font-bold dark:text-slate-400">
+              <label className="text-text-side text-xs font-bold">
                 월 보상수당 산정 방식
               </label>
               <div className="flex items-center gap-1 rounded-lg bg-slate-100 p-0.5 dark:bg-slate-800">
@@ -210,7 +210,7 @@ export default function FormNonCompeteAction() {
                   type="button"
                   onClick={() => setStep2({ wizNonCompeteCalcType: 'percent' })}
                   className={cx(
-                    'rounded-md px-2.5 py-1 text-[11px] font-extrabold transition-all',
+                    'rounded-md px-2.5 py-1 text-11 font-extrabold transition-all',
                     wizNonCompeteCalcType === 'percent'
                       ? 'text-custom-indigo dark:text-custom-indigo bg-white shadow-2xs dark:bg-slate-900'
                       : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200',
@@ -222,7 +222,7 @@ export default function FormNonCompeteAction() {
                   type="button"
                   onClick={() => setStep2({ wizNonCompeteCalcType: 'manual', wizNonCompeteAmount: 0 })}
                   className={cx(
-                    'rounded-md px-2.5 py-1 text-[11px] font-extrabold transition-all',
+                    'rounded-md px-2.5 py-1 text-11 font-extrabold transition-all',
                     wizNonCompeteCalcType === 'manual'
                       ? 'text-custom-indigo dark:text-custom-indigo bg-white shadow-2xs dark:bg-slate-900'
                       : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200',
@@ -244,15 +244,15 @@ export default function FormNonCompeteAction() {
                       className={cx(
                         'flex h-9 cursor-pointer items-center justify-center rounded-xl border text-xs font-extrabold transition-all',
                         wizNonCompetePercent === pct
-                          ? 'border-custom-indigo-border bg-custom-indigo-bg text-custom-indigo dark:border-custom-indigo dark:text-custom-indigo dark:bg-slate-900'
-                          : 'border-custom-slate-border bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300',
+                          ? 'border-custom-indigo-border bg-custom-indigo-bg text-custom-indigo dark:border-custom-indigo dark:text-custom-indigo'
+                          : 'border-custom-slate-border bg-white text-slate-700 hover:bg-slate-50 dark:bg-slate-900 dark:text-slate-300',
                       )}
                     >
                       {pct}% {pct === 10 && '(권장)'}
                     </button>
                   ))}
                 </div>
-                <p className="text-custom-indigo px-0.5 text-[11px] font-semibold dark:text-indigo-400">
+                <p className="text-custom-indigo px-0.5 text-11 font-semibold">
                   * 선택하신 비율({wizNonCompetePercent}%)은 약정 월급 입력 시 월 보상수당액으로 자동 반영됩니다.
                 </p>
               </div>
@@ -265,12 +265,12 @@ export default function FormNonCompeteAction() {
                     onChange={handleAmountChange}
                     placeholder="예: 240,000"
                   />
-                  <span className="text-text-side absolute top-1/2 right-3 -translate-y-1/2 text-xs font-bold dark:text-slate-400">
+                  <span className="text-text-side absolute top-1/2 right-3 -translate-y-1/2 text-xs font-bold">
                     원
                   </span>
                 </div>
                 {koreanText && (
-                  <p className="text-text-side px-1 text-xs font-bold dark:text-slate-400">
+                  <p className="text-text-side px-1 text-xs font-bold">
                     {koreanText}
                   </p>
                 )}

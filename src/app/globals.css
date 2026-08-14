@@ -399,6 +399,7 @@
     font-weight: bold;
     color: var(--color-text-main);
     border: 1px solid var(--color-custom-slate-border);
+    background-color: var(--background);
     padding: 10px 16px;
     transition: all 0.2s;
   }
@@ -414,6 +415,7 @@
     font-size: var(--text-14);
     border-radius: 0.75rem;
     border: 1px solid var(--color-border);
+    background-color: var(--background);
     font-weight: bold;
     color: var(--color-text-main);
     resize: none;

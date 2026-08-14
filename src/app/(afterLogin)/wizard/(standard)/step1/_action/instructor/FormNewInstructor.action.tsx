@@ -21,7 +21,7 @@ export default function FormNewInstructorAction() {
           value={step1.instructorName}
           onChange={(e) => setStep1({ instructorName: e.target.value })}
           placeholder="예: 홍길동"
-          className="p-2.5 text-xs font-medium"
+          className="bg-background p-2.5 text-xs font-medium"
         />
       </div>
       <div>
@@ -34,7 +34,7 @@ export default function FormNewInstructorAction() {
           onChange={(e) => setStep1({ instructorPhone: formatPhoneNumber(e.target.value) })}
           placeholder="예: 010-1234-5678"
           maxLength={13}
-          className="p-2.5 text-xs font-medium"
+          className="bg-background p-2.5 text-xs font-medium"
         />
       </div>
       <div>
@@ -46,7 +46,7 @@ export default function FormNewInstructorAction() {
           value={step1.instructorSubject}
           onChange={(e) => setStep1({ instructorSubject: e.target.value })}
           placeholder="예: 공통수학, 수학I"
-          className="p-2.5 text-xs font-medium"
+          className="bg-background p-2.5 text-xs font-medium"
         />
       </div>
       <div>
@@ -71,7 +71,7 @@ export default function FormNewInstructorAction() {
           value={step1.instructorAddress}
           onChange={(e) => setStep1({ instructorAddress: e.target.value })}
           placeholder="예: 서울시 강남구 대치동 123-45"
-          className="p-2.5 text-xs font-medium"
+          className="bg-background p-2.5 text-xs font-medium"
         />
       </div>
     </>

@@ -74,15 +74,7 @@ export default function ReadLegalTermRecommendationAction() {
       try {
         regex = new RegExp(rule.matchPattern, rule.matchPatternFlags || 'g');
       } catch (err) {
-        console.error('Invalid regex pattern from rule:', err);
-      }
-    }
-
-    if (regex && regex.test(newText)) {
-      newText = newText.replace(regex, rule.recommendation);
-    } else {
-      const keywords = rule.targetKeywords || [];
-      const lines = newText.split('\n');
+        console.error('Invalid regex pattern from rule:', err); } } if (regex && regex.test(newText)) { newText = newText.replace(regex, rule.recommendation); } else { const keywords = rule.targetKeywords || []; const lines = newText.split('\n');
       const filteredLines = lines.filter((line) => !keywords.some((kw) => kw && line.includes(kw)));
       filteredLines.push(rule.recommendation);
       newText = filteredLines.join('\n').trim();

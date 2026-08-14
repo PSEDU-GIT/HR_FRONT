@@ -7,13 +7,9 @@ import { AnimatePresence, motion } from 'framer-motion';
 import CustomTimePicker from '@/app/_component/time/CustomTimePicker';
 
 function parseHHMM(timeStr: string) {
-  if (!timeStr || !timeStr.includes(':')) {
-    return { ampm: '오전', hour: 9, min: 0 };
+  if (!timeStr || !timeStr.includes(':')) { return { ampm:'오전', hour: 9, min: 0 };
   }
-  const [hStr, mStr] = timeStr.split(':');
-  let h = parseInt(hStr, 10);
-  const m = parseInt(mStr, 10);
-  const ampm = h >= 12 ? '오후' : '오전';
+  const [hStr, mStr] = timeStr.split(':'); let h = parseInt(hStr, 10); const m = parseInt(mStr, 10); const ampm = h >= 12 ?'오후' : '오전';
   if (h === 0) h = 12;
   else if (h > 12) h -= 12;
   return { ampm, hour: h, min: m };
@@ -73,7 +69,7 @@ export default function TimePicker({
       <button
         type="button"
         className={cx(
-          'bg-background border-custom-slate-border text-text-main flex h-[34px] cursor-pointer items-center justify-between gap-1.5 rounded-xl border px-3 text-xs transition-all outline-none',
+          'bg-background border-custom-slate-border text-text-main flex h-8.5 cursor-pointer items-center justify-between gap-1.5 rounded-xl border px-3 text-xs transition-all outline-none',
           'hover:border-custom-indigo-border/50 hover:bg-custom-slate-bg',
           isVisible && 'border-custom-indigo-border! bg-custom-indigo-bg/30!',
           buttonClassName,

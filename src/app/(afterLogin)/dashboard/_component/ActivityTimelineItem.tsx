@@ -26,7 +26,7 @@ export default function ActivityTimelineItem({ item }: ActivityTimelineItemProps
   const { date, time } = parseDateInfo(item.occurredAt);
 
   return (
-    <div className="relative flex min-h-[2.5rem] items-center text-sm">
+    <div className="relative flex min-h-10 items-center text-sm">
       <div className="flex w-14 shrink-0 flex-col items-end pr-2 text-right">
         <span className="text-text-main text-xs font-bold leading-tight">{time}</span>
         {date && <span className="text-text-side mt-0.5 text-[10px] font-semibold leading-tight">{date}</span>}

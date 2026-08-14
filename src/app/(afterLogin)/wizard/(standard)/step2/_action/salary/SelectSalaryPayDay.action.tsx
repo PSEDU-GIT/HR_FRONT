@@ -24,7 +24,7 @@ export default function SelectSalaryPayDayAction() {
       data={PAY_DAY_OPTIONS}
       selectData={selectedItem}
       onChangeAction={(selected) => setStep2({ wizPayDay: String(selected.id) })}
-      buttonClassName="h-[44px] rounded-2xl"
+      buttonClassName="h-11 rounded-2xl"
     />
   );
 }

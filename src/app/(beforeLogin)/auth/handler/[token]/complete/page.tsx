@@ -24,27 +24,27 @@ export default async function CompletePage({ params, searchParams }: CompletePag
         </div>
 
         <div className="space-y-2">
-          <h1 className="text-text-title text-xl font-bold tracking-tight dark:text-slate-100">
+          <h1 className="text-text-title text-xl font-bold tracking-tight">
             전자계약 체결 완료
           </h1>
-          <p className="text-text-sub text-xs font-normal leading-relaxed dark:text-slate-400">
+          <p className="text-text-sub text-xs font-normal leading-relaxed">
             전자근로계약서 서명이 성공적으로 제출되었습니다.
             <br />
             자세한 계약서 전문 및 체결 내역은{' '}
-            <strong className="text-text-title font-bold dark:text-slate-200">마이페이지</strong>
+            <strong className="text-text-title font-bold">마이페이지</strong>
             에서 언제든지 확인하실 수 있습니다.
           </p>
         </div>
 
-        <div className="border-custom-slate-border bg-custom-slate-bg mt-6 w-full space-y-2 rounded-xl border p-4 text-left dark:border-slate-800 dark:bg-slate-900">
+        <div className="border-custom-slate-border bg-custom-slate-bg mt-6 w-full space-y-2 rounded-xl border p-4 text-left">
           <div className="flex items-center justify-between text-xs">
             <span className="text-text-side font-medium">강사명</span>
-            <span className="text-text-title font-semibold dark:text-slate-200">{name || '강사'}</span>
+            <span className="text-text-title font-semibold">{name || '강사'}</span>
           </div>
           {phone && (
             <div className="flex items-center justify-between text-xs">
               <span className="text-text-side font-medium">연락처</span>
-              <span className="text-text-title font-semibold dark:text-slate-200">{maskedPhone}</span>
+              <span className="text-text-title font-semibold">{maskedPhone}</span>
             </div>
           )}
           <div className="flex items-center justify-between text-xs">

@@ -31,7 +31,7 @@ export default function ClickPrevSummaryStepAction({
       type="button"
       onClick={handlePrev}
       className={cx(
-        'border-custom-slate-border text-text-main hover:bg-custom-slate-bg flex cursor-pointer items-center justify-center space-x-1 rounded-xl border bg-white px-3 py-2 text-xs font-bold transition-all dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700',
+        'border-custom-slate-border text-text-main hover:bg-custom-slate-bg bg-background flex cursor-pointer items-center justify-center space-x-1 rounded-xl border px-3 py-2 text-xs font-bold transition-all',
         className,
       )}
     >

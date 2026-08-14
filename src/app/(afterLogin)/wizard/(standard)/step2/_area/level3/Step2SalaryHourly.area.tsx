@@ -33,7 +33,7 @@ export default function Step2SalaryHourlyArea() {
             </button>
           )}
         </div>
-        <p className="text-text-sub mt-1.5 text-[11px] leading-relaxed font-medium">
+        <p className="text-text-sub mt-1.5 text-11 leading-relaxed font-medium">
           * 2026년 법정 최저시급: 10,320원
         </p>
       </div>

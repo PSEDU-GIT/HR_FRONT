@@ -196,11 +196,7 @@ export default function ClickFontScaleAction() {
               title={`${c.name} 키컬러 변경`}
               onClick={() => handleSelectColor(c.id)}
               style={{ backgroundColor: c.hex }}
-              className={`h-4 w-4 shrink-0 cursor-pointer rounded-full transition-transform hover:scale-115 ${
-                activeColor === c.id
-                  ? 'ring-2 ring-slate-700 ring-offset-1 dark:ring-slate-300'
-                  : 'opacity-80 hover:opacity-100'
-              }`}
+              className={`h-4 w-4 shrink-0 cursor-pointer rounded-full transition-transform hover:scale-115 ${ activeColor === c.id ? 'ring-2 ring-slate-700 ring-offset-1 dark:ring-slate-300' : 'opacity-80 hover:opacity-100' }`}
             />
           ))}
         </motion.div>
@@ -238,7 +234,7 @@ export default function ClickFontScaleAction() {
             <Minus size={14} />
           </button>
 
-          <span className="w-9 shrink-0 text-center text-[11px] font-black text-slate-700 dark:text-slate-300">
+          <span className="w-9 shrink-0 text-center text-11 font-black text-slate-700 dark:text-slate-300">
             {percentage}%
           </span>
 

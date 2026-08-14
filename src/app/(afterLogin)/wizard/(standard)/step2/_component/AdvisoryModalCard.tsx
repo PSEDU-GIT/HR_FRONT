@@ -58,7 +58,7 @@ export default function AdvisoryModalCard({
         ? 'border-custom-yellow-border dark:border-amber-900 bg-custom-yellow-bg dark:bg-amber-950/50 text-custom-yellow dark:text-amber-300'
         : theme === 'emerald'
           ? 'border-custom-emerald-border dark:border-emerald-900 bg-custom-emerald-bg dark:bg-emerald-950/50 text-custom-emerald dark:text-emerald-300'
-          : 'bg-white dark:bg-slate-900 text-text-main dark:text-slate-200 border border-custom-slate-border dark:border-slate-800';
+          : 'bg-white dark:bg-slate-900 text-text-main border border-custom-slate-border dark:border-slate-800';
 
   return (
     <>

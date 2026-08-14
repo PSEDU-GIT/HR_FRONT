@@ -39,14 +39,14 @@ export default function StepSummarySideArea() {
   const guide = SIDE_GUIDE_MAP[type] || SIDE_GUIDE_MAP.draft;
 
   return (
-    <aside className="ml-6 w-[540px] shrink-0 space-y-4">
-      <div className="absolute top-[14px] right-0 flex justify-end">
+    <aside className="ml-6 w-135 shrink-0 space-y-4">
+      <div className="absolute top-3.5 right-0 flex justify-end">
         <NextStepBtn className="w-48" />
       </div>
 
-      <div className="border-custom-slate-border-side dark:border-slate-800 bg-white dark:bg-slate-900 space-y-4 rounded-3xl border p-6 transition-colors">
-        <h4 className="text-13 text-text-title dark:text-slate-100 font-bold">{guide.title}</h4>
-        <div className="text-text-sub dark:text-slate-300 space-y-3 text-xs font-medium leading-relaxed">
+      <div className="border-custom-slate-border-side bg-background space-y-4 rounded-3xl border p-6 transition-colors">
+        <h4 className="text-13 text-text-title font-bold">{guide.title}</h4>
+        <div className="text-text-sub space-y-3 text-xs font-medium leading-relaxed">
           <p>{guide.guide1}</p>
           <p>{guide.guide2}</p>
           <p className="text-custom-indigo font-bold">{guide.guide3}</p>

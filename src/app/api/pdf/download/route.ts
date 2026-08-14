@@ -16,7 +16,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
   const contractId = searchParams.get('contractId');
-  let fallbackName = searchParams.get('name') || '이지은';
+  const fallbackName = searchParams.get('name') || '이지은';
   const title = searchParams.get('title') || '표준 근로계약서';
 
   let detail: ContractDetailResponse | null = null;

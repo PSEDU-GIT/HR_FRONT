@@ -5,8 +5,8 @@ import { useShallow } from 'zustand/react/shallow';
 import { useCabinetStore } from '@/app/(afterLogin)/cabinet/_state/useCabinetStore';
 import { useContractArchiveState } from '@/app/(afterLogin)/cabinet/_state/getContractArchive.state';
 import { useDownloadContractPdfState } from '@/app/(afterLogin)/cabinet/_state/downloadContractPdf.state';
-import { updateSendSignatureLinkMutation } from '@/app/(afterLogin)/cabinet/_lib/updateSendSignatureLinkMutation';
-import { deleteContractMutation } from '@/app/(afterLogin)/cabinet/_lib/deleteContractMutation';
+import { useUpdateSendSignatureLinkMutation } from '@/app/(afterLogin)/cabinet/_lib/updateSendSignatureLinkMutation';
+import { useDeleteContractMutation } from '@/app/(afterLogin)/cabinet/_lib/deleteContractMutation';
 import CabinetTableCellComponent, {
   ColumnKey,
 } from '@/app/(afterLogin)/cabinet/_component/CabinetTableCell.component';
@@ -20,8 +20,8 @@ export default function ReadCabinetTableTbodyAction() {
 
   const { filteredContracts } = useContractArchiveState();
   const { downloadContractPdf } = useDownloadContractPdfState();
-  const { mutate: sendSignatureLink } = updateSendSignatureLinkMutation();
-  const { mutate: removeContract } = deleteContractMutation();
+  const { mutate: sendSignatureLink } = useUpdateSendSignatureLinkMutation();
+  const { mutate: removeContract } = useDeleteContractMutation();
   const { handleAlert } = useAlert();
 
   const { density } = useCabinetStore(
@@ -39,11 +39,7 @@ export default function ReadCabinetTableTbodyAction() {
   };
 
   const handleDelete = (id: number) => {
-    if (confirm('해당 계약서를 삭제하시겠습니까?')) {
-      removeContract(id, {
-        onSuccess: (res) => {
-          handleAlert({
-            type: 'success',
+    if (confirm('해당 계약서를 삭제하시겠습니까?')) { removeContract(id, { onSuccess: (res) => { handleAlert({ type:'success',
             title: '삭제 완료',
             description: res?.message || '해당 계약서 삭제 요청이 처리되었습니다.',
           });

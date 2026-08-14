@@ -51,21 +51,7 @@ const formatPayload = (payload: Record<string, any> | null): string => {
     return `${key}: ${val}`;
   });
 
-  return parts.filter(Boolean).join(', ');
-};
-
-interface CabinetDetailTimelineItemProps {
-  item: ContractEventLogItem;
-  isLast?: boolean;
-}
-
-export default function CabinetDetailTimelineItemComponent({
-  item,
-  isLast,
-}: CabinetDetailTimelineItemProps) {
-  const { eventType, actorType, actorStaffId, payload, ipAddress, userAgent, createdAt } = item;
-
-  const actorLabel = ACTOR_TYPE_MAP[actorType] || actorType || '사용자';
+  return parts.filter(Boolean).join(', '); }; interface CabinetDetailTimelineItemProps { item: ContractEventLogItem; isLast?: boolean; } export default function CabinetDetailTimelineItemComponent({ item, isLast, }: CabinetDetailTimelineItemProps) { const { eventType, actorType, actorStaffId, payload, ipAddress, userAgent, createdAt } = item; const actorLabel = ACTOR_TYPE_MAP[actorType] || actorType ||'사용자';
   const actorDisplay = actorStaffId ? `${actorLabel} (${actorStaffId})` : actorLabel;
 
   const eventConfig = EVENT_TYPE_MAP[eventType] || {
@@ -84,7 +70,7 @@ export default function CabinetDetailTimelineItemComponent({
   return (
     <div
       className={cx(
-        'border-l-2 pl-3.5 text-[11px]',
+        'border-l-2 pl-3.5 text-11',
         isCompletedEvent ? 'border-custom-indigo' : 'border-slate-300',
       )}
     >

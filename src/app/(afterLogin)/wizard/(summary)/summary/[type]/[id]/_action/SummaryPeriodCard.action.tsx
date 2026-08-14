@@ -78,7 +78,7 @@ export default function SummaryPeriodCardAction() {
               }
               placeholder="계약 시작일"
               className="w-full"
-              buttonClassName="h-[40px] !rounded-xl !border-custom-slate-border !px-3 bg-white focus:border-custom-indigo w-full text-xs font-bold text-slate-800 outline-none transition-all"
+              buttonClassName="h-10 !rounded-xl !border-custom-slate-border !px-3 bg-white focus:border-custom-indigo w-full text-xs font-bold text-slate-800 outline-none transition-all"
               hasReset={false}
             />
           </div>
@@ -91,7 +91,7 @@ export default function SummaryPeriodCardAction() {
               }
               placeholder="계약 종료일"
               className="w-full"
-              buttonClassName="h-[40px] !rounded-xl !border-custom-slate-border !px-3 bg-white focus:border-custom-indigo w-full text-xs font-bold text-slate-800 outline-none transition-all"
+              buttonClassName="h-10 !rounded-xl !border-custom-slate-border !px-3 bg-white focus:border-custom-indigo w-full text-xs font-bold text-slate-800 outline-none transition-all"
               hasReset={false}
             />
           </div>
@@ -103,7 +103,7 @@ export default function SummaryPeriodCardAction() {
               onChangeAction={(item) =>
                 setDraft((prev) => ({ ...prev, wizProbation: String(item.id) }))
               }
-              buttonClassName="h-[40px] rounded-xl"
+              buttonClassName="h-10 rounded-xl"
             />
           </div>
         </div>

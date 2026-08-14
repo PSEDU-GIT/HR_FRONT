@@ -97,7 +97,7 @@ export default function SummaryInstructorInfoCardAction() {
               }
               placeholder="연도. 월. 일."
               className="w-full"
-              buttonClassName="h-[40px] !rounded-xl !border-custom-slate-border !px-3 bg-white focus:border-custom-indigo w-full text-xs font-bold text-slate-800 outline-none transition-all"
+              buttonClassName="h-10 !rounded-xl !border-custom-slate-border !px-3 bg-white focus:border-custom-indigo w-full text-xs font-bold text-slate-800 outline-none transition-all"
               hasReset={false}
             />
           </div>

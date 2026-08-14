@@ -100,17 +100,17 @@ export default function SalaryFormHandler() {
       {!salaryEditingSection && (
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="border-custom-indigo-border bg-custom-indigo-bg text-custom-indigo inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-xs font-extrabold dark:border-custom-indigo/40 dark:bg-slate-900 dark:text-custom-indigo">
+            <span className="border-custom-indigo-border bg-custom-indigo-bg text-custom-indigo inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-xs font-extrabold">
               {SALARY_TYPE_LABELS[wizSalaryType] || '고정급'}
             </span>
-            <span className="text-text-main text-xs font-bold dark:text-slate-200">
+            <span className="text-text-main text-xs font-bold">
               급여 및 수당 설정
             </span>
           </div>
           <button
             type="button"
             onClick={handleChangeSalaryType}
-            className="text-text-side hover:text-custom-indigo flex cursor-pointer items-center gap-1 text-xs font-semibold transition-colors dark:text-slate-400 dark:hover:text-custom-indigo"
+            className="text-text-side hover:text-custom-indigo flex cursor-pointer items-center gap-1 text-xs font-semibold transition-colors"
           >
             <RotateCcw className="h-3 w-3" />
             <span>급여 형태 변경</span>
@@ -139,7 +139,7 @@ export default function SalaryFormHandler() {
             className={cx(
               'flex w-full items-center justify-center gap-1.5 rounded-xl border py-2.5 text-xs font-bold transition-all shadow-2xs',
               isHourlyBelowMinimum
-                ? 'cursor-not-allowed border-rose-200 bg-rose-50 text-rose-500 opacity-80 dark:border-rose-950 dark:bg-rose-950/40 dark:text-rose-400'
+                ? 'cursor-not-allowed border-custom-rose-border bg-custom-rose-bg text-custom-rose opacity-80'
                 : 'border-custom-indigo-border bg-custom-indigo text-white hover:bg-custom-indigo-hover active:scale-[0.99]',
             )}
           >

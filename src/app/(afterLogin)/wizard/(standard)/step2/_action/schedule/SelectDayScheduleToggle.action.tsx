@@ -50,7 +50,8 @@ export default function SelectDayScheduleToggleAction() {
     } else {
       // OFF -> ON: 근무일 ON 전환
       setStep2((prev) => {
-        const defaultStart = day === '토요일' || day === '일요일' ? '10:00' : batchStartTime || '14:00';
+        const defaultStart =
+          day === '토요일' || day === '일요일' ? '10:00' : batchStartTime || '14:00';
         const defaultEnd = day === '토요일' || day === '일요일' ? '15:00' : batchEndTime || '22:00';
         const startTime = prev.wizDaysConfig?.[day]?.startTime || defaultStart;
         const endTime = prev.wizDaysConfig?.[day]?.endTime || defaultEnd;
@@ -110,11 +111,11 @@ export default function SelectDayScheduleToggleAction() {
               'relative flex flex-col items-center justify-between rounded-2xl border p-2.5 transition-all duration-200',
               isEnabled
                 ? isEditing
-                  ? 'border-custom-indigo ring-custom-indigo-border bg-custom-indigo-bg/70 text-custom-indigo ring-2 shadow-2xs dark:border-custom-indigo dark:bg-slate-900'
-                  : 'border-custom-indigo-border/60 bg-custom-indigo-bg/40 text-custom-indigo hover:bg-custom-indigo-bg/70 dark:border-custom-indigo/60 dark:bg-slate-950/80 dark:text-custom-indigo dark:hover:bg-slate-900'
+                  ? 'border-custom-indigo ring-custom-indigo-border bg-custom-indigo-bg/70 text-custom-indigo shadow-2xs ring-2'
+                  : 'border-custom-indigo-border/60 bg-custom-indigo-bg/40 text-custom-indigo hover:bg-custom-indigo-bg/70 dark:hover:bg-slate-900'
                 : isWeeklyHoliday
                   ? 'border-indigo-300 bg-indigo-50/70 text-indigo-800 dark:border-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300'
-                  : 'border-custom-slate-border-side text-text-side bg-white hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900/40 dark:text-slate-500 dark:hover:bg-slate-800',
+                  : 'border-custom-slate-border-side text-text-side bg-white hover:bg-slate-50 dark:bg-slate-900/40 dark:hover:bg-slate-800',
             )}
           >
             {/* 요일명 및 ON/OFF 직관적 토글 뱃지 */}
@@ -123,10 +124,10 @@ export default function SelectDayScheduleToggleAction() {
                 className={cx(
                   'text-xs font-black',
                   isEnabled
-                    ? 'text-custom-indigo dark:text-custom-indigo'
+                    ? 'text-custom-indigo'
                     : isWeeklyHoliday
                       ? 'text-indigo-800 dark:text-indigo-300'
-                      : 'text-text-side dark:text-slate-400',
+                      : 'text-text-side',
                 )}
               >
                 {day.substring(0, 1)}
@@ -157,13 +158,13 @@ export default function SelectDayScheduleToggleAction() {
                   onClick={() => setStep2({ editingDay: isEditing ? null : day })}
                   className="w-full cursor-pointer text-center"
                 >
-                  <span className="text-custom-indigo/90 dark:text-custom-indigo/90 text-[10px] font-bold">
+                  <span className="text-custom-indigo/90 text-[10px] font-bold">
                     {conf?.startTime ? conf.startTime.split(':')[0] : '14'}~
                     {conf?.endTime ? conf.endTime.split(':')[0] : '22'}
                   </span>
                 </button>
               ) : isWeeklyHoliday ? (
-                <span className="border-indigo-200 bg-indigo-100 text-indigo-800 dark:border-indigo-800 dark:bg-indigo-900 dark:text-indigo-200 inline-flex items-center gap-0.5 rounded-md border px-1.5 py-0.5 text-[9.5px] font-black">
+                <span className="inline-flex items-center gap-0.5 rounded-md border border-indigo-200 bg-indigo-100 px-1.5 py-0.5 text-[9.5px] font-black text-indigo-800 dark:border-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
                   <CalendarHeart className="h-2.5 w-2.5 text-indigo-600 dark:text-indigo-300" />
                   주휴일
                 </span>
@@ -172,7 +173,7 @@ export default function SelectDayScheduleToggleAction() {
                   type="button"
                   onClick={(e) => handleSetWeeklyHoliday(day, e)}
                   title="이 휴무일을 유급 주휴일로 지정"
-                  className="text-text-side hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-600 rounded px-1 py-0.5 text-[9.5px] font-semibold transition-all dark:hover:bg-indigo-950/50"
+                  className="text-text-side rounded px-1 py-0.5 text-[9.5px] font-semibold transition-all hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-600 dark:hover:bg-indigo-950/50"
                 >
                   + 주휴일 지정
                 </button>
@@ -180,7 +181,7 @@ export default function SelectDayScheduleToggleAction() {
             </div>
 
             {isEditing && (
-              <span className="bg-custom-indigo text-white absolute -top-1.5 -right-1 flex h-4 w-4 items-center justify-center rounded-full shadow-2xs">
+              <span className="bg-custom-indigo absolute -top-1.5 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-white shadow-2xs">
                 <Check className="h-2.5 w-2.5 stroke-[3]" />
               </span>
             )}

@@ -26,7 +26,7 @@ export default function ToggleButton({
         'flex-1 rounded-xl border py-2 text-xs font-bold transition-all disabled:opacity-50',
         isSelected
           ? 'border-custom-indigo bg-custom-indigo/10 text-custom-indigo'
-          : 'border-custom-slate-border text-text-side bg-white hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700',
+          : 'border-custom-slate-border text-text-side bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700',
         className,
       )}
     >

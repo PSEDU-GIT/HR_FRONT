@@ -13,7 +13,7 @@ export default function ContractDocumentArea({
 }: ContractDocumentAreaProps) {
   return (
     <div className="space-y-2">
-      <h2 className="text-text-title text-xs font-bold dark:text-slate-100">계약서 전문</h2>
+      <h2 className="text-text-title text-xs font-bold">계약서 전문</h2>
       <ViewContractDocumentAction token={token} name={name} phone={phone} />
     </div>
   );

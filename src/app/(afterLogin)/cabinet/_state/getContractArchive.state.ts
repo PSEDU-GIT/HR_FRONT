@@ -77,7 +77,7 @@ export const useContractArchiveState = () => {
     }
   }, [data?.counterparties, setCounterparties]);
 
-  const contracts = data?.contracts || [];
+  const contracts = useMemo(() => data?.contracts || [], [data?.contracts]);
   const paging = data?.paging || { page: 1, size: 10, totalCount: 0, hasNext: false };
 
   const filteredContracts = useMemo(() => {

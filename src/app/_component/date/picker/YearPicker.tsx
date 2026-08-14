@@ -24,7 +24,7 @@ export default function YearPicker({ years, currentYear, isOpen, activeRef, onSe
           exit={{ opacity: 0, y: '-5%' }}
           transition={{ duration: 0.15 }}
           className={cx(
-            'border-custom-slate-border dark:border-slate-800 bg-white dark:bg-slate-900 mt-1.5 min-w-[80px] overflow-hidden rounded-xl border shadow-xl',
+            'border-custom-slate-border mt-1.5 min-w-20 overflow-hidden rounded-xl border bg-white shadow-xl dark:bg-slate-900',
             'absolute top-full left-0 z-50',
           )}
         >
@@ -40,7 +40,7 @@ export default function YearPicker({ years, currentYear, isOpen, activeRef, onSe
                   'w-full cursor-pointer rounded-lg px-2.5 py-1.5 text-center font-bold transition-all duration-150',
                   y === currentYear
                     ? 'bg-custom-indigo text-white shadow-2xs'
-                    : 'text-text-main hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800',
+                    : 'text-text-main hover:bg-slate-100 dark:hover:bg-slate-800',
                 )}
                 onClick={() => onSelect(y)}
               >

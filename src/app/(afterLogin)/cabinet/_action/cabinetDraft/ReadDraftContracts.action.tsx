@@ -43,8 +43,7 @@ export default function ReadDraftContractsAction() {
       queryClient.invalidateQueries({ queryKey: getDraftContractsQueryKey });
     },
     onError: (error: any) => {
-      console.error('임시저장 계약서 삭제 실패:', error);
-      alert(error.message || '임시저장 계약서 삭제 중 오류가 발생했습니다.');
+      console.error('임시저장 계약서 삭제 실패:', error); alert(error.message ||'임시저장 계약서 삭제 중 오류가 발생했습니다.');
     },
   });
 
@@ -53,17 +52,7 @@ export default function ReadDraftContractsAction() {
   if (isLoading || draftList.length === 0) return null;
 
   const handleDelete = (id: number) => {
-    if (confirm('작성 중인 임시 저장 계약서를 삭제하시겠습니까?')) {
-      deleteDraft(id);
-    }
-  };
-
-  const handleEdit = (id: number) => {
-    router.push(`/wizard/summary/draft/${id}`);
-  };
-
-  return (
-    <section className="w-full space-y-3">
+    if (confirm('작성 중인 임시 저장 계약서를 삭제하시겠습니까?')) { deleteDraft(id); } }; const handleEdit = (id: number) => { router.push(`/wizard/summary/draft/${id}`); }; return ( <section className="w-full space-y-3">
       {draftList.map((draft) => {
         const name = draft.counterpartyName || '미지정 강사';
         const phone = formatPhoneNumber(draft.counterpartyPhone) || '';
@@ -95,14 +84,14 @@ export default function ReadDraftContractsAction() {
               <button
                 type="button"
                 onClick={() => handleDelete(draft.id)}
-                className="cursor-pointer rounded-xl border border-rose-200 bg-white px-2.5 py-1 text-[11px] font-bold text-rose-600 transition-all hover:bg-rose-50"
+                className="cursor-pointer rounded-xl border border-rose-200 bg-white px-2.5 py-1 text-11 font-bold text-rose-600 transition-all hover:bg-rose-50"
               >
                 삭제
               </button>
               <button
                 type="button"
                 onClick={() => handleEdit(draft.id)}
-                className="bg-custom-indigo hover:bg-custom-indigo-hover cursor-pointer rounded-xl px-3.5 py-1 text-[11px] font-bold text-white transition-all active:scale-95"
+                className="bg-custom-indigo hover:bg-custom-indigo-hover cursor-pointer rounded-xl px-3.5 py-1 text-11 font-bold text-white transition-all active:scale-95"
               >
                 <span>이어 작성하기</span>
               </button>

@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteContract } from '@/app/(afterLogin)/cabinet/_lib/deleteContract';
 import { getContractArchiveQueryKey } from '@/app/(afterLogin)/cabinet/_state/getContractArchive.state';
 
-export const deleteContractMutation = () => {
+export const useDeleteContractMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -12,3 +12,6 @@ export const deleteContractMutation = () => {
     },
   });
 };
+
+export const deleteContractMutation = useDeleteContractMutation;
+

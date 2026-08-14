@@ -13,7 +13,7 @@ export default function ClickResetSignatureAction() {
     <button
       type="button"
       onClick={handleClick}
-      className="text-text-side hover:text-text-main text-xs font-medium underline cursor-pointer dark:text-slate-400"
+      className="text-text-side hover:text-text-main text-xs font-medium underline cursor-pointer"
     >
       초기화
     </button>

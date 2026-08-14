@@ -124,7 +124,7 @@ export default function FormMonthlySalaryAction() {
     <div className="space-y-2 pt-4">
       <div className="relative">
         {koreanText && (
-          <span className="text-text-side absolute -top-5 right-1 text-[11px] font-bold dark:text-slate-300">
+          <span className="text-text-side absolute -top-5 right-1 text-11 font-bold">
             {koreanText}
           </span>
         )}
@@ -134,12 +134,12 @@ export default function FormMonthlySalaryAction() {
           onChange={handleAmountChange}
           placeholder="예: 2,500,000"
         />
-        <span className="text-text-side absolute top-1/2 right-4 -translate-y-1/2 text-xs font-extrabold dark:text-slate-400">
+        <span className="text-text-side absolute top-1/2 right-4 -translate-y-1/2 text-xs font-extrabold">
           원
         </span>
       </div>
 
-      <p className="text-custom-indigo px-1 text-[11px] leading-relaxed font-semibold dark:text-indigo-400">
+      <p className="text-custom-indigo px-1 text-11 leading-relaxed font-semibold">
         * 설정하신 소정근로시간(주 {cappedWeeklyHours}시간, 연장 제외) 기준, 최소{' '}
         <strong className="font-bold underline">
           {minRequiredStandardSalary.toLocaleString()}원

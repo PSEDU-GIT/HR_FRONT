@@ -106,7 +106,7 @@ export default function FormSignaturePadAction() {
   };
 
   return (
-    <div className="border-custom-slate-border relative overflow-hidden rounded-lg border bg-white dark:border-slate-800 dark:bg-slate-900">
+    <div className="border-custom-slate-border relative overflow-hidden rounded-lg border bg-white dark:bg-slate-900">
       <canvas
         ref={canvasRef}
         onMouseDown={startDrawing}
@@ -120,7 +120,7 @@ export default function FormSignaturePadAction() {
       />
 
       {!hasSignature && (
-        <div className="text-text-side pointer-events-none absolute inset-0 flex items-center justify-center text-xs dark:text-slate-500">
+        <div className="text-text-side pointer-events-none absolute inset-0 flex items-center justify-center text-xs">
           서명 입력
         </div>
       )}

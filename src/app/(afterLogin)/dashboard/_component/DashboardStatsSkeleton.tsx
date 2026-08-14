@@ -4,11 +4,7 @@ export default function DashboardStatsSkeleton() {
       {[1, 2, 3, 4].map((item, index) => (
         <div
           key={item}
-          className={`border-custom-slate-border w-full p-6 md:w-1/2 lg:w-1/4 ${
-            index < 3 ? 'border-b lg:border-r lg:border-b-0' : ''
-          } ${index % 2 === 0 ? 'md:border-r' : ''} ${
-            index >= 2 ? 'md:border-b-0' : 'md:border-b'
-          }`}
+          className={`border-custom-slate-border w-full p-6 md:w-1/2 lg:w-1/4 ${ index < 3 ? 'border-b lg:border-r lg:border-b-0' : '' } ${index % 2 === 0 ? 'md:border-r' : ''} ${ index >= 2 ? 'md:border-b-0' : 'md:border-b' }`}
         >
           <div className="flex items-start justify-between">
             <div className="flex flex-col gap-3">

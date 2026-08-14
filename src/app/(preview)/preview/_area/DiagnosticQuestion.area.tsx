@@ -13,7 +13,7 @@ function RiskLevelBadge({
 }) {
   if (level === 'critical') {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-md border border-rose-200 bg-rose-50 px-2 py-0.5 text-[11px] font-bold text-rose-700">
+      <span className="inline-flex items-center gap-1.5 rounded-md border border-rose-200 bg-rose-50 px-2 py-0.5 text-11 font-bold text-rose-700">
         <ShieldAlert className="h-3.5 w-3.5 shrink-0 text-rose-600" />
         <span>{category}</span>
       </span>
@@ -22,7 +22,7 @@ function RiskLevelBadge({
 
   if (level === 'high') {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-md border border-orange-300 bg-orange-50 px-2 py-0.5 text-[11px] font-bold text-orange-800">
+      <span className="inline-flex items-center gap-1.5 rounded-md border border-orange-300 bg-orange-50 px-2 py-0.5 text-11 font-bold text-orange-800">
         <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-orange-600" />
         <span>{category}</span>
       </span>
@@ -30,7 +30,7 @@ function RiskLevelBadge({
   }
 
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-md border border-yellow-300 bg-yellow-50 px-2 py-0.5 text-[11px] font-bold text-yellow-900">
+    <span className="inline-flex items-center gap-1.5 rounded-md border border-yellow-300 bg-yellow-50 px-2 py-0.5 text-11 font-bold text-yellow-900">
       <AlertCircle className="h-3.5 w-3.5 shrink-0 text-yellow-600" />
       <span>{category}</span>
     </span>
@@ -58,7 +58,7 @@ export default function DiagnosticQuestionArea() {
             <span>학온 HR 진단</span>
           </div>
 
-          <span className="font-mono text-[11px] font-bold text-blue-600">
+          <span className="font-mono text-11 font-bold text-blue-600">
             {questionIndex + 1} / {QUESTIONS.length}
           </span>
         </div>
@@ -67,9 +67,7 @@ export default function DiagnosticQuestionArea() {
           {QUESTIONS.map((_, idx) => (
             <div
               key={idx}
-              className={`h-full flex-1 rounded-full transition-colors ${
-                idx <= questionIndex ? 'bg-blue-600' : 'bg-gray-200'
-              }`}
+              className={`h-full flex-1 rounded-full transition-colors ${ idx <= questionIndex ? 'bg-blue-600' : 'bg-gray-200' }`}
             />
           ))}
         </div>
@@ -89,22 +87,14 @@ export default function DiagnosticQuestionArea() {
         <div className="mt-5 space-y-2.5">
           <div
             onClick={() => answerQuestion(true)}
-            className={`flex min-h-[52px] w-full cursor-pointer items-center justify-center rounded-xl border px-4 py-3.5 text-center shadow-2xs transition-all active:scale-[98%] ${
-              selectedAnswer === true
-                ? 'border-blue-600 bg-blue-600 font-bold text-white shadow-sm'
-                : 'border-gray-200 bg-white font-semibold text-gray-900 hover:border-gray-300 hover:bg-gray-50/80'
-            }`}
+            className={`flex min-h-[52px] w-full cursor-pointer items-center justify-center rounded-xl border px-4 py-3.5 text-center shadow-2xs transition-all active:scale-[98%] ${ selectedAnswer === true ? 'border-blue-600 bg-blue-600 font-bold text-white shadow-sm' : 'border-gray-200 bg-white font-semibold text-gray-900 hover:border-gray-300 hover:bg-gray-50/80' }`}
           >
             <span className="text-xs">예, 해당됩니다</span>
           </div>
 
           <div
             onClick={() => answerQuestion(false)}
-            className={`flex min-h-[52px] w-full cursor-pointer items-center justify-center rounded-xl border px-4 py-3.5 text-center shadow-2xs transition-all active:scale-[98%] ${
-              selectedAnswer === false
-                ? 'border-blue-600 bg-blue-600 font-bold text-white shadow-sm'
-                : 'border-gray-200 bg-white font-semibold text-gray-900 hover:border-gray-300 hover:bg-gray-50/80'
-            }`}
+            className={`flex min-h-[52px] w-full cursor-pointer items-center justify-center rounded-xl border px-4 py-3.5 text-center shadow-2xs transition-all active:scale-[98%] ${ selectedAnswer === false ? 'border-blue-600 bg-blue-600 font-bold text-white shadow-sm' : 'border-gray-200 bg-white font-semibold text-gray-900 hover:border-gray-300 hover:bg-gray-50/80' }`}
           >
             <span className="text-xs">아니요, 해당 없습니다</span>
           </div>

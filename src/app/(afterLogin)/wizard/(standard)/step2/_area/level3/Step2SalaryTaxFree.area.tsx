@@ -33,7 +33,7 @@ export default function Step2SalaryTaxFreeArea() {
             <span className="underline-offset-2 group-hover:underline">비과세 적용 안내</span>
           </button>
         </div>
-        <p className="text-text-sub mt-1.5 text-[11px] leading-relaxed font-medium">
+        <p className="text-text-sub mt-1.5 text-11 leading-relaxed font-medium">
           * 총 세전 금액은 동일하더라도 비과세 처리를 늘릴수록 사업주와 선생님 양측의 4대보험료 및
           소득세 부담이 경감됩니다.
         </p>

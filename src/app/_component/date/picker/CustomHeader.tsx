@@ -53,7 +53,7 @@ export default function CustomHeader({
     if (el) {
       el.scrollIntoView({ block: 'center' });
     }
-  }, [isOpen, Number(year)]);
+  }, [isOpen, year]);
 
   return (
     <div className="flex items-center">

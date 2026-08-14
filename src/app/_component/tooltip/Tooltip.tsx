@@ -3,10 +3,10 @@
 import {
   useState,
   useRef,
-  useEffect,
   useCallback,
   type CSSProperties,
   type ReactNode,
+  useSyncExternalStore,
 } from 'react';
 import cx from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -21,6 +21,8 @@ type Props = {
   contentClassName?: string;
   bg?: 'black' | 'white';
 };
+
+const emptySubscribe = () => () => {};
 
 const GAP = 16;
 
@@ -73,13 +75,9 @@ export default function Tooltip({
   bg = 'black',
 }: Props) {
   const [show, setShow] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
+  const isMounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
   const [style, setStyle] = useState<CSSProperties>({});
   const triggerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   const handleMouseEnter = useCallback(() => {
     const rect = triggerRef.current?.getBoundingClientRect();

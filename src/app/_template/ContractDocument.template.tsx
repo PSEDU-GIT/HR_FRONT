@@ -204,14 +204,14 @@ export default function ContractDocumentTemplate({
             {/* 별지 1 : 상세 근로시간표 (주휴일 명시) */}
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
-                <h3 className="border-l-4 border-slate-900 pl-2 text-[14px] font-black text-slate-900">
+                <h3 className="border-l-4 border-slate-900 pl-2 text-sm font-black text-slate-900">
                   【별지 1】 상세 근로시간표
                 </h3>
-                <span className="bg-indigo-50 text-indigo-700 border-indigo-200 inline-flex items-center rounded-md border px-2 py-0.5 text-[11px] font-extrabold">
+                <span className="bg-indigo-50 text-indigo-700 border-indigo-200 inline-flex items-center rounded-md border px-2 py-0.5 text-11 font-extrabold">
                   지정 유급주휴일: 매주 {wizWeeklyHoliday}
                 </span>
               </div>
-              <table className="border-custom-slate-border-side w-full overflow-hidden rounded-xl border text-[11px] text-slate-700 shadow-2xs">
+              <table className="border-custom-slate-border-side w-full overflow-hidden rounded-xl border text-11 text-slate-700 shadow-2xs">
                 <thead className="bg-slate-50/80">
                   <tr className="border-custom-slate-border-side border-b">
                     <th className="w-24 p-2.5 text-center font-extrabold">요일</th>
@@ -261,7 +261,7 @@ export default function ContractDocumentTemplate({
 
             {/* 별지 2 : 상세 임금산정 내역 (이미지 레이아웃 정밀 반영) */}
             <div className="space-y-2.5 pt-2">
-              <h3 className="border-l-4 border-slate-900 pl-2 text-[14px] font-black text-slate-900">
+              <h3 className="border-l-4 border-slate-900 pl-2 text-sm font-black text-slate-900">
                 【별지 2】 상세 임금산정 내역
               </h3>
               <table className="border-slate-300 w-full overflow-hidden rounded-xl border text-[11.5px] text-slate-800 shadow-2xs border-collapse">
@@ -422,7 +422,7 @@ export default function ContractDocumentTemplate({
             <div className="space-y-2 text-center pb-2">
               <h1 className="text-xl font-black text-slate-900 tracking-wider">강 사 근 로 계 약 서</h1>
               <p className="text-xs font-semibold text-slate-600">
-                목동 학온 캠퍼스(이하 "갑"이라 한다)과 {instructorName}(이하 "을"이라 한다)는 다음과 같이 근로계약을 체결한다.
+                목동 학온 캠퍼스(이하 &quot;갑&quot;이라 한다)과 {instructorName}(이하 &quot;을&quot;이라 한다)는 다음과 같이 근로계약을 체결한다.
               </p>
             </div>
 
@@ -432,26 +432,26 @@ export default function ContractDocumentTemplate({
               <div className="border-custom-slate-border-side overflow-hidden rounded-xl border">
                 <div className="border-custom-slate-border-side grid grid-cols-1 divide-y md:grid-cols-2 md:divide-x md:divide-y-0">
                   <div className="space-y-2 p-4">
-                    <div className="mb-2 border-b border-slate-100 pb-1.5 text-[12px] font-extrabold text-slate-900">
+                    <div className="mb-2 border-b border-slate-100 pb-1.5 text-xs font-extrabold text-slate-900">
                       갑 (사용자)
                     </div>
-                    <div className="flex text-[11px]">
+                    <div className="flex text-11">
                       <span className="w-20 font-medium text-slate-400">상호</span>
                       <span className="font-bold text-slate-800">목동 학온 캠퍼스</span>
                     </div>
-                    <div className="flex text-[11px]">
+                    <div className="flex text-11">
                       <span className="w-20 font-medium text-slate-400">대표자</span>
                       <span className="font-bold text-slate-800">이학온</span>
                     </div>
-                    <div className="flex text-[11px]">
+                    <div className="flex text-11">
                       <span className="w-20 font-medium text-slate-400">등록번호</span>
                       <span className="font-bold text-slate-800">105-13-98765</span>
                     </div>
-                    <div className="flex text-[11px]">
+                    <div className="flex text-11">
                       <span className="w-20 font-medium text-slate-400">연락처</span>
                       <span className="font-bold text-slate-800">02-2644-5678</span>
                     </div>
-                    <div className="flex text-[11px]">
+                    <div className="flex text-11">
                       <span className="w-20 font-medium text-slate-400">주소</span>
                       <span className="leading-normal font-bold text-slate-800">
                         서울특별시 양천구 목동서로 201 학온빌딩 5층
@@ -460,22 +460,22 @@ export default function ContractDocumentTemplate({
                   </div>
 
                   <div className="space-y-2 p-4">
-                    <div className="mb-2 border-b border-slate-100 pb-1.5 text-[12px] font-extrabold text-slate-900">
+                    <div className="mb-2 border-b border-slate-100 pb-1.5 text-xs font-extrabold text-slate-900">
                       을 (근로자)
                     </div>
-                    <div className="flex text-[11px]">
+                    <div className="flex text-11">
                       <span className="w-20 font-medium text-slate-400">성명</span>
                       <span className="font-bold text-slate-800">{instructorName}</span>
                     </div>
-                    <div className="flex text-[11px]">
+                    <div className="flex text-11">
                       <span className="w-20 font-medium text-slate-400">연락처</span>
                       <span className="font-bold text-slate-800">{instructorPhone}</span>
                     </div>
-                    <div className="flex text-[11px]">
+                    <div className="flex text-11">
                       <span className="w-20 font-medium text-slate-400">담당과목</span>
                       <span className="font-bold text-slate-800">{instructorSubject}</span>
                     </div>
-                    <div className="flex text-[11px]">
+                    <div className="flex text-11">
                       <span className="w-20 font-medium text-slate-400">주소</span>
                       <span className="leading-normal font-bold text-slate-800">
                         {instructorAddress}
@@ -651,13 +651,13 @@ export default function ContractDocumentTemplate({
             <div className="mt-6 grid grid-cols-2 gap-4">
               <div className="border-custom-slate-border-side space-y-1.5 rounded-xl border bg-slate-50/40 p-4">
                 <div className="text-[10px] font-extrabold text-slate-400">갑 (사용자)</div>
-                <div className="text-[11px] font-bold text-slate-800">상호: 목동 학온 캠퍼스</div>
-                <div className="text-[11px] font-bold text-slate-800">대표자: 이학온</div>
-                <div className="text-[11px] font-medium text-slate-600">
+                <div className="text-11 font-bold text-slate-800">상호: 목동 학온 캠퍼스</div>
+                <div className="text-11 font-bold text-slate-800">대표자: 이학온</div>
+                <div className="text-11 font-medium text-slate-600">
                   주소: 서울특별시 양천구 목동서로 201 학온빌딩 5층
                 </div>
                 <div className="mt-4 flex justify-end">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-white text-[11px] font-extrabold text-slate-400 shadow-2xs">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-white text-11 font-extrabold text-slate-400 shadow-2xs">
                     인
                   </div>
                 </div>
@@ -665,12 +665,12 @@ export default function ContractDocumentTemplate({
 
               <div className="border-custom-slate-border-side space-y-1.5 rounded-xl border bg-slate-50/40 p-4">
                 <div className="text-[10px] font-extrabold text-slate-400">을 (근로자)</div>
-                <div className="text-[11px] font-bold text-slate-800">성명: {instructorName}</div>
-                <div className="text-[11px] font-medium text-slate-600">
+                <div className="text-11 font-bold text-slate-800">성명: {instructorName}</div>
+                <div className="text-11 font-medium text-slate-600">
                   주소: {instructorAddress}
                 </div>
                 <div className="mt-4 flex justify-end">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-white text-[11px] font-extrabold text-slate-400 shadow-2xs">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-white text-11 font-extrabold text-slate-400 shadow-2xs">
                     인
                   </div>
                 </div>

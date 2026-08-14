@@ -109,7 +109,7 @@ export default function DiagnosticFormArea() {
           <span>학온 HR 진단</span>
         </div>
 
-        <span className="font-mono text-[11px] font-semibold text-blue-600">진단 완료 (8/8)</span>
+        <span className="font-mono text-11 font-semibold text-blue-600">진단 완료 (8/8)</span>
       </header>
 
       <main className="mx-auto max-w-md px-4 pt-20">
@@ -188,7 +188,7 @@ export default function DiagnosticFormArea() {
 
               <div className="space-y-0.5 text-xs">
                 <p className="font-bold text-gray-900">[필수] 개인정보 수집 및 이용 동의</p>
-                <p className="text-[11px] leading-relaxed font-medium text-gray-500">
+                <p className="text-11 leading-relaxed font-medium text-gray-500">
                   진단 결과 리포트 안내 및 학온 인사노무 서비스 정보 제공을 위해 수집합니다.
                 </p>
               </div>
@@ -198,7 +198,7 @@ export default function DiagnosticFormArea() {
           <div className="fixed inset-x-0 bottom-0 z-40 border-t border-gray-200 bg-white/95 p-3.5 backdrop-blur-md">
             <div className="mx-auto max-w-md space-y-2">
               {isInvalid && (
-                <div className="text-custom-rose flex items-center justify-center gap-1.5 text-[11px] font-bold">
+                <div className="text-custom-rose flex items-center justify-center gap-1.5 text-11 font-bold">
                   <AlertCircle className="h-3.5 w-3.5 shrink-0" />
                   <span>
                     {isPhoneEmpty

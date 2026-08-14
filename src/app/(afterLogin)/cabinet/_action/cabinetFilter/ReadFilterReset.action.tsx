@@ -23,7 +23,7 @@ export default function ReadFilterResetAction() {
     <button
       type="button"
       onClick={resetFilter}
-      className="text-text-side hover:text-rose-600 active:scale-95 flex cursor-pointer items-center gap-1 text-[11px] font-bold transition-all"
+      className="text-text-side hover:text-rose-600 active:scale-95 flex cursor-pointer items-center gap-1 text-11 font-bold transition-all"
     >
       <RotateCcw className="h-3 w-3" />
       <span>필터 초기화</span>

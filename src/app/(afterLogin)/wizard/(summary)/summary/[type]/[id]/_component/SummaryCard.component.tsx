@@ -18,12 +18,12 @@ export default function SummaryCardComponent({
   children,
 }: SummaryCardComponentProps) {
   return (
-    <div className="border-custom-slate-border rounded-2xl border bg-white p-5 shadow-xs transition-colors dark:border-slate-800 dark:bg-slate-900">
+    <div className="border-custom-slate-border bg-background rounded-2xl border p-5 shadow-xs transition-colors">
       {/* Seamless Header */}
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <div className="bg-custom-indigo h-4 w-1 rounded-full" />
-          <h3 className="text-text-title text-sm font-extrabold tracking-tight dark:text-slate-100">
+          <h3 className="text-text-title text-sm font-extrabold tracking-tight">
             {title}
           </h3>
         </div>
@@ -35,7 +35,7 @@ export default function SummaryCardComponent({
                 <button
                   type="button"
                   onClick={onCancelEdit}
-                  className="border-custom-slate-border text-text-sub hover:bg-custom-slate-bg hover:text-text-title flex cursor-pointer items-center justify-center rounded-xl border bg-white px-3.5 py-1.5 text-xs font-bold transition-all dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
+                  className="border-custom-slate-border text-text-sub hover:bg-custom-slate-bg hover:text-text-title bg-background flex cursor-pointer items-center justify-center rounded-xl border px-3.5 py-1.5 text-xs font-bold transition-all"
                 >
                   취소
                 </button>
@@ -52,7 +52,7 @@ export default function SummaryCardComponent({
             <button
               type="button"
               onClick={onToggleEdit}
-              className="border-custom-indigo text-custom-indigo hover:bg-custom-indigo-bg flex cursor-pointer items-center justify-center rounded-xl border bg-white px-3.5 py-1.5 text-xs font-bold transition-all dark:bg-slate-800 dark:hover:bg-indigo-950/40"
+              className="border-custom-indigo text-custom-indigo hover:bg-custom-indigo-bg bg-background flex cursor-pointer items-center justify-center rounded-xl border px-3.5 py-1.5 text-xs font-bold transition-all"
             >
               수정
             </button>

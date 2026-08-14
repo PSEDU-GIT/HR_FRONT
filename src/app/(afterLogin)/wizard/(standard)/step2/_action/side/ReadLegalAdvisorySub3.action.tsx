@@ -114,12 +114,12 @@ export default function ReadLegalAdvisorySub3Action() {
   return (
     <div className="space-y-3">
       {hasSalaryEntered && minWageTitle && (
-        <div className="border-custom-slate-border-side space-y-2 rounded-2xl border bg-white p-4 transition-all dark:border-slate-800 dark:bg-slate-900">
-          <div className="text-text-title text-xs font-extrabold dark:text-slate-100">
+        <div className="border-custom-slate-border-side bg-background space-y-2 rounded-2xl border p-4 transition-all">
+          <div className="text-text-title text-xs font-extrabold">
             {minWageTitle}
           </div>
           {minWageDescription && (
-            <p className="text-text-sub text-xs leading-relaxed font-medium whitespace-pre-line dark:text-slate-300">
+            <p className="text-text-sub text-xs leading-relaxed font-medium whitespace-pre-line">
               {minWageDescription}
             </p>
           )}

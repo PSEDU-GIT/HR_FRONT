@@ -5,5 +5,5 @@ import { useContractArchiveState } from '@/app/(afterLogin)/cabinet/_state/getCo
 export default function ReadFilterInstructorCountAction() {
   const { totalInstructorCount } = useContractArchiveState();
 
-  return <span className="text-text-side text-[11px] font-bold">총 {totalInstructorCount}명</span>;
+  return <span className="text-text-side text-11 font-bold">총 {totalInstructorCount}명</span>;
 }

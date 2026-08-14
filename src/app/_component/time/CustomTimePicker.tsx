@@ -57,13 +57,13 @@ export default function CustomTimePicker({
   const [hour, setHour] = useState<number | null>(defaultData?.hour ?? null);
   const [min, setMin] = useState<number | null>(defaultData?.min ?? null);
 
-  useEffect(() => {
-    if (defaultData) {
-      setAmPm(defaultData.ampm);
-      setHour(defaultData.hour);
-      setMin(defaultData.min);
-    }
-  }, [defaultData?.ampm, defaultData?.hour, defaultData?.min]);
+  const [prevDefaultData, setPrevDefaultData] = useState(defaultData);
+  if (defaultData !== prevDefaultData) {
+    setPrevDefaultData(defaultData);
+    setAmPm(defaultData?.ampm ?? null);
+    setHour(defaultData?.hour ?? null);
+    setMin(defaultData?.min ?? null);
+  }
 
   const getHourData = (checkAmPm: string | null) => {
     return ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'].map((datum) => {
@@ -132,7 +132,7 @@ export default function CustomTimePicker({
     if (amPm !== null && hour !== null && min !== null) {
       onTrackable?.(amPm, hour, min);
     }
-  }, [amPm, hour, min]);
+  }, [amPm, hour, min, onTrackable]);
 
   return (
     <div className="bg-background border-custom-slate-border z-10 flex w-max rounded-2xl border p-1 shadow-sm">

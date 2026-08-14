@@ -28,9 +28,7 @@ export default function ConfirmOtpAction({ token, name, phone }: ConfirmOtpActio
       setResendMessage('인증번호가 발송되었습니다.');
     },
     onError: (err: any) => {
-      console.error('OTP 요청 실패:', err);
-      handleAlert({
-        type: 'error',
+      console.error('OTP 요청 실패:', err); handleAlert({ type:'error',
         title: '인증번호 발송 실패',
         description: err.message || '인증번호 발송에 실패했습니다.',
       });
@@ -42,7 +40,7 @@ export default function ConfirmOtpAction({ token, name, phone }: ConfirmOtpActio
 
     isMountedRef.current = true;
     handleRequestOtp();
-  }, [token, name, phone]);
+  }, [token, name, phone, handleRequestOtp]);
 
   useEffect(() => {
     if (timer <= 0) return;
@@ -69,7 +67,7 @@ export default function ConfirmOtpAction({ token, name, phone }: ConfirmOtpActio
     <div className="space-y-4">
       <div className="space-y-1.5">
         <div className="flex items-center justify-between">
-          <label className="text-text-main block text-xs font-medium dark:text-slate-300">
+          <label className="text-text-main block text-xs font-medium">
             인증번호 (6자리)
           </label>
           <span className="text-custom-indigo text-xs font-bold">
@@ -90,7 +88,7 @@ export default function ConfirmOtpAction({ token, name, phone }: ConfirmOtpActio
 
         <div className="flex items-center justify-between pt-1 text-xs">
           {resendMessage ? (
-            <span className="text-text-main font-medium dark:text-slate-300">{resendMessage}</span>
+            <span className="text-text-main font-medium">{resendMessage}</span>
           ) : (
             <span className="text-text-side">인증번호가 도착하지 않았나요?</span>
           )}

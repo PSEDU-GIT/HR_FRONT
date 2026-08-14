@@ -14,16 +14,12 @@ export default function ClickGoToMyPageAction() {
       try {
         sessionStorage.clear();
       } catch (e) {
-        console.error('Failed to clear sessionStorage:', e);
-      }
-    }
-
-    const mainAppUrl = process.env.NEXT_PUBLIC_MAIN_APP_URL || 'https://hakon.co.kr';
+        console.error('Failed to clear sessionStorage:', e); } } const mainAppUrl = process.env.NEXT_PUBLIC_MAIN_APP_URL ||'https://hakon.co.kr';
     window.location.href = mainAppUrl;
   };
 
   return (
-    <div className="border-custom-slate-border fixed inset-x-0 bottom-0 z-50 border-t bg-white p-4 dark:border-slate-800 dark:bg-slate-950">
+    <div className="border-custom-slate-border bg-background fixed inset-x-0 bottom-0 z-50 border-t p-4">
       <div className="mx-auto max-w-md">
         <button
           type="button"

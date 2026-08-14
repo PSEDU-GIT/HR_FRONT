@@ -60,7 +60,7 @@ export default function Alert({
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
           className={cx(
-            'border-custom-slate-border relative flex w-full max-w-md items-start overflow-hidden rounded-2xl border bg-gradient-to-r p-3.5 sm:p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:from-slate-900 dark:to-slate-900',
+            'border-custom-slate-border relative flex w-full max-w-md items-start overflow-hidden rounded-2xl border bg-gradient-to-r p-3.5 sm:p-4 shadow-sm dark:bg-slate-900 dark:from-slate-900 dark:to-slate-900',
             config.gradient,
           )}
         >
@@ -71,12 +71,12 @@ export default function Alert({
           </div>
 
           <div className="flex-1 pt-0.5 min-w-0">
-            <h3 className="text-14 sm:text-15 text-text-title mb-0.5 font-bold dark:text-slate-100">{title}</h3>
-            <p className="text-text-side text-xs font-semibold leading-snug break-words dark:text-slate-400">{description}</p>
+            <h3 className="text-14 sm:text-15 text-text-title mb-0.5 font-bold">{title}</h3>
+            <p className="text-text-side text-xs font-semibold leading-snug break-words">{description}</p>
           </div>
 
           <button type="button" onClick={hideAlert} className="ml-3 shrink-0 cursor-pointer sm:ml-4">
-            <HoverChip icon={<X className="h-4 w-4 text-text-side dark:text-slate-400" strokeWidth={2} />} />
+            <HoverChip icon={<X className="h-4 w-4 text-text-side" strokeWidth={2} />} />
           </button>
         </motion.div>
       )}

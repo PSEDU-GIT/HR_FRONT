@@ -30,7 +30,7 @@ export default async function SummaryWizardLayout({
           <SelectSummaryStepNavAction />
         </header>
 
-        <div className="ml-6 flex w-[540px] shrink-0 justify-end" />
+        <div className="ml-6 flex w-135 shrink-0 justify-end" />
       </div>
 
       {children}

@@ -64,7 +64,7 @@ export default function Step2WorkScheduleArea() {
                 </legend>
                 <ReadWorkScheduleWarningAction />
               </div>
-              <p className="text-text-sub mt-1 text-[11px] leading-relaxed font-medium">
+              <p className="text-text-sub mt-1 text-11 leading-relaxed font-medium">
                 * 각 요일을 클릭하여 휴무 여부 및 시작/종료/휴게 시간을 세부 조정할 수 있습니다. (주 52시간 상한 준수)
               </p>
             </div>

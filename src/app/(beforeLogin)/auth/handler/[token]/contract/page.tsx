@@ -19,10 +19,10 @@ export default async function ContractPage({ params, searchParams }: ContractPag
 
       <main className="space-y-6 px-5 pt-6 pb-28">
         <div className="space-y-1">
-          <h1 className="text-text-title text-xl font-bold tracking-tight dark:text-slate-100">
+          <h1 className="text-text-title text-xl font-bold tracking-tight">
             전자근로계약서 체결
           </h1>
-          <p className="text-text-sub text-xs font-normal dark:text-slate-400">
+          <p className="text-text-sub text-xs font-normal">
             {name ? `${name} 강사님, ` : ''}약관 동의 및 서명을 진행해 주세요.
           </p>
         </div>

@@ -44,7 +44,7 @@ export default function FormPrivacyTermsAction() {
             onChange={(e) => toggleAllAgreements(e.target.checked)}
             className="text-custom-indigo focus:ring-custom-indigo h-4 w-4 rounded border-slate-300"
           />
-          <span className="text-text-title text-xs font-bold dark:text-slate-100">전체 동의</span>
+          <span className="text-text-title text-xs font-bold">전체 동의</span>
         </label>
       </div>
 

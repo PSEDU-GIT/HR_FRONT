@@ -120,7 +120,7 @@ export default function SummarySalaryCardAction() {
                 onChangeAction={(item) =>
                   setDraft((prev) => ({ ...prev, wizSalaryType: item.id as SalaryType }))
                 }
-                buttonClassName="h-[40px] rounded-xl"
+                buttonClassName="h-10 rounded-xl"
               />
             </div>
 
@@ -211,16 +211,16 @@ export default function SummarySalaryCardAction() {
                 onChangeAction={(item) =>
                   setDraft((prev) => ({ ...prev, wizPayDay: String(item.id) }))
                 }
-                buttonClassName="h-[40px] rounded-xl"
+                buttonClassName="h-10 rounded-xl"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="flex items-center justify-between rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 p-3">
+            <div className="border-custom-slate-border bg-custom-slate-bg flex items-center justify-between rounded-xl border p-3">
               <div className="space-y-0.5">
-                <span className="text-xs font-bold text-slate-800 dark:text-slate-100">식대 비과세</span>
-                <p className="text-[11px] text-slate-400 dark:text-slate-400">월 최대 20만원</p>
+                <span className="text-text-title text-xs font-bold">식대 비과세</span>
+                <p className="text-text-side text-11">월 최대 20만원</p>
               </div>
               <input
                 type="text"

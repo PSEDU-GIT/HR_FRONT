@@ -27,17 +27,17 @@ export default function ReadProbationAdvisoryAction() {
   return (
     <div className="space-y-3">
       {wizProbation !== '없음' && title && (
-        <div className="border-custom-slate-border-side space-y-2 rounded-2xl border bg-white p-4 transition-all dark:border-slate-800 dark:bg-slate-900">
-          <div className="text-text-title text-xs font-extrabold dark:text-slate-100">{title}</div>
+        <div className="border-custom-slate-border-side bg-background space-y-2 rounded-2xl border p-4 transition-all">
+          <div className="text-text-title text-xs font-extrabold">{title}</div>
           {description && (
-            <p className="text-text-sub text-xs leading-relaxed font-medium whitespace-pre-line dark:text-slate-300">
+            <p className="text-text-sub text-xs leading-relaxed font-medium whitespace-pre-line">
               {description}
             </p>
           )}
-          <div className="border-custom-slate-border mt-2 flex flex-wrap gap-2 border-t pt-2 dark:border-slate-800">
+          <div className="border-custom-slate-border mt-2 flex flex-wrap gap-2 border-t pt-2">
             <span
               className={cx(
-                'inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-[11px] font-semibold',
+                'inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-11 font-semibold',
                 isProbationWarning
                   ? 'border-custom-yellow-border bg-custom-yellow-bg text-custom-yellow'
                   : 'border-custom-emerald-border bg-custom-emerald-bg text-custom-emerald',

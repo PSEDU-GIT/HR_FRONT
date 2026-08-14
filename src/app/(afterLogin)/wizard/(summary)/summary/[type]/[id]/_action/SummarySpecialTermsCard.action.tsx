@@ -44,13 +44,13 @@ export default function SummarySpecialTermsCardAction() {
             rows={4}
             value={draftCustomTerms}
             onChange={(e) => setDraftCustomTerms(e.target.value)}
-            className="border-custom-slate-border-side dark:border-slate-800 text-text-title dark:text-slate-100 w-full resize-none rounded-2xl border bg-white dark:bg-slate-800 p-4 text-xs leading-relaxed font-medium transition-all focus:border-custom-indigo focus:outline-none"
+            className="border-custom-slate-border-side text-text-title w-full resize-none rounded-2xl border bg-white dark:bg-slate-800 p-4 text-xs leading-relaxed font-medium transition-all focus:border-custom-indigo focus:outline-none"
             placeholder="추가로 적용할 특약 사항을 작성해주세요."
           />
         </div>
       ) : (
-        <div className="border-custom-slate-border dark:border-slate-800 overflow-hidden rounded-xl border bg-white dark:bg-slate-800/60 p-3.5">
-          <p className="text-text-main dark:text-slate-200 whitespace-pre-wrap text-xs font-semibold leading-relaxed">
+        <div className="border-custom-slate-border overflow-hidden rounded-xl border bg-white dark:bg-slate-800/60 p-3.5">
+          <p className="text-text-main whitespace-pre-wrap text-xs font-semibold leading-relaxed">
             {step3.customTerms?.trim() ? step3.customTerms : '등록된 특약 사항이 없습니다.'}
           </p>
         </div>

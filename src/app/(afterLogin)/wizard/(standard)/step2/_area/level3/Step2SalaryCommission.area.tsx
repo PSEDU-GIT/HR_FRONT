@@ -17,7 +17,7 @@ export default function Step2SalaryCommissionArea() {
           <legend className="text-text-side text-xs font-extrabold tracking-widest uppercase">
             최소 보장 금액을 설정할까요?
           </legend>
-          <p className="text-text-sub mt-1.5 text-[11px] leading-relaxed font-medium">
+          <p className="text-text-sub mt-1.5 text-11 leading-relaxed font-medium">
             * 비율제로 급여를 산정하더라도 근로자로 판단 시 최저임금법 준수 의무가 발생할 수
             있습니다.
           </p>
@@ -25,7 +25,7 @@ export default function Step2SalaryCommissionArea() {
 
         <FormMinGuaranteeSalaryAction />
 
-        <div className="mt-2.5 rounded-xl border border-custom-indigo-border/80 bg-custom-indigo-bg/60 p-2.5 text-[11px] text-custom-indigo dark:border-indigo-900/60 dark:bg-indigo-950/40 dark:text-indigo-200">
+        <div className="mt-2.5 rounded-xl border border-custom-indigo-border/80 bg-custom-indigo-bg/60 p-2.5 text-11 text-custom-indigo">
           <p className="font-bold leading-relaxed">
             * 매월 <strong className="underline underline-offset-2">수강료 매출 비율 정산액</strong>과{' '}
             <strong className="underline underline-offset-2">최소 보장 약정액</strong> 중{' '}

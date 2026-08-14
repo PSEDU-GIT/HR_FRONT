@@ -40,27 +40,27 @@ export default function ReadContractPeriodAdvisoryAction() {
   return (
     <div className="space-y-3">
       {advisoryTitle && (
-        <div className="border-custom-slate-border-side space-y-2 rounded-2xl border bg-white p-4 transition-all dark:border-slate-800 dark:bg-slate-900">
-          <div className="text-text-title text-xs font-extrabold dark:text-slate-100">
+        <div className="border-custom-slate-border-side space-y-2 rounded-2xl border bg-white p-4 transition-all dark:bg-slate-900">
+          <div className="text-text-title text-xs font-extrabold">
             {advisoryTitle}
           </div>
           {advisoryDescription && (
-            <p className="text-text-sub text-xs leading-relaxed font-medium whitespace-pre-line dark:text-slate-300">
+            <p className="text-text-sub text-xs leading-relaxed font-medium whitespace-pre-line">
               {advisoryDescription}
             </p>
           )}
           {periodDays > 0 && (
-            <div className="border-custom-slate-border mt-2 flex flex-wrap gap-2 border-t pt-2 dark:border-slate-800">
+            <div className="border-custom-slate-border mt-2 flex flex-wrap gap-2 border-t pt-2">
               <span
                 className={cx(
-                  'inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-[11px] font-semibold',
+                  'inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-11 font-semibold',
                   periodDays >= 365
                     ? 'border-custom-emerald-border bg-custom-emerald-bg text-custom-emerald dark:bg-emerald-950/40 dark:text-emerald-300'
                     : 'border-custom-yellow-border bg-custom-yellow-bg text-custom-yellow dark:bg-amber-950/40 dark:text-amber-300',
                 )}
               >
                 계약기간 {periodLabel}{' '}
-                <span className="text-text-side font-medium dark:text-slate-400">
+                <span className="text-text-side font-medium">
                   ({periodDays}일)
                 </span>{' '}
                 · {periodDays >= 365 ? '퇴직금 의무 있음' : '퇴직금 없음'}

@@ -69,9 +69,7 @@ export default function ClickSummaryCompleteAction({
       router.push('/cabinet');
     },
     onError: (error: any) => {
-      console.error('계약서 작성 완료 실패:', error);
-      handleAlert({
-        type: 'error',
+      console.error('계약서 작성 완료 실패:', error); handleAlert({ type:'error',
         title: '오류 발생',
         description: error.message || '계약서 생성 중 오류가 발생했습니다.',
       });
@@ -96,9 +94,7 @@ export default function ClickSummaryCompleteAction({
       router.push('/cabinet');
     },
     onError: (error: any) => {
-      console.error('계약서 수정 완료 실패:', error);
-      handleAlert({
-        type: 'error',
+      console.error('계약서 수정 완료 실패:', error); handleAlert({ type:'error',
         title: '오류 발생',
         description: error.message || '계약서 수정 중 오류가 발생했습니다.',
       });

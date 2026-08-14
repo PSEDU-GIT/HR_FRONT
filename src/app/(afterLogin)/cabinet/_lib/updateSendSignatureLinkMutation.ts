@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateSendSignatureLink } from '@/app/(afterLogin)/cabinet/_lib/updateSendSignatureLink';
 import { getContractArchiveQueryKey } from '@/app/(afterLogin)/cabinet/_state/getContractArchive.state';
 
-export const updateSendSignatureLinkMutation = () => {
+export const useUpdateSendSignatureLinkMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -12,3 +12,6 @@ export const updateSendSignatureLinkMutation = () => {
     },
   });
 };
+
+export const updateSendSignatureLinkMutation = useUpdateSendSignatureLinkMutation;
+

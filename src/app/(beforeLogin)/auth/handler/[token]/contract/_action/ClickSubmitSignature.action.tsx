@@ -64,9 +64,7 @@ export default function ClickSubmitSignatureAction({
       );
     },
     onError: (err: any) => {
-      console.error('서명 제출 실패:', err);
-      handleAlert({
-        type: 'error',
+      console.error('서명 제출 실패:', err); handleAlert({ type:'error',
         title: '서명 제출 실패',
         description: err.message || '서명 제출 과정 중 오류가 발생했습니다.',
       });
@@ -98,7 +96,7 @@ export default function ClickSubmitSignatureAction({
   };
 
   return (
-    <div className="border-custom-slate-border fixed inset-x-0 bottom-0 z-50 border-t bg-white p-4 dark:border-slate-800 dark:bg-slate-950">
+    <div className="border-custom-slate-border bg-background fixed inset-x-0 bottom-0 z-50 border-t p-4">
       <div className="mx-auto max-w-md">
         <button
           type="button"
@@ -110,7 +108,7 @@ export default function ClickSubmitSignatureAction({
               ? 'bg-custom-emerald cursor-default text-white'
               : !isSubmitDisabled
                 ? 'bg-custom-indigo hover:bg-custom-indigo-hover text-white'
-                : 'bg-custom-slate-bg text-text-side border-custom-slate-border cursor-not-allowed border dark:bg-slate-800 dark:text-slate-600',
+                : 'bg-custom-slate-bg text-text-side border-custom-slate-border cursor-not-allowed border',
           )}
         >
           {isSubmitting ? (

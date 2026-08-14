@@ -17,23 +17,23 @@ export default function ReadContractPeriodSummaryAction() {
 
   return (
     <>
-      계약기간: <span className="font-bold text-text-title dark:text-slate-200">{wizStartDate || '-'}</span> ~{' '}
-      <span className="font-mono font-bold text-text-title dark:text-slate-200">{wizEndDate || '-'}</span>
+      계약기간: <span className="font-bold text-text-title">{wizStartDate || '-'}</span> ~{' '}
+      <span className="font-mono font-bold text-text-title">{wizEndDate || '-'}</span>
       {periodLabel && (
         <>
           {' '}
-          <span className="font-mono font-bold text-text-title dark:text-slate-200">({periodLabel})</span>
+          <span className="font-mono font-bold text-text-title">({periodLabel})</span>
         </>
       )}
       {wizProbation !== '없음' ? (
         <>
           {' '}
-          · 수습: <span className="font-mono font-bold text-text-title dark:text-slate-200">{wizProbation}</span>
+          · 수습: <span className="font-mono font-bold text-text-title">{wizProbation}</span>
         </>
       ) : (
         <>
           {' '}
-          · 수습: <span className="font-bold text-text-title dark:text-slate-200">없음</span>
+          · 수습: <span className="font-bold text-text-title">없음</span>
         </>
       )}
     </>

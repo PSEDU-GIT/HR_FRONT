@@ -21,7 +21,7 @@ export default function SelectExistingInstructorAction() {
     { id: '', displayName: '-- 강사를 선택하세요 --' },
     ...instructors.map((ins) => {
       const phoneText = ins.phone ? ` (${formatPhoneNumber(ins.phone)})` : '';
-      const historyBadge = ins.hasContractHistory ? ' [계약 이력 있음]' : '';
+      const historyBadge = ins.hasContractHistory ? '[계약 이력 있음]' : '';
       return {
         id: String(ins.staffId),
         displayName: `${ins.name}${phoneText}${historyBadge}`,
@@ -34,7 +34,7 @@ export default function SelectExistingInstructorAction() {
   const currentSelectValue: SelectDataTypes = selectedInstructor
     ? {
         id: String(selectedInstructor.staffId),
-        displayName: `${selectedInstructor.name}${selectedInstructor.phone ? ` (${formatPhoneNumber(selectedInstructor.phone)})` : ''}${selectedInstructor.hasContractHistory ? ' [계약 이력 있음]' : ''}`,
+        displayName: `${selectedInstructor.name}${selectedInstructor.phone ? ` (${formatPhoneNumber(selectedInstructor.phone)})` : ''}${selectedInstructor.hasContractHistory ? '[계약 이력 있음]' : ''}`,
       }
     : { id: '', displayName: '-- 강사를 선택하세요 --' };
 

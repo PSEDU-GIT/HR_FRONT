@@ -17,7 +17,7 @@ export default function DiagnosticLandingArea() {
           <span>학온 HR 진단</span>
         </div>
 
-        <span className="text-[11px] font-semibold text-gray-500">진단 시작</span>
+        <span className="text-11 font-semibold text-gray-500">진단 시작</span>
       </header>
 
       <main className="mx-auto max-w-md px-4 pt-20">

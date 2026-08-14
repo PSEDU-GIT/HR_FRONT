@@ -22,7 +22,7 @@ export default function SummaryKeyValueListComponent({
 }: SummaryKeyValueListProps) {
   if (!items || items.length === 0) {
     return (
-      <div className="border-custom-slate-border dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 text-text-side dark:text-slate-400 rounded-xl border p-3.5 text-xs font-medium">
+      <div className="border-custom-slate-border bg-custom-slate-bg/40 text-text-side rounded-xl border p-3.5 text-xs font-medium">
         {emptyText}
       </div>
     );
@@ -42,15 +42,15 @@ export default function SummaryKeyValueListComponent({
         <div
           key={idx}
           className={cx(
-            'border-custom-slate-border dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/60 flex flex-col justify-center rounded-xl border px-3.5 py-3 transition-colors',
+            'border-custom-slate-border bg-custom-slate-bg/60 flex flex-col justify-center rounded-xl border px-3.5 py-3 transition-colors',
             item.colSpan === 2 && 'sm:col-span-2',
             item.colSpan === 3 && 'lg:col-span-3',
           )}
         >
-          <span className="text-text-side dark:text-slate-400 text-[11px] font-bold tracking-tight">
+          <span className="text-text-side text-11 font-bold tracking-tight">
             {item.label}
           </span>
-          <span className="text-text-title dark:text-slate-100 mt-1 truncate text-xs font-extrabold">
+          <span className="text-text-title mt-1 truncate text-xs font-extrabold">
             {item.value || '-'}
           </span>
         </div>

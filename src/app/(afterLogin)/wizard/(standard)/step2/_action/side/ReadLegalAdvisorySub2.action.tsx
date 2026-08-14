@@ -36,20 +36,20 @@ export default function ReadLegalAdvisorySub2Action() {
   return (
     <div className="space-y-3">
       {advisoryTitle && (
-        <div className="border-custom-slate-border-side space-y-2 rounded-2xl border bg-white p-4 transition-all dark:border-slate-800 dark:bg-slate-900">
-          <div className="text-text-title text-xs font-extrabold dark:text-slate-100">
+        <div className="border-custom-slate-border-side bg-background space-y-2 rounded-2xl border p-4 transition-all">
+          <div className="text-text-title text-xs font-extrabold">
             {advisoryTitle}
           </div>
           {advisoryDescription && (
-            <p className="text-text-sub text-xs leading-relaxed font-medium whitespace-pre-line dark:text-slate-300">
+            <p className="text-text-sub text-xs leading-relaxed font-medium whitespace-pre-line">
               {advisoryDescription}
             </p>
           )}
 
-          <div className="border-custom-slate-border mt-2 flex flex-wrap gap-2 border-t pt-2 dark:border-slate-800">
+          <div className="border-custom-slate-border mt-2 flex flex-wrap gap-2 border-t pt-2">
             <span
               className={cx(
-                'inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-[11px] font-semibold',
+                'inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-11 font-semibold',
                 isUnder15Hours
                   ? 'border-custom-yellow-border bg-custom-yellow-bg text-custom-yellow'
                   : 'border-custom-emerald-border bg-custom-emerald-bg text-custom-emerald',
@@ -90,7 +90,7 @@ export default function ReadLegalAdvisorySub2Action() {
             <p className="whitespace-pre-line">
               근로기준법 제54조(휴게)에 따라 근로시간이 4시간인 경우에는 30분 이상, 8시간인 경우에는 1시간 이상의 휴게시간을 근로시간 도중에 부여해야 합니다. 위반 시 2년 이하의 징역 또는 2천만원 이하의 벌금 대상이 됩니다.
             </p>
-            <ul className="mt-1 list-disc space-y-0.5 pl-4 text-rose-600 dark:text-rose-400">
+            <ul className="mt-1 list-disc space-y-0.5 pl-4">
               {breakViolations.map((v, i) => (
                 <li key={i}>{v.message}</li>
               ))}

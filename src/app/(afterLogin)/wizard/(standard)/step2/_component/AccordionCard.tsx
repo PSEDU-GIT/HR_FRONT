@@ -29,10 +29,10 @@ export default function AccordionCard({
   return (
     <div
       className={cx(
-        'border-custom-slate-border dark:border-slate-800 rounded-2xl border transition-all duration-500',
+        'border-custom-slate-border bg-background rounded-2xl border transition-all duration-500',
         isOpen
-          ? 'bg-white dark:bg-slate-900 shadow-sm'
-          : 'bg-white hover:bg-slate-50 dark:bg-slate-900 dark:hover:bg-slate-800/80',
+          ? 'shadow-sm'
+          : 'hover:bg-slate-50 dark:hover:bg-slate-800/80',
       )}
     >
       <button
@@ -41,8 +41,8 @@ export default function AccordionCard({
         className={cx(
           'flex w-full cursor-pointer items-center justify-between p-4 text-left transition-all',
           isOpen
-            ? 'border-custom-slate-border-side dark:border-slate-800 bg-custom-slate-bg dark:bg-slate-800/50 rounded-t-2xl border-b'
-            : 'hover:bg-custom-slate-bg dark:hover:bg-slate-800/50 bg-background dark:bg-slate-900 rounded-2xl border-transparent',
+            ? 'border-custom-slate-border-side bg-custom-slate-bg rounded-t-2xl border-b'
+            : 'hover:bg-custom-slate-bg dark:hover:bg-slate-800/50 bg-background rounded-2xl border-transparent',
         )}
       >
         <div className="flex items-center gap-2.5">
@@ -57,10 +57,10 @@ export default function AccordionCard({
                     ? 'bg-custom-emerald'
                     : isOpen
                       ? 'bg-custom-indigo'
-                      : 'bg-slate-300 dark:bg-slate-700',
+                      : 'bg-custom-slate-border',
             )}
           />
-          <span className="text-text-title dark:text-slate-100 text-sm font-bold">{title}</span>
+          <span className="text-text-title text-sm font-bold">{title}</span>
           {hasDanger && <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-rose-600" />}
           {!hasDanger && hasWarning && (
             <AlertTriangle className="text-custom-yellow h-3.5 w-3.5 shrink-0" />
@@ -68,11 +68,11 @@ export default function AccordionCard({
         </div>
 
         <div className="flex items-center gap-3">
-          {summary && <span className="text-text-side dark:text-slate-400 text-xs font-medium">{summary}</span>}
+          {summary && <span className="text-text-side text-xs font-medium">{summary}</span>}
           {isOpen ? (
-            <ChevronUp className="text-text-side dark:text-slate-400 h-4 w-4 shrink-0" />
+            <ChevronUp className="text-text-side h-4 w-4 shrink-0" />
           ) : (
-            <ChevronDown className="text-text-side dark:text-slate-400 h-4 w-4 shrink-0" />
+            <ChevronDown className="text-text-side h-4 w-4 shrink-0" />
           )}
         </div>
       </button>
@@ -85,7 +85,7 @@ export default function AccordionCard({
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
-            className="border-custom-slate-border dark:border-slate-800 bg-background dark:bg-slate-900 rounded-b-2xl border-t"
+            className="border-custom-slate-border bg-background rounded-b-2xl border-t"
           >
             <div className="space-y-4 p-5">{children}</div>
           </motion.div>

@@ -41,9 +41,7 @@ export default function ClickVerifyAfterSignupAction({
         );
       });
     } catch (err: any) {
-      console.error('회원가입 세션 인증 실패:', err);
-      handleAlert({
-        type: 'error',
+      console.error('회원가입 세션 인증 실패:', err); handleAlert({ type:'error',
         title: '인증 처리 실패',
         description:
           err.message || '인증 처리에 실패했습니다. 회원가입 완료 후 다시 시도해 주세요.',
@@ -56,7 +54,8 @@ export default function ClickVerifyAfterSignupAction({
   const isDisabled = isVerifying || isPending;
 
   return (
-    <div className="border-custom-slate-border fixed inset-x-0 bottom-0 z-50 border-t bg-white p-4 dark:border-slate-800 dark:bg-slate-950">
+    <div className="border-custom-slate-border bg-background fixed inset-x-0 bottom-0 z-50 border-t p-4">
+      <div className="mx-auto max-w-md">
       <button
         type="button"
         onClick={handleVerifyAfterSignup}
@@ -71,6 +70,7 @@ export default function ClickVerifyAfterSignupAction({
           <span>가입 완료 후 계약서 열기</span>
         )}
       </button>
+      </div>
     </div>
   );
 }

@@ -64,14 +64,14 @@ export default function ClickNextSubStepAction({ nextSubStep }: ClickNextSubStep
       onClick={handleClick}
       disabled={isBlocked}
       className={cx(
-        'border-custom-slate-border flex w-full justify-center gap-1.5 rounded-xl border py-2.5 text-xs font-bold transition-all dark:border-slate-800',
+        'border-custom-slate-border flex w-full justify-center gap-1.5 rounded-xl border py-2.5 text-xs font-bold transition-all',
         isBlocked
           ? 'cursor-not-allowed bg-rose-50 text-rose-500 opacity-80 dark:bg-rose-950/40 dark:text-rose-400'
-          : 'text-text-title cursor-pointer items-center bg-white hover:bg-slate-50 active:scale-[0.99] dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700',
+          : 'text-text-title cursor-pointer items-center bg-white hover:bg-slate-50 active:scale-[0.99] dark:bg-slate-800 dark:hover:bg-slate-700',
       )}
     >
       <span>{label}</span>
-      {!isBlocked && <ArrowRight className="text-text-side h-3.5 w-3.5 dark:text-slate-400" />}
+      {!isBlocked && <ArrowRight className="text-text-side h-3.5 w-3.5" />}
     </button>
   );
 }

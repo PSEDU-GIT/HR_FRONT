@@ -24,7 +24,7 @@ export default function ReadFilterStatusAction() {
       data={STATUS_TABS}
       selectedData={statusFilter}
       onChangeTab={(id) => setStatusFilter(id as CabinetStatusFilter)}
-      className="!text-[11px] !py-1.5"
+      className="!text-11 !py-1.5"
     />
   );
 }

@@ -31,7 +31,7 @@ export default function AccordionTermItem({
             onChange={(e) => onToggleCheck(e.target.checked)}
             className="text-custom-indigo focus:ring-custom-indigo h-4 w-4 rounded border-slate-300"
           />
-          <span className="text-text-main text-xs font-medium dark:text-slate-200">{label}</span>
+          <span className="text-text-main text-xs font-medium">{label}</span>
         </label>
         <button
           type="button"
@@ -42,7 +42,7 @@ export default function AccordionTermItem({
         </button>
       </div>
       {isOpen && (
-        <div className="bg-custom-slate-bg text-text-sub mt-2 rounded p-2.5 text-[11px] font-normal leading-relaxed dark:bg-slate-900 dark:text-slate-400">
+        <div className="bg-custom-slate-bg text-text-sub mt-2 rounded p-2.5 text-11 font-normal leading-relaxed">
           {content}
         </div>
       )}
