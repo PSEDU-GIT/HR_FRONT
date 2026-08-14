@@ -4,16 +4,38 @@ import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
 
 export default function ClickApplySalaryTypeAction() {
-  const { setStep2 } = useWizardStore(
+  const { wizSalaryType, setStep2 } = useWizardStore(
     useShallow((state) => ({
+      wizSalaryType: state.step2.wizSalaryType,
       setStep2: state.setStep2,
     })),
   );
 
   const handleApply = () => {
-    setStep2({
-      wizSalaryApplied: true,
-      salaryEditingSection: null,
+    setStep2((prev) => {
+      if (wizSalaryType === 'hourly') {
+        return {
+          wizSalaryApplied: true,
+          salaryEditingSection: null,
+          wizHasTaxFree: false,
+          wizNonTaxFood: 0,
+          wizHasNonCompete: false,
+          wizNonCompeteAmount: 0,
+        };
+      }
+      if (wizSalaryType === 'monthly') {
+        return {
+          wizSalaryApplied: true,
+          salaryEditingSection: null,
+          wizHasTaxFree: prev.wizNonTaxFood > 0 ? true : prev.wizHasTaxFree,
+          wizNonTaxFood: prev.wizNonTaxFood > 0 ? prev.wizNonTaxFood : 200000,
+          wizHasNonCompete: prev.wizHasNonCompete ?? true,
+        };
+      }
+      return {
+        wizSalaryApplied: true,
+        salaryEditingSection: null,
+      };
     });
   };
 
