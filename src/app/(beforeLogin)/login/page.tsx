@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { LogIn, Building2, Sparkles, ShieldCheck } from 'lucide-react';
+import { LogIn } from 'lucide-react';
 import cx from 'classnames';
 
 export default function LoginPage() {

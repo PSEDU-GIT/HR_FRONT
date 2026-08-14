@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useEffect } from 'react';
-import { useQuery, keepPreviousData, useQueryClient } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { useShallow } from 'zustand/react/shallow';
 import { useCabinetStore } from '@/app/(afterLogin)/cabinet/_state/useCabinetStore';
 import {

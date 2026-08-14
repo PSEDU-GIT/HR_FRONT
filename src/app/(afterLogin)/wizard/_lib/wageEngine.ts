@@ -38,7 +38,7 @@ export function calculateDailyTime(start: string, end: string, breakStr: string)
   }
   const [sH, sM] = start.split(':').map(Number);
   const [eH, eM] = end.split(':').map(Number);
-  let startMin = sH * 60 + sM;
+  const startMin = sH * 60 + sM;
   let endMin = eH * 60 + eM;
   if (endMin < startMin) endMin += 24 * 60; // 익일 종료
 
@@ -122,7 +122,7 @@ export function getAutoBreakTime(start: string, end: string, currentBreak?: stri
   if (!start || !end) return '30분';
   const [sH, sM] = start.split(':').map(Number);
   const [eH, eM] = end.split(':').map(Number);
-  let startMin = sH * 60 + sM;
+  const startMin = sH * 60 + sM;
   let endMin = eH * 60 + eM;
   if (endMin < startMin) endMin += 24 * 60;
   const grossMinutes = endMin - startMin;
@@ -284,7 +284,6 @@ export function calculateWageEngine(input: WageEngineInput): WageEngineResult {
     salaryType,
     salaryAmount,
     hourlyRate,
-    commissionRate,
     minGuaranteeAmount,
     mealAllowance = 0,
     positionAllowance = 0,
@@ -293,18 +292,15 @@ export function calculateWageEngine(input: WageEngineInput): WageEngineResult {
     nonCompeteAmount = 0,
     weeklyHours = 0,
     weeklyOvertimeHours = 0,
-    weeklyNightHours = 0,
     employeeCount = 5,
   } = input;
 
   const { mo, mh, T, holidayHours, moExact, mhExact, TExact } = calculateMonthlyHours(weeklyHours);
   const isFiveOrMore = employeeCount >= 5;
   const overtimeRate = isFiveOrMore ? 1.5 : 1.0;
-  const nightRate = isFiveOrMore ? 0.5 : 0.0;
 
   // 계수 산출 (포괄 연장/야간 가산 수렴 정밀값)
   const kotExact = weeklyOvertimeHours * overtimeRate * LEGAL_STANDARDS.WEEKS_PER_MONTH;
-  const kniExact = weeklyNightHours * nightRate * LEGAL_STANDARDS.WEEKS_PER_MONTH;
 
   let totalMonthlyPay = 0;
   let baseSalary = 0;
@@ -385,9 +381,6 @@ export function calculateWageEngine(input: WageEngineInput): WageEngineResult {
   } else {
     // 2) 비율제 (commission) - 최소보장액 기준 독립 분할 (주휴수당 10원 올림 미적용)
     totalMonthlyPay = minGuaranteeAmount || 0;
-
-    const cappedWeeklyHours = Math.min(weeklyHours, LEGAL_STANDARDS.MAX_WEEKLY_HOURS);
-    const weeklyHolidayHours = calculateWeeklyHolidayHours(cappedWeeklyHours);
 
     comparedHourlyRate = TExact > 0 ? Math.round(totalMonthlyPay / TExact) : 0;
     ordinaryHourlyRate = comparedHourlyRate;

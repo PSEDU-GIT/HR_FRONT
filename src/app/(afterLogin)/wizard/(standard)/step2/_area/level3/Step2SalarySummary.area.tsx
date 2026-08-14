@@ -3,7 +3,6 @@
 import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
 import { Pencil, ArrowRight } from 'lucide-react';
-import { calculateDailyHours } from '@/app/(afterLogin)/wizard/(standard)/step2/_state/periodUtils';
 import {
   calculateWageEngine,
   calculateScheduleHours,

@@ -2,7 +2,6 @@
 
 import React from 'react';
 import cx from 'classnames';
-import { calculateDailyHours } from '@/app/(afterLogin)/wizard/(standard)/step2/_state/periodUtils';
 import { calculateWageEngine, calculateScheduleHours, getEffectiveNonCompeteAmount } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
 
 export interface DaysConfig {
@@ -333,6 +332,19 @@ export default function ContractDocumentTemplate({
                         {wizPositionAllowance.toLocaleString()}원
                       </td>
                       <td className="p-2.5 text-slate-500">직무 담당 수당</td>
+                    </tr>
+                  )}
+
+                  {/* 기타수당 */}
+                  {wizHasExtraAllowance && wizOtherAllowance > 0 && (
+                    <tr className="bg-white">
+                      <td className="border-r border-slate-200 p-2.5 font-medium text-slate-700 pl-4">
+                        {wizOtherAllowanceName || '기타수당'}
+                      </td>
+                      <td className="border-r border-slate-200 p-2.5 text-right font-bold text-slate-800">
+                        {wizOtherAllowance.toLocaleString()}원
+                      </td>
+                      <td className="p-2.5 text-slate-500">기타 제수당</td>
                     </tr>
                   )}
 

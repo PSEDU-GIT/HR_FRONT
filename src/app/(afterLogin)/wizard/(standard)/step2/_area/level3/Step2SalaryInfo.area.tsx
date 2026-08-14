@@ -116,14 +116,6 @@ export default function Step2SalaryInfoArea() {
 
   const isCurrentOpen = wizSubStep === 3;
 
-  const totalCalculatedPay =
-    wageResult.baseSalary +
-    wageResult.weeklyHolidayPay +
-    (wizHasTaxFree ? wizNonTaxFood : 0) +
-    wageResult.overtimeAllowance +
-    (wizHasExtraAllowance ? wizPositionAllowance + wizOtherAllowance : 0) +
-    (wizHasNonCompete ? calculatedNonCompeteAmount : 0);
-
   const getSummaryText = () => {
     if (!wizSalaryDone) return undefined;
 

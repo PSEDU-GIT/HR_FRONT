@@ -45,7 +45,7 @@ export default function SummaryScheduleCardAction() {
     setIsEditing(false);
   };
 
-  const activeDays = Object.entries(step2.wizDaysConfig || {}).filter(([_, val]) => val.enabled);
+  const activeDays = Object.entries(step2.wizDaysConfig || {}).filter(([, val]) => val.enabled);
 
   const summaryItems = activeDays.map(([dayKey, dayVal]) => ({
     label: dayKey,

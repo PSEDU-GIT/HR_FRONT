@@ -14,7 +14,6 @@ export default function SelectDayScheduleToggleAction() {
     wizWeeklyHoliday,
     batchStartTime,
     batchEndTime,
-    batchBreakTime,
     editingDay,
     setStep2,
   } = useWizardStore(
@@ -23,7 +22,6 @@ export default function SelectDayScheduleToggleAction() {
       wizWeeklyHoliday: state.step2.wizWeeklyHoliday,
       batchStartTime: state.step2.batchStartTime,
       batchEndTime: state.step2.batchEndTime,
-      batchBreakTime: state.step2.batchBreakTime,
       editingDay: state.step2.editingDay,
       setStep2: state.setStep2,
     })),

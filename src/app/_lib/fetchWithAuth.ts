@@ -56,7 +56,7 @@ export async function fetchWithAuth<T = object>(
   let response: Response;
   try {
     response = await doFetch(session?.accessToken ?? '');
-  } catch (err) {
+  } catch {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     session = await auth();
     response = await doFetch(session?.accessToken ?? '');
@@ -65,11 +65,7 @@ export async function fetchWithAuth<T = object>(
   if ((response.status === 500 || response.status === 401) && hasToken) {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     session = await auth();
-    try {
-      response = await doFetch(session?.accessToken ?? '');
-    } catch (err) {
-      throw err;
-    }
+    response = await doFetch(session?.accessToken ?? '');
   }
 
   const isSuccess = response.status >= 200 && response.status < 300;

@@ -16,8 +16,6 @@ export default function FormMonthlySalaryAction() {
   const {
     wizSalaryAmount,
     wizDaysConfig,
-    wizHasTaxFree,
-    wizNonTaxFood,
     wizHasNonCompete,
     wizNonCompeteAmount,
     wizNonCompeteCalcType,
@@ -32,8 +30,6 @@ export default function FormMonthlySalaryAction() {
     useShallow((state) => ({
       wizSalaryAmount: state.step2.wizSalaryAmount,
       wizDaysConfig: state.step2.wizDaysConfig,
-      wizHasTaxFree: state.step2.wizHasTaxFree,
-      wizNonTaxFood: state.step2.wizNonTaxFood,
       wizHasNonCompete: state.step2.wizHasNonCompete,
       wizNonCompeteAmount: state.step2.wizNonCompeteAmount,
       wizNonCompeteCalcType: state.step2.wizNonCompeteCalcType || 'percent',

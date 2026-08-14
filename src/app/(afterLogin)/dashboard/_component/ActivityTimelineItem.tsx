@@ -16,7 +16,7 @@ const parseDateInfo = (dateStr?: string) => {
         time: format(parsed, 'HH:mm'),
       };
     }
-  } catch (e) {
+  } catch {
     // fallback
   }
   return { date: '', time: dateStr };

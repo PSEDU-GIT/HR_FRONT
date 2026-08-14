@@ -115,7 +115,7 @@ export default function ClickCompleteContractAction({
     };
 
     const schedulePayload = Object.entries(step2.wizDaysConfig || {})
-      .filter(([_, val]) => val.enabled)
+      .filter(([, val]) => val.enabled)
       .map(([dayKey, val]) => ({
         dayOfWeek: DAY_MAP[dayKey] || dayKey,
         isEnabled: true,
@@ -124,7 +124,6 @@ export default function ClickCompleteContractAction({
         breakMinutes: parseInt(val.breakTime) || 0,
       }));
 
-    const isUnder5 = step1.contractType?.includes('5인 미만') || step1.contractType?.includes('5인 이하');
     const dynamicMinPay = calculateDynamicMinGuaranteeAmount(step2.wizDaysConfig);
     const effectiveMinGuaranteeAmount = step2.wizMinGuaranteeAmount ?? dynamicMinPay;
 

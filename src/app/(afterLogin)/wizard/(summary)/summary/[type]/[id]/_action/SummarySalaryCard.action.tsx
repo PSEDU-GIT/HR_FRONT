@@ -102,11 +102,6 @@ export default function SummarySalaryCardAction() {
         ? `${step2.wizCommissionRate || 0}% (최소보장 ${formatCurrency(step2.wizMinGuaranteeAmount) || 0}원)`
         : `시간당 ${formatCurrency(step2.wizHourlyRate) || 0}원`;
 
-  const nonTaxValue =
-    (step2.wizNonTaxFood || 0) > 0
-      ? `식대: ${formatCurrency(step2.wizNonTaxFood)}원`
-      : '미적용';
-
   return (
     <SummaryCardComponent
       title="급여 조건"

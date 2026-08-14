@@ -3,7 +3,7 @@
 import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
 import Select, { SelectDataTypes } from '@/app/_component/select/Select';
-import { getEffectiveNonCompeteAmount, LEGAL_STANDARDS } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
+import { LEGAL_STANDARDS } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
 import cx from 'classnames';
 
 const PERIOD_OPTIONS: SelectDataTypes[] = [
@@ -89,17 +89,6 @@ export default function FormNonCompeteAction() {
         : wizSalaryAmount || 0;
 
   const calculatedPercentAmount = Math.round(baseAmount * ((wizNonCompetePercent || 10) / 100));
-
-  const effectiveNonCompeteAmount = getEffectiveNonCompeteAmount({
-    hasNonCompete: wizHasNonCompete,
-    calcType: wizNonCompeteCalcType,
-    percent: wizNonCompetePercent,
-    manualAmount: wizNonCompeteAmount,
-    salaryType: wizSalaryType,
-    salaryAmount: wizSalaryAmount,
-    hourlyRate: wizHourlyRate,
-    minGuaranteeAmount: wizMinGuaranteeAmount,
-  });
 
   const handleSelectNo = () => {
     setStep2({ wizHasNonCompete: false });

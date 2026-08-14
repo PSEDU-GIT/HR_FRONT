@@ -16,26 +16,15 @@ export default function FormMinGuaranteeSalaryAction() {
   const {
     wizMinGuaranteeAmount,
     wizDaysConfig,
-    contractType,
-    wizHasNonCompete,
-    wizNonCompeteCalcType,
-    wizNonCompetePercent,
-    wizNonCompeteAmount,
     setStep2,
   } = useWizardStore(
     useShallow((state) => ({
       wizMinGuaranteeAmount: state.step2.wizMinGuaranteeAmount,
       wizDaysConfig: state.step2.wizDaysConfig,
-      contractType: state.step1.contractType,
-      wizHasNonCompete: state.step2.wizHasNonCompete,
-      wizNonCompeteCalcType: state.step2.wizNonCompeteCalcType,
-      wizNonCompetePercent: state.step2.wizNonCompetePercent,
-      wizNonCompeteAmount: state.step2.wizNonCompeteAmount,
       setStep2: state.setStep2,
     })),
   );
 
-  const isUnder5 = contractType?.includes('5인 미만') || contractType?.includes('5인 이하');
   const dynamicMinPay = calculateDynamicMinGuaranteeAmount(wizDaysConfig);
 
   const { weeklyHours } = calculateScheduleHours(wizDaysConfig);

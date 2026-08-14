@@ -148,7 +148,7 @@ export default function ClickSummaryCompleteAction({
     };
 
     const schedulePayload = Object.entries(step2.wizDaysConfig || {})
-      .filter(([_, val]) => val.enabled)
+      .filter(([, val]) => val.enabled)
       .map(([dayKey, val]) => ({
         dayOfWeek: DAY_MAP[dayKey] || dayKey,
         isEnabled: true,

@@ -69,7 +69,7 @@ export const getContractArchive = async (
 };
 
 export const getContractArchiveServer =
-  (cookie: string) =>
+  () =>
   async ({ queryKey }: { queryKey: readonly unknown[] }): Promise<ContractArchiveResponse> => {
     const [, page = 1, take = 10, keyword = '', instructor = '', status = ''] = queryKey as [
       string,
