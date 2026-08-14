@@ -39,7 +39,26 @@ export default function SelectSalaryTypeAction() {
           <button
             key={option.id}
             type="button"
-            onClick={() => setStep2({ wizSalaryType: option.id })}
+            onClick={() => {
+              if (option.id === 'hourly') {
+                setStep2({
+                  wizSalaryType: 'hourly',
+                  wizHasTaxFree: false,
+                  wizNonTaxFood: 0,
+                  wizHasNonCompete: false,
+                  wizNonCompeteAmount: 0,
+                });
+              } else if (option.id === 'monthly') {
+                setStep2((prev) => ({
+                  wizSalaryType: 'monthly',
+                  wizHasTaxFree: prev.wizNonTaxFood > 0 ? true : prev.wizHasTaxFree,
+                  wizNonTaxFood: prev.wizNonTaxFood > 0 ? prev.wizNonTaxFood : 200000,
+                  wizHasNonCompete: prev.wizHasNonCompete ?? true,
+                }));
+              } else {
+                setStep2({ wizSalaryType: option.id });
+              }
+            }}
             className={cx(
               'group relative flex w-full cursor-pointer flex-col items-start rounded-2xl border p-4 text-left transition-all duration-200',
               isSelected

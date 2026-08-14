@@ -136,7 +136,7 @@ export default function Step2SalarySummaryArea() {
                     ? `${wizCommissionRate}% (최소보장 ${wizMinGuaranteeAmount ? wizMinGuaranteeAmount.toLocaleString() : 0}원)`
                     : `월 ${wizSalaryAmount ? wizSalaryAmount.toLocaleString() : 0}원`}
               </span>
-              {!isHourly && (
+              {!isCommission && (
                 <button
                   type="button"
                   onClick={() => goToSection('taxFree')}
@@ -183,62 +183,58 @@ export default function Step2SalarySummaryArea() {
           </button>
         </div>
 
-        {!isHourly && (
-          <>
-            {/* 경업금지 약정 */}
-            <div className="flex items-center justify-between p-3.5 transition-colors hover:bg-slate-50/60 dark:hover:bg-slate-800/60">
-              <div className="flex min-w-0 items-center gap-3 pr-2">
-                <span className="text-text-side w-24 shrink-0 text-xs font-semibold">
-                  경업금지 약정
-                </span>
-                <span className="text-text-main truncate text-xs font-bold">
-                  {wizHasNonCompete
-                    ? `${wizNonCompetePeriod} / ${wizNonCompeteRange} (${wizNonCompeteCalcType === 'percent' ? `${wizNonCompetePercent}%: ` : ''}${calculatedNonCompeteAmount.toLocaleString()}원)`
-                    : '약정 없음'}
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={() => goToSection('nonCompete')}
-                className="text-text-side hover:text-custom-indigo hover:bg-custom-indigo-bg dark:hover:text-custom-indigo shrink-0 cursor-pointer rounded-lg p-1.5 transition-colors dark:hover:bg-slate-800"
-                title="경업금지 약정 수정"
-              >
-                <Pencil className="h-3.5 w-3.5" />
-              </button>
-            </div>
+        {/* 경업금지 약정 */}
+        <div className="flex items-center justify-between p-3.5 transition-colors hover:bg-slate-50/60 dark:hover:bg-slate-800/60">
+          <div className="flex min-w-0 items-center gap-3 pr-2">
+            <span className="text-text-side w-24 shrink-0 text-xs font-semibold">
+              경업금지 약정
+            </span>
+            <span className="text-text-main truncate text-xs font-bold">
+              {wizHasNonCompete
+                ? `${wizNonCompetePeriod} / ${wizNonCompeteRange} (${wizNonCompeteCalcType === 'percent' ? `${wizNonCompetePercent}%: ` : ''}${calculatedNonCompeteAmount.toLocaleString()}원)`
+                : '약정 없음'}
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => goToSection('nonCompete')}
+            className="text-text-side hover:text-custom-indigo hover:bg-custom-indigo-bg dark:hover:text-custom-indigo shrink-0 cursor-pointer rounded-lg p-1.5 transition-colors dark:hover:bg-slate-800"
+            title="경업금지 약정 수정"
+          >
+            <Pencil className="h-3.5 w-3.5" />
+          </button>
+        </div>
 
-            {/* 추가 고정수당 */}
-            <div className="flex items-center justify-between p-3.5 transition-colors hover:bg-slate-50/60 dark:hover:bg-slate-800/60">
-              <div className="flex min-w-0 items-center gap-3 pr-2">
-                <span className="text-text-side w-24 shrink-0 text-xs font-semibold">
-                  추가 고정수당
-                </span>
-                <span className="text-text-main truncate text-xs font-bold">
-                  {wizHasExtraAllowance
-                    ? [
-                        wizPositionAllowance > 0 &&
-                          `직책: ${wizPositionAllowance.toLocaleString()}원`,
-                        wizOvertimeAllowance > 0 &&
-                          `연장: ${wizOvertimeAllowance.toLocaleString()}원`,
-                        wizOtherAllowance > 0 &&
-                          `${wizOtherAllowanceName || '기타'}: ${wizOtherAllowance.toLocaleString()}원`,
-                      ]
-                        .filter(Boolean)
-                        .join(' / ') || '추가 수당 없음'
-                    : '추가 수당 없음'}
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={() => goToSection('extraAllowance')}
-                className="text-text-side hover:text-custom-indigo hover:bg-custom-indigo-bg dark:hover:text-custom-indigo shrink-0 cursor-pointer rounded-lg p-1.5 transition-colors dark:hover:bg-slate-800"
-                title="추가 고정수당 수정"
-              >
-                <Pencil className="h-3.5 w-3.5" />
-              </button>
-            </div>
-          </>
-        )}
+        {/* 추가 고정수당 */}
+        <div className="flex items-center justify-between p-3.5 transition-colors hover:bg-slate-50/60 dark:hover:bg-slate-800/60">
+          <div className="flex min-w-0 items-center gap-3 pr-2">
+            <span className="text-text-side w-24 shrink-0 text-xs font-semibold">
+              추가 고정수당
+            </span>
+            <span className="text-text-main truncate text-xs font-bold">
+              {wizHasExtraAllowance
+                ? [
+                    wizPositionAllowance > 0 &&
+                      `직책: ${wizPositionAllowance.toLocaleString()}원`,
+                    wizOvertimeAllowance > 0 &&
+                      `연장: ${wizOvertimeAllowance.toLocaleString()}원`,
+                    wizOtherAllowance > 0 &&
+                      `${wizOtherAllowanceName || '기타'}: ${wizOtherAllowance.toLocaleString()}원`,
+                  ]
+                    .filter(Boolean)
+                    .join(' / ') || '추가 수당 없음'
+                : '추가 수당 없음'}
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => goToSection('extraAllowance')}
+            className="text-text-side hover:text-custom-indigo hover:bg-custom-indigo-bg dark:hover:text-custom-indigo shrink-0 cursor-pointer rounded-lg p-1.5 transition-colors dark:hover:bg-slate-800"
+            title="추가 고정수당 수정"
+          >
+            <Pencil className="h-3.5 w-3.5" />
+          </button>
+        </div>
       </div>
 
       {/* 2. 법정 노무 임금 계산 명세 (Breakdown Card) */}
