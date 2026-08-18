@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import ReadNavListAction from '@/app/(afterLogin)/_action/ReadNavList.action';
+import ReadNavListAction from '@/app/(afterLogin)/_action/nav/ReadNavList.action';
 import { useSidebarStore } from '@/app/(afterLogin)/_state/useSidebarStore';
 
 export default function NavArea() {

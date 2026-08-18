@@ -1,7 +1,7 @@
-import ClickSidebarToggleAction from '@/app/(afterLogin)/_action/ClickSidebarToggle.action';
-import ClickDarkModeAction from '@/app/(afterLogin)/_action/ClickDarkMode.action';
-import ClickAcademyAction from '@/app/(afterLogin)/_action/ClickAcademy.action';
-import ClickProfileAction from '@/app/(afterLogin)/_action/ClickProfile.action';
+import ClickSidebarToggleAction from '@/app/(afterLogin)/_action/header/ClickSidebarToggle.action';
+import ClickDarkModeAction from '@/app/(afterLogin)/_action/header/ClickDarkMode.action';
+import ClickAcademyAction from '@/app/(afterLogin)/_action/academy/ClickAcademy.action';
+import ClickProfileAction from '@/app/(afterLogin)/_action/profile/ClickProfile.action';
 
 export default function HeaderArea() {
   return (

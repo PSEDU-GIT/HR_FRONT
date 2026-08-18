@@ -1,6 +1,6 @@
 import NavArea from '@/app/(afterLogin)/_area/Nav.area';
 import HeaderArea from '@/app/(afterLogin)/_area/Header.area';
-import ClickFontScaleAction from '@/app/(afterLogin)/_action/ClickFontScale.action';
+import ClickFontScaleAction from '@/app/(afterLogin)/_action/header/ClickFontScale.action';
 import AlertProvider from '@/app/(afterLogin)/_provider/Alert.provider';
 
 export default function AfterLoginLayout({
