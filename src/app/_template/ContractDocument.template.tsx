@@ -3,6 +3,7 @@
 import React from 'react';
 import cx from 'classnames';
 import { calculateWageEngine, calculateScheduleHours, getEffectiveNonCompeteAmount } from '@/app/(afterLogin)/wizard/_lib/wageEngine';
+import { formatPhoneNumber } from '@/app/util/formatPhoneNumber.util';
 
 export interface DaysConfig {
   [key: string]: {
@@ -18,6 +19,13 @@ export interface ContractDocumentTemplateProps {
   instructorPhone?: string;
   instructorSubject?: string;
   instructorAddress?: string;
+  instructorSignatureUrl?: string | null;
+  academyName?: string;
+  academyRepresentative?: string;
+  academyBusinessNum?: string;
+  academyTel?: string;
+  academyAddress?: string;
+  academySealUrl?: string | null;
   wizStartDate?: string;
   wizEndDate?: string;
   wizProbation?: string;
@@ -86,6 +94,13 @@ export default function ContractDocumentTemplate({
   instructorPhone = '010-8273-0192',
   instructorSubject = '미지정',
   instructorAddress = '미지정',
+  instructorSignatureUrl,
+  academyName = '학원',
+  academyRepresentative = '대표자',
+  academyBusinessNum,
+  academyTel,
+  academyAddress = '학원 주소',
+  academySealUrl,
   wizStartDate = '2026-07-21',
   wizEndDate = '2027-07-20',
   wizProbation = '3개월',
@@ -422,7 +437,7 @@ export default function ContractDocumentTemplate({
             <div className="space-y-2 text-center pb-2">
               <h1 className="text-xl font-black text-slate-900 tracking-wider">강 사 근 로 계 약 서</h1>
               <p className="text-xs font-semibold text-slate-600">
-                목동 학온 캠퍼스(이하 &quot;갑&quot;이라 한다)과 {instructorName}(이하 &quot;을&quot;이라 한다)는 다음과 같이 근로계약을 체결한다.
+                {academyName}(이하 &quot;갑&quot;이라 한다)과 {instructorName}(이하 &quot;을&quot;이라 한다)는 다음과 같이 근로계약을 체결한다.
               </p>
             </div>
 
@@ -437,24 +452,26 @@ export default function ContractDocumentTemplate({
                     </div>
                     <div className="flex text-11">
                       <span className="w-20 font-medium text-slate-400">상호</span>
-                      <span className="font-bold text-slate-800">목동 학온 캠퍼스</span>
+                      <span className="font-bold text-slate-800">{academyName}</span>
                     </div>
                     <div className="flex text-11">
                       <span className="w-20 font-medium text-slate-400">대표자</span>
-                      <span className="font-bold text-slate-800">이학온</span>
+                      <span className="font-bold text-slate-800">{academyRepresentative}</span>
                     </div>
                     <div className="flex text-11">
                       <span className="w-20 font-medium text-slate-400">등록번호</span>
-                      <span className="font-bold text-slate-800">105-13-98765</span>
+                      <span className="font-bold text-slate-800">{academyBusinessNum || '-'}</span>
                     </div>
                     <div className="flex text-11">
                       <span className="w-20 font-medium text-slate-400">연락처</span>
-                      <span className="font-bold text-slate-800">02-2644-5678</span>
+                      <span className="font-bold text-slate-800">
+                        {academyTel ? formatPhoneNumber(academyTel) : '-'}
+                      </span>
                     </div>
                     <div className="flex text-11">
                       <span className="w-20 font-medium text-slate-400">주소</span>
                       <span className="leading-normal font-bold text-slate-800">
-                        서울특별시 양천구 목동서로 201 학온빌딩 5층
+                        {academyAddress}
                       </span>
                     </div>
                   </div>
@@ -469,7 +486,9 @@ export default function ContractDocumentTemplate({
                     </div>
                     <div className="flex text-11">
                       <span className="w-20 font-medium text-slate-400">연락처</span>
-                      <span className="font-bold text-slate-800">{instructorPhone}</span>
+                      <span className="font-bold text-slate-800">
+                        {instructorPhone ? formatPhoneNumber(instructorPhone) : '-'}
+                      </span>
                     </div>
                     <div className="flex text-11">
                       <span className="w-20 font-medium text-slate-400">담당과목</span>
@@ -649,30 +668,61 @@ export default function ContractDocumentTemplate({
             </div>
 
             <div className="mt-6 grid grid-cols-2 gap-4">
-              <div className="border-custom-slate-border-side space-y-1.5 rounded-xl border bg-slate-50/40 p-4">
-                <div className="text-[10px] font-extrabold text-slate-400">갑 (사용자)</div>
-                <div className="text-11 font-bold text-slate-800">상호: 목동 학온 캠퍼스</div>
-                <div className="text-11 font-bold text-slate-800">대표자: 이학온</div>
-                <div className="text-11 font-medium text-slate-600">
-                  주소: 서울특별시 양천구 목동서로 201 학온빌딩 5층
+              <div className="border-custom-slate-border-side flex flex-col justify-between min-h-[160px] rounded-xl border bg-slate-50/40 p-4">
+                <div className="space-y-1.5">
+                  <div className="text-[10px] font-extrabold text-slate-400">갑 (사용자)</div>
+                  <div className="text-11 font-bold text-slate-800">상호: {academyName}</div>
+                  <div className="text-11 font-bold text-slate-800">대표자: {academyRepresentative}</div>
+                  {academyBusinessNum && (
+                    <div className="text-11 font-medium text-slate-600">
+                      사업자등록번호: {academyBusinessNum}
+                    </div>
+                  )}
+                  <div className="text-11 font-medium text-slate-600">
+                    주소: {academyAddress}
+                  </div>
                 </div>
                 <div className="mt-4 flex justify-end">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-white text-11 font-extrabold text-slate-400 shadow-2xs">
-                    인
-                  </div>
+                  {academySealUrl ? (
+                    <div className="relative flex h-12 w-12 items-center justify-center">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={academySealUrl}
+                        alt="학원 직인"
+                        className="max-h-full max-w-full object-contain"
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-white text-11 font-extrabold text-slate-400 shadow-2xs">
+                      인
+                    </div>
+                  )}
                 </div>
               </div>
 
-              <div className="border-custom-slate-border-side space-y-1.5 rounded-xl border bg-slate-50/40 p-4">
-                <div className="text-[10px] font-extrabold text-slate-400">을 (근로자)</div>
-                <div className="text-11 font-bold text-slate-800">성명: {instructorName}</div>
-                <div className="text-11 font-medium text-slate-600">
-                  주소: {instructorAddress}
+              <div className="border-custom-slate-border-side flex flex-col justify-between min-h-[160px] rounded-xl border bg-slate-50/40 p-4">
+                <div className="space-y-1.5">
+                  <div className="text-[10px] font-extrabold text-slate-400">을 (근로자)</div>
+                  <div className="text-11 font-bold text-slate-800">성명: {instructorName}</div>
+                  <div className="text-11 font-medium text-slate-600">
+                    주소: {instructorAddress}
+                  </div>
                 </div>
                 <div className="mt-4 flex justify-end">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-white text-11 font-extrabold text-slate-400 shadow-2xs">
-                    인
-                  </div>
+                  {instructorSignatureUrl ? (
+                    <div className="relative flex h-12 w-12 items-center justify-center">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={instructorSignatureUrl}
+                        alt="근로자 서명"
+                        className="max-h-full max-w-full object-contain"
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-white text-11 font-extrabold text-slate-400 shadow-2xs">
+                      인
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

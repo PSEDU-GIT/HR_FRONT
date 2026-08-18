@@ -13,7 +13,7 @@ export interface TeacherContractPayload {
   pendingStaffSubject?: string;
   pendingStaffBirthDate?: string;
   pendingStaffAddress?: string;
-  payType: 'FIXED' | 'PERCENT' | 'HOURLY' | string;
+  payType: 'FIXED' | 'RATIO' | 'HOURLY' | string;
   basePay: number;
   ratioPercent: number;
   hourlyRate: number;

@@ -2,9 +2,12 @@
 
 import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
+import { useAcademyPartyInfoState } from '@/app/(afterLogin)/_state/getAcademyPartyInfo.state';
 import ContractDocumentTemplate from '@/app/_template/ContractDocument.template';
 
 export default function ReadContractDocumentAction() {
+  const { academyInfo } = useAcademyPartyInfoState();
+
   const {
     instructorName,
     instructorPhone,
@@ -71,6 +74,10 @@ export default function ReadContractDocumentAction() {
     })),
   );
 
+  const academyAddress = academyInfo
+    ? `${academyInfo.address || ''} ${academyInfo.addressDetail || ''}`.trim()
+    : undefined;
+
   return (
     <ContractDocumentTemplate
       contractType={contractType}
@@ -78,6 +85,13 @@ export default function ReadContractDocumentAction() {
       instructorPhone={instructorPhone}
       instructorSubject={instructorSubject}
       instructorAddress={instructorAddress}
+      academyName={academyInfo?.name}
+      academyRepresentative={academyInfo?.representative}
+      academyBusinessNum={academyInfo?.businessNum}
+      academyTel={academyInfo?.tel}
+      academyAddress={academyAddress}
+      academySealUrl={academyInfo?.sealImageUrl}
+      employeeCount={academyInfo?.employedStaffCount}
       wizStartDate={wizStartDate}
       wizEndDate={wizEndDate}
       wizProbation={wizProbation}

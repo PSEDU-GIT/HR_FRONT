@@ -2,6 +2,7 @@
 
 import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
+import { useAcademyPartyInfoState } from '@/app/(afterLogin)/_state/getAcademyPartyInfo.state';
 import {
   MAX_SALARY_AMOUNT,
   numberToKorean,
@@ -65,8 +66,12 @@ export default function FormMonthlySalaryAction() {
 
   const pureMinOrdinaryPool = baseSalaryPay + weeklyHolidayPay;
 
-  // 연장근로수당 최소 금액 (주 연장근로시간 포함 시)
-  const isUnder5 = contractType?.includes('5인 미만') || contractType?.includes('5인 이하');
+  const { academyInfo } = useAcademyPartyInfoState();
+  const count = academyInfo?.employedStaffCount;
+  const isUnder5 =
+    (count !== undefined && count < 5) ||
+    contractType?.includes('5인 미만') ||
+    contractType?.includes('5인 이하');
   const overtimeRateFinal = isUnder5 ? 1.0 : 1.5;
   const monthlyOvertimeHours =
     weeklyOvertimeHours > 0

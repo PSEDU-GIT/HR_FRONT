@@ -1,6 +1,7 @@
 'use client';
 
 import { useAcademyPartyInfoState } from '@/app/(afterLogin)/_state/getAcademyPartyInfo.state';
+import { formatPhoneNumber } from '@/app/util/formatPhoneNumber.util';
 import { User, Phone, MapPin, FileText, Users } from 'lucide-react';
 
 export default function ReadAcademyPartyDetailAction() {
@@ -48,7 +49,7 @@ export default function ReadAcademyPartyDetailAction() {
           <Phone className="text-text-side mt-0.5 h-3.5 w-3.5 shrink-0" />
           <div className="flex-1">
             <span className="text-text-side text-[11px]">대표 연락처</span>
-            <p className="text-text-main font-semibold">{academyInfo.tel}</p>
+            <p className="text-text-main font-semibold">{formatPhoneNumber(academyInfo.tel)}</p>
           </div>
         </div>
 

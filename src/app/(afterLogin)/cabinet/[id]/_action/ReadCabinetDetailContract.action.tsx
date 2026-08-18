@@ -3,6 +3,7 @@
 import { useParams } from 'next/navigation';
 import ContractDocumentTemplate, { DaysConfig } from '@/app/_template/ContractDocument.template';
 import { useContractDetailState } from '@/app/(afterLogin)/cabinet/_state/getContractDetail.state';
+import { useAcademyPartyInfoState } from '@/app/(afterLogin)/_state/getAcademyPartyInfo.state';
 import { formatPhoneNumber } from '@/app/util/formatPhoneNumber.util';
 
 const DAY_KEY_MAP: Record<string, string> = {
@@ -29,6 +30,7 @@ export default function ReadCabinetDetailContractAction() {
   const contractId = Number(params?.id) || 1;
 
   const { contractDetail, isLoading, isError } = useContractDetailState(contractId);
+  const { academyInfo } = useAcademyPartyInfoState();
 
   if (isLoading) {
     return (
@@ -67,6 +69,10 @@ export default function ReadCabinetDetailContractAction() {
   const rawHolidayDay = (contractDetail as any).weeklyHolidayDay || 'SUN';
   const resolvedWeeklyHoliday = DAY_KEY_MAP[rawHolidayDay] || rawHolidayDay || '일요일';
 
+  const academyAddress = academyInfo
+    ? `${academyInfo.address || ''} ${academyInfo.addressDetail || ''}`.trim()
+    : undefined;
+
   return (
     <ContractDocumentTemplate
       contractType={contractDetail.contractType}
@@ -74,6 +80,18 @@ export default function ReadCabinetDetailContractAction() {
       instructorPhone={formatPhoneNumber(contractDetail.pendingStaffPhone) || '연락처 미지정'}
       instructorSubject={contractDetail.pendingStaffSubject || '과목 미지정'}
       instructorAddress={contractDetail.pendingStaffAddress || '주소 미지정'}
+      instructorSignatureUrl={
+        contractDetail.status === 'SIGNED'
+          ? `/api/hr/contract/${contractId}/signature-image`
+          : undefined
+      }
+      academyName={academyInfo?.name}
+      academyRepresentative={academyInfo?.representative}
+      academyBusinessNum={academyInfo?.businessNum}
+      academyTel={academyInfo?.tel}
+      academyAddress={academyAddress}
+      academySealUrl={academyInfo?.sealImageUrl}
+      employeeCount={academyInfo?.employedStaffCount}
       wizStartDate={contractDetail.contractStartDate || '시작일 미지정'}
       wizEndDate={contractDetail.contractEndDate || '종료일 미지정'}
       wizProbation={

@@ -5,6 +5,7 @@ import { ArrowRight, RotateCcw } from 'lucide-react';
 import cx from 'classnames';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
 import { useAlert } from '@/app/(afterLogin)/_state/useAlert';
+import { useAcademyPartyInfoState } from '@/app/(afterLogin)/_state/getAcademyPartyInfo.state';
 import {
   calculateScheduleHours,
   calculateWageEngine,
@@ -25,6 +26,7 @@ export default function NextStepBtn({ className, disabled }: NextStepBtnProps) {
   const step2 = useWizardStore((state) => state.step2);
   const reset = useWizardStore((state) => state.reset);
   const { handleAlert } = useAlert();
+  const { academyInfo } = useAcademyPartyInfoState();
 
   const getActiveStep = () => {
     if (pathname.includes('/step4')) return 4;
@@ -142,14 +144,23 @@ export default function NextStepBtn({ className, disabled }: NextStepBtnProps) {
       handleAlert({
         type: 'warning',
         title: '유급주휴일 미지정 위험',
-        description: '유급주휴일이 지정되지 않았거나 근무일과 중복됩니다. OFF 요일을 주휴일로 지정해 주세요.',
+        description:
+          '유급주휴일이 지정되지 않았거나 근무일과 중복됩니다. OFF 요일을 주휴일로 지정해 주세요.',
       });
       return false;
     }
 
     // 2) 주 52시간 상한 초과 위험 검사 (5인 이상 사업장)
-    const isUnder5 = step1.contractType?.includes('5인 미만') || step1.contractType?.includes('5인 이하');
-    const { weeklyHours, weeklyOvertimeHours, weeklyNightHours } = calculateScheduleHours(step2.wizDaysConfig);
+    const count = academyInfo?.employedStaffCount;
+    const isUnder5 =
+      (count !== undefined && count < 5) ||
+      step1.contractType?.includes('5인 미만') ||
+      step1.contractType?.includes('5인 이하');
+    const effectiveEmployeeCount = isUnder5 ? 4 : (count ?? 5);
+
+    const { weeklyHours, weeklyOvertimeHours, weeklyNightHours } = calculateScheduleHours(
+      step2.wizDaysConfig,
+    );
     const dynamicMinPay = calculateDynamicMinGuaranteeAmount(step2.wizDaysConfig);
     const effectiveMinGuaranteeAmount = step2.wizMinGuaranteeAmount ?? dynamicMinPay;
 
@@ -188,14 +199,15 @@ export default function NextStepBtn({ className, disabled }: NextStepBtnProps) {
       weeklyHours,
       weeklyOvertimeHours,
       weeklyNightHours,
-      employeeCount: isUnder5 ? 4 : 5,
+      employeeCount: effectiveEmployeeCount,
     });
 
     if (!wageResult.isMinWagePassed) {
       handleAlert({
         type: 'warning',
         title: '최저임금 미달 위험',
-        description: '설정된 급여 조건이 2026년 법정 최저임금(10,320원/h) 미달입니다. 급여 또는 근무시간을 수정해 주세요.',
+        description:
+          '설정된 급여 조건이 2026년 법정 최저임금(10,320원/h) 미달입니다. 급여 또는 근무시간을 수정해 주세요.',
       });
       return false;
     }

@@ -39,7 +39,7 @@ export default function ReadPreviousContractSummaryAction() {
   if (previousContract) {
     if (previousContract.payType === 'FIXED') {
       salaryText = `월급 ${previousContract.basePay?.toLocaleString() ?? 0}원`;
-    } else if (previousContract.payType === 'PERCENT') {
+    } else if (previousContract.payType === 'RATIO' || previousContract.payType === 'PERCENT') {
       salaryText = `비율제 ${previousContract.ratioPercent ?? 0}%`;
     } else if (previousContract.payType === 'HOURLY') {
       salaryText = `시급 ${previousContract.hourlyRate?.toLocaleString() ?? 0}원`;

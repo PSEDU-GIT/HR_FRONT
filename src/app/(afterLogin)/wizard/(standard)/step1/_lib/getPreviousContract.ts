@@ -18,7 +18,7 @@ export interface PreviousContractResponse {
   contractType: string;
   status: string;
   templateVersion: number;
-  payType: 'FIXED' | 'PERCENT' | 'HOURLY' | string;
+  payType: 'FIXED' | 'RATIO' | 'PERCENT' | 'HOURLY' | string;
   basePay: number;
   ratioPercent: number;
   hourlyRate: number;
@@ -47,7 +47,7 @@ export interface PreviousContractResponse {
 }
 
 export const getPreviousContract = async (
-  staffId?: number
+  staffId?: number,
 ): Promise<PreviousContractResponse | null> => {
   if (!staffId) return null;
   try {

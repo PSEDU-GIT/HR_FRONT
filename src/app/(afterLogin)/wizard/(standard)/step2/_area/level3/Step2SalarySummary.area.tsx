@@ -2,6 +2,7 @@
 
 import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
+import { useAcademyPartyInfoState } from '@/app/(afterLogin)/_state/getAcademyPartyInfo.state';
 import { Pencil, ArrowRight } from 'lucide-react';
 import {
   calculateWageEngine,
@@ -65,7 +66,14 @@ export default function Step2SalarySummaryArea() {
   const { weeklyHours, weeklyOvertimeHours, weeklyNightHours } =
     calculateScheduleHours(wizDaysConfig);
 
-  const isUnder5 = contractType?.includes('5인 미만') || contractType?.includes('5인 이하');
+  const { academyInfo } = useAcademyPartyInfoState();
+  const count = academyInfo?.employedStaffCount;
+  const isUnder5 =
+    (count !== undefined && count < 5) ||
+    contractType?.includes('5인 미만') ||
+    contractType?.includes('5인 이하');
+  const effectiveEmployeeCount = isUnder5 ? 4 : (count ?? 5);
+
   const dynamicMinPay = calculateDynamicMinGuaranteeAmount(wizDaysConfig);
   const wizMinGuaranteeAmount = wizMinGuaranteeAmountRaw ?? dynamicMinPay;
 
@@ -84,7 +92,7 @@ export default function Step2SalarySummaryArea() {
     salaryType: wizSalaryType,
     salaryAmount: wizSalaryAmount,
     hourlyRate: wizHourlyRate,
-    commissionRate: wizCommissionRate,
+    commissionRate: wizCommissionRate || 20,
     minGuaranteeAmount: wizMinGuaranteeAmount,
     mealAllowance: wizHasTaxFree ? wizNonTaxFood : 0,
     positionAllowance: wizHasExtraAllowance ? wizPositionAllowance : 0,
@@ -94,7 +102,7 @@ export default function Step2SalarySummaryArea() {
     weeklyHours,
     weeklyOvertimeHours,
     weeklyNightHours,
-    employeeCount: isUnder5 ? 4 : 5,
+    employeeCount: effectiveEmployeeCount,
   });
 
   const goToSection = (

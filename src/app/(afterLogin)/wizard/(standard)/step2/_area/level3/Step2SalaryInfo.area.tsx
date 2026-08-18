@@ -2,6 +2,7 @@
 
 import { useShallow } from 'zustand/react/shallow';
 import { useWizardStore } from '@/app/(afterLogin)/wizard/store';
+import { useAcademyPartyInfoState } from '@/app/(afterLogin)/_state/getAcademyPartyInfo.state';
 import AccordionCard from '@/app/(afterLogin)/wizard/(standard)/step2/_component/AccordionCard';
 import { motion } from 'framer-motion';
 
@@ -67,11 +68,19 @@ export default function Step2SalaryInfoArea() {
     })),
   );
 
+  const { academyInfo } = useAcademyPartyInfoState();
+
   if (maxUnlockedSubStep < 3) return null;
+
+  const count = academyInfo?.employedStaffCount;
+  const isUnder5 =
+    (count !== undefined && count < 5) ||
+    contractType?.includes('5인 미만') ||
+    contractType?.includes('5인 이하');
+  const effectiveEmployeeCount = isUnder5 ? 4 : (count ?? 5);
 
   const { weeklyHours, weeklyOvertimeHours, weeklyNightHours } =
     calculateScheduleHours(wizDaysConfig);
-  const isUnder5 = contractType?.includes('5인 미만') || contractType?.includes('5인 이하');
 
   const dynamicMinPay = calculateDynamicMinGuaranteeAmount(wizDaysConfig);
 
@@ -100,7 +109,7 @@ export default function Step2SalaryInfoArea() {
     weeklyHours,
     weeklyOvertimeHours,
     weeklyNightHours,
-    employeeCount: isUnder5 ? 4 : 5,
+    employeeCount: effectiveEmployeeCount,
   });
 
   const isBelowMinimum =

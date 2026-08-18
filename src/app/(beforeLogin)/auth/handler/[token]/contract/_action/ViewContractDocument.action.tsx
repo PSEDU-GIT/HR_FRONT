@@ -59,7 +59,7 @@ export default function ViewContractDocumentAction({
       wizSalaryType={
         contractData?.payType === 'HOURLY'
           ? 'hourly'
-          : contractData?.payType === 'PERCENT'
+          : contractData?.payType === 'RATIO' || contractData?.payType === 'PERCENT'
             ? 'commission'
             : 'monthly'
       }

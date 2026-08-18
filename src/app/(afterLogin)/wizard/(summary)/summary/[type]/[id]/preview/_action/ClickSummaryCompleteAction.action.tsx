@@ -139,7 +139,7 @@ export default function ClickSummaryCompleteAction({
 
     const payTypeMap: Record<string, string> = {
       monthly: 'FIXED',
-      commission: 'PERCENT',
+      commission: 'RATIO',
       hourly: 'HOURLY',
     };
 

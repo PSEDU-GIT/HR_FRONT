@@ -108,7 +108,7 @@ export default function ClickCompleteContractAction({
 
     const payTypeMap: Record<string, string> = {
       monthly: 'FIXED',
-      commission: 'PERCENT',
+      commission: 'RATIO',
       hourly: 'HOURLY',
     };
 
