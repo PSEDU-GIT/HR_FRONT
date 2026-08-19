@@ -528,14 +528,185 @@ export async function GET(request: Request) {
 </head>
 <body>
   <div class="content">
-    <!-- PAGE 1: Attachments (Schedule & Wage Details) -->
+    <!-- PAGE 1: Contract Main Body -->
     <div class="header-box">
-      <div class="header-title">【별 지】 상세 근로조건 및 임금산정 내역</div>
-      <div class="header-subtitle">${instructorName} 강사님 근로계약 명세표</div>
+      <div class="header-title">강 사 근 로 계 약 서</div>
     </div>
 
-    <!-- 별지 1 -->
-    <div class="section-header-wrap">
+    <div class="intro-text">
+      ${academyName}(이하 "갑"이라 한다)과 ${instructorName}(이하 "을"이라 한다)는 다음과 같이 근로계약을 체결한다.
+    </div>
+
+    <!-- 제1조 -->
+    <div class="article-box">
+      <div class="section-header" style="margin-top: 0; margin-bottom: 6px;">제1조 (계약 당사자)</div>
+      <div class="parties-grid">
+        <div class="party-box">
+          <div class="party-title">갑 (사용자)</div>
+          <div class="party-row"><span class="party-label">상호</span><span class="party-value">${academyName}</span></div>
+          <div class="party-row"><span class="party-label">대표자</span><span class="party-value">${academyRep}</span></div>
+          <div class="party-row"><span class="party-label">등록번호</span><span class="party-value">${academyBizNum}</span></div>
+          <div class="party-row"><span class="party-label">연락처</span><span class="party-value">${academyTel}</span></div>
+          <div class="party-row"><span class="party-label">주소</span><span class="party-value">${academyAddr}</span></div>
+        </div>
+        <div class="party-box">
+          <div class="party-title">을 (근로자)</div>
+          <div class="party-row"><span class="party-label">성명</span><span class="party-value">${instructorName}</span></div>
+          <div class="party-row"><span class="party-label">연락처</span><span class="party-value">${instructorPhone}</span></div>
+          <div class="party-row"><span class="party-label">담당과목</span><span class="party-value">${instructorSubject}</span></div>
+          <div class="party-row"><span class="party-label">주소</span><span class="party-value">${instructorAddress}</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 제2조 -->
+    <div class="article-box">
+      <div class="article-title">제2조 (계약기간)</div>
+      <div class="article-desc">① 본 계약의 기간은 <strong>${contractStartDate}</strong>부터 <strong>${contractEndDate}</strong>까지로 한다.</div>
+      ${
+        probationMonths && probationMonths !== '수습 없음'
+          ? `<div class="article-desc">② 수습기간: 계약개시일로부터 <strong>${probationMonths}</strong>으로 하며, 수습기간 중 급여는 약정 급여의 100%를 동일하게 지급한다.</div>`
+          : ''
+      }
+    </div>
+
+    <!-- 제3조 -->
+    <div class="article-box">
+      <div class="article-title">제3조 (업무내용)</div>
+      <div class="article-desc">을의 담당 업무는 다음과 같다.</div>
+      <ul class="bullet-list">
+        <li>담당 과목 및 업무: ${instructorSubject} 강의 및 학습 지도</li>
+        <li>학원 내 수강생 관리, 성적 관리, 강의 자료 준비 및 부수되는 학원 행정 관리 업무</li>
+      </ul>
+    </div>
+
+    <!-- 제4조 (근로시간 - 연장근로 통합) -->
+    <div class="article-box">
+      <div class="article-title">제4조 (근로시간)</div>
+      <div class="article-desc">① 1주 소정근로시간은 <strong>${Math.min(weeklyHours, 40)}시간</strong>으로 한다.</div>
+      <div class="article-desc">② 요일별 소정근로시간 및 시업·종업 시각, 휴게시간은 별지 제1호에 따른다.</div>
+      <div class="article-desc">③ 소정근로시간을 초과하는 연장근로가 발생하는 경우, 그 연장근로수당은 별지 제2호의 기준에 따라 급여에 포함하여 지급한다.</div>
+      <div class="article-desc">④ 1주간 연장근로는 12시간을 초과할 수 없다.</div>
+    </div>
+
+    <!-- 제5조 -->
+    <div class="article-box">
+      <div class="article-title">제5조 (휴게시간)</div>
+      <div class="article-desc">① 근로시간이 4시간인 경우 30분 이상, 8시간인 경우 1시간 이상의 휴게시간을 근로시간 도중에 부여한다.</div>
+      <div class="article-desc">② 휴게시간은 근로자가 자유롭게 이용할 수 있으며 상세 배정은 별지 제1호에 따른다.</div>
+    </div>
+
+    <!-- 제6조 -->
+    <div class="article-box">
+      <div class="article-title">제6조 (임금)</div>
+      <div class="article-desc" style="font-weight: 800; color: #0f172a; margin-bottom: 2px;">
+        총 지급 희망금액: ${numberToKoreanWon(totalMonthlyPay)}
+      </div>
+      <div class="article-desc">① 임금 지급일: 매월 <strong>${paymentDay}</strong> (지급일이 휴일인 경우 그 전일에 지급한다)</div>
+      <div class="article-desc">② 을이 지정한 금융기관 계좌로 현금 입금 지급한다.</div>
+      <div class="article-desc">③ 기본급, 주휴수당, 비과세 식대, 고정수당 등 상세 임금산정 내역은 별지 제2호에 따른다.</div>
+      ${
+        isCommission
+          ? `<div class="article-desc">④ 비율제(수수료 <strong>${detail?.ratioPercent || 20}%</strong>) 정산 시: 당월 담당 수강료 매출 비율 정산액과 별지 제2호의 약정 최소보장액 중 더 큰 금액을 최종 지급한다.</div>`
+          : ''
+      }
+    </div>
+
+    <!-- 제7조 -->
+    <div class="article-box">
+      <div class="article-title">제7조 (휴일·휴가)</div>
+      <div class="article-desc">① 유급주휴일: 매주 <strong>${resolvedWeeklyHoliday}</strong> (1주 소정근로일 개근 시 부여)</div>
+      <div class="article-desc">② 근로자의 날(5월 1일)은 유급휴일로 처리한다.</div>
+      ${
+        isFiveOrMore
+          ? `<div class="article-desc">③ 연차유급휴가는 근로기준법 제60조에 따라 부여한다.</div>`
+          : ''
+      }
+    </div>
+
+    <!-- 제8조 -->
+    <div class="article-box">
+      <div class="article-title">제8조 (퇴직급여)</div>
+      <div class="article-desc">계속근로기간이 1년 이상이고 주 소정근로시간이 15시간 이상인 경우 근로자퇴직급여 보장법에 따라 퇴직급여를 지급한다.</div>
+    </div>
+
+    <!-- 제9조 (비밀유지 - 5항 강화) -->
+    <div class="article-box">
+      <div class="article-title">제9조 (비밀유지)</div>
+      <div class="article-desc">① 을은 재직 중 알게 된 다음 각 호의 정보를 갑의 영업비밀로 인정하고, 재직 중은 물론 퇴직 후에도 제3자에게 누설하거나 자기 또는 제3자의 이익을 위하여 사용하지 아니한다.</div>
+      <ul class="bullet-list">
+        <li>학생·학부모의 성명, 연락처, 주소 등 인적사항</li>
+        <li>학생의 성적, 상담기록, 학습이력, 진학 관련 정보</li>
+        <li>수강료 체계, 할인 정책, 매출 및 회계 자료</li>
+        <li>교재, 커리큘럼, 강의자료, 문제은행, 교수법 자료</li>
+        <li>갑이 비밀로 표시하거나 비밀유지를 고지한 그 밖의 정보</li>
+      </ul>
+      <div class="article-desc" style="margin-top: 3px;">② 갑은 제1항의 정보에 대하여 비밀 표시, 접근 권한 제한, 별도 보관 등 필요한 관리조치를 취하며, 을은 이에 협조한다.</div>
+      <div class="article-desc">③ 을은 제1항의 정보를 갑이 지정한 시스템 또는 장소 외의 개인 저장매체, 개인 클라우드, 메신저 등에 저장·전송하지 아니한다.</div>
+      <div class="article-desc">④ 을은 퇴직 시 제1항의 정보가 담긴 문서 및 전자파일 일체(사본을 포함한다)를 갑에게 반환하고, 개인 보유분을 파기한 후 파기확인서를 제출한다.</div>
+      <div class="article-desc">⑤ 을이 본 조를 위반한 경우 갑은 「부정경쟁방지 및 영업비밀보호법」에 따른 침해행위의 금지 및 손해배상을 청구할 수 있다.</div>
+    </div>
+
+    <!-- 제10조 (개인정보의 처리) -->
+    <div class="article-box">
+      <div class="article-title">제10조 (개인정보의 처리)</div>
+      <div class="article-desc">① 을은 「개인정보 보호법」상 갑의 개인정보취급자로서, 업무 수행에 필요한 범위에서만 학생·학부모의 개인정보를 처리한다.</div>
+      <div class="article-desc">② 을은 개인정보를 처리 목적 외의 용도로 이용하거나 제3자에게 제공하지 아니한다.</div>
+      <div class="article-desc">③ 을은 갑이 실시하는 개인정보 보호 교육을 이수하고, 개인정보 취급자 서약서를 제출한다.</div>
+      <div class="article-desc">④ 을은 퇴직 시 처리 중이던 개인정보 일체를 반환하거나 파기한다.</div>
+      <div class="article-desc">⑤ 을이 본 조를 위반하여 갑이 「개인정보 보호법」상 손해배상·과징금 등의 책임을 지게 된 경우, 을은 그 손해를 배상하며 갑은 을에게 구상권을 행사할 수 있다.</div>
+    </div>
+
+    <!-- 제11조 (겸직금지) -->
+    <div class="article-box">
+      <div class="article-title">제11조 (겸직금지)</div>
+      <div class="article-desc">① 을은 재직 중 갑의 사전 서면 동의 없이 동종의 학원·교습소·개인과외교습 등 갑과 경쟁 관계에 있는 곳에서 강의·자문·운영 등의 겸직을 하지 아니한다.</div>
+      <div class="article-desc">② 제1항 외의 겸직이라도 근로제공에 지장을 주거나 갑의 영업비밀·경쟁상 이익을 침해할 우려가 있는 경우에는 갑의 사전 서면 동의를 받아야 한다.</div>
+      <div class="article-desc">③ 본 조는 근로계약상 성실의무에 근거한 것으로, 별도의 대가를 요하지 아니한다.</div>
+      <div class="article-desc">④ 을이 본 조를 위반한 경우, 갑은 이를 징계 및 계약해지 사유로 삼을 수 있으며, 그로 인한 손해의 배상을 청구할 수 있다.</div>
+    </div>
+
+    <!-- 제12조 (경업금지 - 대가 있을 때만 노출) -->
+    ${
+      detail?.nonCompeteAgreed
+        ? `<div class="article-box">
+        <div class="article-title">제12조 (경업금지)</div>
+        <div class="article-desc">① 을은 퇴직 후 <strong>${detail.nonCompetePeriodMonths || 6}개월</strong> 동안 <strong>반경 ${detail.nonCompeteRadiusKm || 3}km</strong> 범위 내에서 동일·유사 동종 경쟁 학원에 종사하거나 개원할 수 없다.</div>
+        <div class="article-desc">② 갑은 경업금지 약정에 대한 대가로 매월 <strong>${calculatedNonCompeteAmount.toLocaleString()}원</strong>을 별도 지급하며, 상세 내역은 별지 제2호에 따른다.</div>
+      </div>`
+        : ''
+    }
+
+    <!-- 손해배상 (경업금지 여부에 따른 조 번호) -->
+    <div class="article-box">
+      <div class="article-title">${detail?.nonCompeteAgreed ? '제13조' : '제12조'} (손해배상)</div>
+      <div class="article-desc">① 당사자 일방이 고의 또는 중대한 과실로 상대방에게 손해를 입힌 경우, 그 손해를 배상할 책임을 진다.</div>
+      <div class="article-desc">② 본 계약에 위약금 또는 손해배상액을 예정하는 계약을 하지 아니한다. (근로기준법 제20조)</div>
+    </div>
+
+    <!-- 기타 -->
+    <div class="article-box">
+      <div class="article-title">${detail?.nonCompeteAgreed ? '제14조' : '제13조'} (기타)</div>
+      <div class="article-desc">① 본 계약서에 명시되지 않은 사항은 근로기준법 및 관계 법령에 따른다.</div>
+      <div class="article-desc">② 별지 제1호(근로시간표) 및 별지 제2호(상세 임금산정 내역)는 본 계약의 일부를 구성한다.</div>
+      <div class="article-desc">③ 본 계약서는 전자문서로 작성·교부되며, 갑과 을은 이를 각자 열람·보관하고 필요 시 출력하여 보관할 수 있다.</div>
+      <div class="article-desc">④ 을은 본 계약서(별지 포함)를 전자적 방법으로 교부받았음을 확인한다.</div>
+    </div>
+
+    <!-- 관할법원 -->
+    <div class="article-box">
+      <div class="article-title">${detail?.nonCompeteAgreed ? '제15조' : '제14조'} (관할법원)</div>
+      <div class="article-desc">본 계약과 관련하여 발생하는 소송의 관할법원은 갑의 학원 소재지 관할 법원으로 한다.</div>
+    </div>
+
+    <!-- 특약사항 -->
+    <div class="article-box">
+      <div class="article-title">【특약사항】</div>
+      <div class="special-terms-box">${specialTermsHtml}</div>
+    </div>
+
+    <!-- 별지 1 & 별지 2 (서명란 위 배치) -->
+    <div class="section-header-wrap" style="margin-top: 18px;">
       <div class="section-header">【별지 1】 상세 근로시간표</div>
       <span class="holiday-badge">지정 유급주휴일: 매주 ${resolvedWeeklyHoliday}</span>
     </div>
@@ -553,7 +724,6 @@ export async function GET(request: Request) {
       </tbody>
     </table>
 
-    <!-- 별지 2 -->
     <div class="section-header-wrap">
       <div class="section-header">【별지 2】 상세 임금산정 내역</div>
     </div>
@@ -649,159 +819,9 @@ export async function GET(request: Request) {
       </tbody>
     </table>
 
-    <!-- PAGE 2: Page Break & Contract Main -->
-    <div class="page-break"></div>
-
-    <div class="header-box">
-      <div class="header-title">강 사 근 로 계 약 서</div>
-    </div>
-
-    <div class="intro-text">
-      ${academyName}(이하 "갑"이라 한다)과 ${instructorName}(이하 "을"이라 한다)는 다음과 같이 근로계약을 체결한다.
-    </div>
-
-    <!-- 제1조 -->
-    <div class="article-box">
-      <div class="section-header" style="margin-top: 0; margin-bottom: 6px;">제1조 (계약 당사자)</div>
-      <div class="parties-grid">
-        <div class="party-box">
-          <div class="party-title">갑 (사용자)</div>
-          <div class="party-row"><span class="party-label">상호</span><span class="party-value">${academyName}</span></div>
-          <div class="party-row"><span class="party-label">대표자</span><span class="party-value">${academyRep}</span></div>
-          <div class="party-row"><span class="party-label">등록번호</span><span class="party-value">${academyBizNum}</span></div>
-          <div class="party-row"><span class="party-label">연락처</span><span class="party-value">${academyTel}</span></div>
-          <div class="party-row"><span class="party-label">주소</span><span class="party-value">${academyAddr}</span></div>
-        </div>
-        <div class="party-box">
-          <div class="party-title">을 (근로자)</div>
-          <div class="party-row"><span class="party-label">성명</span><span class="party-value">${instructorName}</span></div>
-          <div class="party-row"><span class="party-label">연락처</span><span class="party-value">${instructorPhone}</span></div>
-          <div class="party-row"><span class="party-label">담당과목</span><span class="party-value">${instructorSubject}</span></div>
-          <div class="party-row"><span class="party-label">주소</span><span class="party-value">${instructorAddress}</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 제2조 -->
-    <div class="article-box">
-      <div class="article-title">제2조 (계약기간)</div>
-      <div class="article-desc">① 본 계약의 기간은 <strong>${contractStartDate}</strong>부터 <strong>${contractEndDate}</strong>까지로 한다.</div>
-      ${
-        probationMonths && probationMonths !== '수습 없음'
-          ? `<div class="article-desc">② 수습기간: 계약개시일로부터 <strong>${probationMonths}</strong>으로 하며, 수습기간 중 급여는 약정 급여의 100%를 동일하게 지급한다.</div>`
-          : ''
-      }
-    </div>
-
-    <!-- 제3조 -->
-    <div class="article-box">
-      <div class="article-title">제3조 (업무내용)</div>
-      <div class="article-desc">을의 담당 업무는 다음과 같다.</div>
-      <ul class="bullet-list">
-        <li>담당 과목 및 업무: ${instructorSubject} 강의 및 학습 지도</li>
-        <li>학원 내 수강생 관리, 성적 관리, 강의 자료 준비 및 부수되는 학원 행정 관리 업무</li>
-      </ul>
-    </div>
-
-    <!-- 제4조 -->
-    <div class="article-box">
-      <div class="article-title">제4조 (근로시간)</div>
-      <div class="article-desc">① 1주 소정근로시간은 <strong>${weeklyHours}시간</strong>으로 한다.</div>
-      <div class="article-desc">② 요일별 상세 소정근로시간 및 출퇴근 시각은 별지 제1호(상세 근로시간표)에 명시된 바에 따른다.</div>
-    </div>
-
-    <!-- 제5조 -->
-    <div class="article-box">
-      <div class="article-title">제5조 (연장근로 및 연장근로수당)</div>
-      <div class="article-desc">① 당사자 간 합의에 따라 1주 12시간 한도 내에서 연장근로를 실시할 수 있다.</div>
-      <div class="article-desc">② 연장근로에 대하여 포괄연장근로수당으로 매월 <strong>${wageResult.overtimeAllowance.toLocaleString()}원</strong>을 지급한다.</div>
-    </div>
-
-    <!-- 제6조 -->
-    <div class="article-box">
-      <div class="article-title">제6조 (휴게시간)</div>
-      <div class="article-desc">① 근로시간이 4시간인 경우 30분 이상, 8시간인 경우 1시간 이상의 휴게시간을 근로시간 도중에 부여한다.</div>
-      <div class="article-desc">② 휴게시간은 근로자가 자유롭게 이용할 수 있으며 상세 배정은 별지 제1호에 따른다.</div>
-    </div>
-
-    <!-- 제7조 -->
-    <div class="article-box">
-      <div class="article-title">제7조 (임금 명세)</div>
-      <div class="article-desc" style="font-weight: 800; color: #0f172a; margin-bottom: 2px;">
-        총 지급 희망금액: ${numberToKoreanWon(totalMonthlyPay)}
-      </div>
-      <div class="article-desc">① 임금 지급일: 매월 <strong>${paymentDay}</strong> (지급일이 휴일인 경우 그 전일에 지급한다)</div>
-      <div class="article-desc">② 을이 지정한 금융기관 계좌로 현금 입금 지급한다.</div>
-      <div class="article-desc">③ 기본급, 주휴수당, 비과세 식대, 고정수당 등 상세 임금산정 내역은 별지 제2호에 따른다.</div>
-      ${
-        isCommission
-          ? `<div class="article-desc">④ 비율제(수수료 <strong>${detail?.ratioPercent || 20}%</strong>) 정산 시: 당월 담당 수강료 매출 비율 정산액과 별지 제2호의 약정 최소보장액 중 더 큰 금액을 최종 지급한다.</div>`
-          : ''
-      }
-    </div>
-
-    <!-- 제8조 -->
-    <div class="article-box">
-      <div class="article-title">제8조 (휴일 및 휴가)</div>
-      <div class="article-desc">① 유급주휴일: 매주 <strong>${resolvedWeeklyHoliday}</strong> (1주 소정근로일 개근 시 부여)</div>
-      <div class="article-desc">② 근로자의 날(5월 1일)은 유급휴일로 처리한다.</div>
-      ${
-        isFiveOrMore
-          ? `<div class="article-desc">③ 연차유급휴가는 근로기준법 제60조에 따라 부여한다.</div>`
-          : ''
-      }
-    </div>
-
-    <!-- 제9조 -->
-    <div class="article-box">
-      <div class="article-title">제9조 (퇴직급여)</div>
-      <div class="article-desc">계속근로기간이 1년 이상이고 주 소정근로시간이 15시간 이상인 경우 근로자퇴직급여 보장법에 따라 퇴직급여를 지급한다.</div>
-    </div>
-
-    <!-- 제10조 -->
-    <div class="article-box">
-      <div class="article-title">제10조 (비밀유지)</div>
-      <div class="article-desc">을은 재직 중 및 퇴직 후에도 강의 자료, 수강생 명단 및 개인정보, 영업비밀을 제3자에게 누설하거나 부당하게 활용할 수 없다.</div>
-    </div>
-
-    <!-- 제11조 -->
-    ${
-      detail?.nonCompeteAgreed
-        ? `<div class="article-box">
-        <div class="article-title">제11조 (경업금지 약정)</div>
-        <div class="article-desc">① 을은 퇴직 후 <strong>${detail.nonCompetePeriodMonths || 6}개월</strong> 동안 <strong>반경 ${detail.nonCompeteRadiusKm || 3}km</strong> 범위 내에서 동일·유사 동종 경쟁 학원에 종사하거나 개원할 수 없다.</div>
-        <div class="article-desc">② 갑은 경업금지 약정에 대한 대가로 매월 <strong>${calculatedNonCompeteAmount.toLocaleString()}원</strong>을 별도 지급하며, 상세 내역은 별지 제2호에 따른다.</div>
-      </div>`
-        : ''
-    }
-
-    <!-- 제12조 -->
-    <div class="article-box">
-      <div class="article-title">제12조 (손해배상)</div>
-      <div class="article-desc">을이 무단 이탈, 고의 또는 중과실로 비밀유지의무나 경업금지 약정을 위반하여 갑에게 손해를 입힌 경우 손해를 배상할 책임을 진다.</div>
-    </div>
-
-    <!-- 제13조 -->
-    <div class="article-box">
-      <div class="article-title">제13조 (기타)</div>
-      <div class="article-desc">본 계약서에 명시되지 아니한 사항은 근로기준법 및 관련 법령, 학원 관련 규정에 따른다.</div>
-    </div>
-
-    <!-- 제14조 -->
-    <div class="article-box">
-      <div class="article-title">제14조 (관할법원)</div>
-      <div class="article-desc">본 계약과 관련하여 발생하는 소송의 관할법원은 갑의 학원 소재지 관할 법원으로 한다.</div>
-    </div>
-
-    <!-- 특약사항 -->
-    <div class="article-box">
-      <div class="article-title">【특약사항】</div>
-      <div class="special-terms-box">${specialTermsHtml}</div>
-    </div>
-
     <!-- 서명 란 -->
     <div class="signature-clause">
-      위 계약을 증명하기 위하여 본 계약서 2부를 작성하여 갑과 을이 각각 서명 날인 후 1부씩 보관한다.
+      위 계약의 성립을 증명하기 위하여 갑과 을은 본 계약서(별지 포함)에 전자적으로 서명하며, 본 계약은 전자문서로 보관된다.
       <div class="date-display">${todayStr}</div>
     </div>
 
