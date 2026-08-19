@@ -74,6 +74,13 @@ export default function FormEditingDayTimeAction() {
     });
   };
 
+  const dailyHours = calculateDailyHours(
+    currentDayConfig.startTime || '14:00',
+    currentDayConfig.endTime || '22:00',
+    currentDayConfig.breakTime || '1시간',
+  );
+  const isDailyOvertime = dailyHours > 8;
+
   return (
     <div className="border-custom-indigo-border/50 bg-custom-indigo-bg/20 flex flex-wrap items-center justify-between gap-3 rounded-2xl border p-3.5 shadow-2xs transition-all dark:border-custom-indigo/50">
       <div className="flex items-center gap-1.5">
@@ -81,15 +88,15 @@ export default function FormEditingDayTimeAction() {
           {editingDay.substring(0, 1)}요일 시간 설정
         </span>
         <span className="text-text-side text-xs font-semibold">
-          (소정{' '}
+          (실근로{' '}
           <strong className="text-custom-indigo font-mono text-xs font-extrabold">
-            {calculateDailyHours(
-              currentDayConfig.startTime || '14:00',
-              currentDayConfig.endTime || '22:00',
-              currentDayConfig.breakTime || '1시간',
-            )}
-            시간
+            {dailyHours}시간
           </strong>
+          {isDailyOvertime && (
+            <span className="text-custom-indigo ml-1 font-bold">
+              · 소정 8h + 연장 {Math.round((dailyHours - 8) * 10) / 10}h
+            </span>
+          )}
           )
         </span>
       </div>

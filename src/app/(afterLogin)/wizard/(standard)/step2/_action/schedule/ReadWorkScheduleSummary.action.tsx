@@ -30,7 +30,6 @@ export default function ReadWorkScheduleSummaryAction() {
   );
 
   const totalBreakHours = parseFloat((weeklyTotals.breakMin / 60).toFixed(1));
-  const contractedHours = Math.min(40, weeklyHours);
 
   return (
     <>
@@ -40,7 +39,7 @@ export default function ReadWorkScheduleSummaryAction() {
       <span className="text-text-title font-bold">{totalBreakHours}시간</span> ·
       소정{' '}
       <span className="text-text-title font-mono font-bold">
-        {contractedHours}시간
+        {weeklyHours}시간
       </span>
       {weeklyOvertimeHours > 0 && (
         <>
